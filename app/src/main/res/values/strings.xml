@@ -3,4 +3,8 @@
     <string name="login_btn">Login</string>
     <string name="email_et">Email</string>
     <string name="password_et">Password</string>
+    <string name="error_wrong_combination">Invalid Email or Password Combination</string>
+    <string name="error_email">Please Enter a Valid Email Address</string>
+    <string name="error_password">Please Enter a Valid Password</string>
+
 </resources>

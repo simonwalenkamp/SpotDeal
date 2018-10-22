@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Starts the LoginFragment
     private fun startLogin() {
         supportFragmentManager
             .beginTransaction()
