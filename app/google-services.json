@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "280859323954",
+    "firebase_url": "https://spotdeal-9c383.firebaseio.com",
+    "project_id": "spotdeal-9c383",
+    "storage_bucket": "spotdeal-9c383.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:280859323954:android:96d08433e3e59fbf",
+        "android_client_info": {
+          "package_name": "com.walenkamp.spotdeal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "280859323954-tpedkjbfb8s5e2hvl0clmldkbhifda4o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.walenkamp.spotdeal",
+            "certificate_hash": "08418d28276247829a1178b14c8649def3e58ff8"
+          }
+        },
+        {
+          "client_id": "280859323954-a8lhf74no1kv668641bilqhbcm2fd55s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApkfswYAWrM-PCVd2XIVtIPSqC8mTMhgs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "280859323954-a8lhf74no1kv668641bilqhbcm2fd55s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

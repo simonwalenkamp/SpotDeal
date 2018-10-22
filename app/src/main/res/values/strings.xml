@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">SpotDeal</string>
+    <string name="login_btn">Login</string>
+    <string name="email_et">Email</string>
+    <string name="password_et">Password</string>
 </resources>
