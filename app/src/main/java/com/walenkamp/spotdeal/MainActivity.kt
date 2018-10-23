@@ -1,5 +1,6 @@
 package com.walenkamp.spotdeal
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.walenkamp.spotdeal.Authentication.AuthManager
@@ -31,12 +32,10 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    // Starts the SearchFragment
+    // Start the SearchActivity
     private fun startSearch() {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.main_activity, SearchFragment.newInstance(), "searchFragment")
-            .commit()
+        val intent = Intent(this, SearchActivity::class.java)
+        startActivity(intent)
     }
 
     // Checks if a user is logged in

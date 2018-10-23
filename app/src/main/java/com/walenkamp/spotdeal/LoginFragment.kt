@@ -1,5 +1,6 @@
 package com.walenkamp.spotdeal
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -60,11 +61,9 @@ class LoginFragment : androidx.fragment.app.Fragment() {
             })
     }
 
-    // Starts the SearchFragment
+    // Starts the SearchActivity
     private fun startSearch() {
-        activity!!.supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.main_activity, SearchFragment.newInstance(), "searchFragment")
-            .commit()
+        val intent = Intent(this.context, SearchActivity::class.java)
+        startActivity(intent)
     }
 }
