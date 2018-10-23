@@ -24,4 +24,8 @@ class AuthManager {
                 }
             }
     }
+
+    fun logOut(){
+        mAuth.signOut()
+    }
 }
