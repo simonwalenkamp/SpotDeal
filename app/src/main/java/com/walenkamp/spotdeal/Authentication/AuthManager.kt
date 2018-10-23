@@ -10,7 +10,7 @@ class AuthManager {
     private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     // User instance
-    var user: FirebaseUser? = null
+    var user: FirebaseUser? = mAuth.currentUser
 
     // Authenticates the user with the given information
     fun login(email: String, password: String, callBack: ICallBackUser) {

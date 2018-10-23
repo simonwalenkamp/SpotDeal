@@ -11,6 +11,8 @@ import com.walenkamp.spotdeal.Interface.ICallBackUser
 import kotlinx.android.synthetic.main.login_fragment.*
 
 
+
+
 class LoginFragment : androidx.fragment.app.Fragment() {
 
     // AuthManager instance
@@ -49,12 +51,20 @@ class LoginFragment : androidx.fragment.app.Fragment() {
             authManager.login(email_et.text.toString(), password_et.text.toString(), object: ICallBackUser {
                 override fun onFinishFirebaseUser(user: FirebaseUser?) {
                     if(authManager.user != null) {
-
+                        startSearch()
                     } else {
                         progress.visibility = View.INVISIBLE
                         Snackbar.make(view!!, R.string.error_wrong_combination, Snackbar.LENGTH_LONG).show()
                     }
                 }
             })
+    }
+
+    // Starts the SearchFragment
+    private fun startSearch() {
+        activity!!.supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.main_activity, SearchFragment.newInstance(), "searchFragment")
+            .commit()
     }
 }
