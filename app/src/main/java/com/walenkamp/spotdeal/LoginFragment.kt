@@ -65,5 +65,6 @@ class LoginFragment : androidx.fragment.app.Fragment() {
     private fun startSearch() {
         val intent = Intent(this.context, SearchActivity::class.java)
         startActivity(intent)
+        activity!!.finish()
     }
 }

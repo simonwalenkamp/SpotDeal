@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private fun startSearch() {
         val intent = Intent(this, SearchActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     // Checks if a user is logged in
