@@ -29,7 +29,6 @@ class LogoutDialogFragment: DialogFragment() {
         dialog_log_out.setOnClickListener{
             logout()
         }
-
         dialog_cancel.setOnClickListener{
             cancel()
         }

@@ -25,6 +25,7 @@ class AuthManager {
             }
     }
 
+    // Signs the user out
     fun logOut(){
         mAuth.signOut()
     }
