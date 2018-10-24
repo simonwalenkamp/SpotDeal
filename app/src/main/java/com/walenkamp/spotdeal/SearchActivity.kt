@@ -1,8 +1,8 @@
 package com.walenkamp.spotdeal
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
@@ -56,12 +56,11 @@ class SearchActivity : AppCompatActivity() {
             menuItem.isChecked = true
             // close drawer when item is tapped
             mDrawerLayout.closeDrawers()
-
             when {
                 menuItem.toString() == "Log out" -> logout()
+                menuItem.toString() == "Scan code" -> startScan()
             }
-
-            true
+           true
         }
 
         this.setSupportActionBar(findViewById(R.id.toolbar))
@@ -88,5 +87,11 @@ class SearchActivity : AppCompatActivity() {
     private fun logout() {
         val dialog = LogoutDialogFragment.newInstance()
         dialog.show(supportFragmentManager, "LogoutDialog")
+    }
+
+    // Start the ScanActivity
+    private fun startScan() {
+        val intent = Intent(this, ScanActivity::class.java)
+        startActivity(intent)
     }
 }
