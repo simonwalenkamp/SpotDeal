@@ -2,13 +2,10 @@ package com.walenkamp.spotdeal
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
 import com.google.android.material.navigation.NavigationView
 
 class SearchActivity : AppCompatActivity() {
@@ -56,6 +53,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    // Shows the LogoutDialogFragment
     private fun logout() {
         val dialog = LogoutDialogFragment.newInstance()
         dialog.show(supportFragmentManager, "LogoutDialog")
