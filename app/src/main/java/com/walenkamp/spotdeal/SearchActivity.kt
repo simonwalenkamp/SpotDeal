@@ -9,10 +9,15 @@ import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
+import com.walenkamp.spotdeal.BLL.CustomerLogic
 import com.walenkamp.spotdeal.BLL.SupplierLogic
+import com.walenkamp.spotdeal.Entities.Customer
 import com.walenkamp.spotdeal.Entities.Supplier
 import com.walenkamp.spotdeal.Interface.ICallBackSupplier
+import com.walenkamp.spotdeal.Interface.ICallbackCustomers
+import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : AppCompatActivity() {
 
@@ -23,12 +28,57 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var supplier: Supplier
 
     // SupplierLogic instance
-    private var supplierLogic: SupplierLogic = SupplierLogic()
+    private val supplierLogic: SupplierLogic = SupplierLogic()
+
+    // CustomerLogic instance
+    private val customerLogic: CustomerLogic = CustomerLogic()
+
+    // CustomerAdapter instance
+    private val adapter = CustomerAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        setNavigationAndToolbar()
+
+        rec_customer.adapter = adapter
+        rec_customer.layoutManager = LinearLayoutManager(this)
+
+        customerLogic.getCustomers(object : ICallbackCustomers {
+            override fun onFinishCustomers(customers: List<Customer>?) {
+                adapter.setCustomers(customers!!)
+            }
+        })
+
+
+    }
+
+    // Handles opening the drawer menu
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                mDrawerLayout.openDrawer(GravityCompat.START)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    // Shows the LogoutDialogFragment
+    private fun logout() {
+        val dialog = LogoutDialogFragment.newInstance()
+        dialog.show(supportFragmentManager, "LogoutDialog")
+    }
+
+    // Start the ScanActivity
+    private fun startScan() {
+        val intent = Intent(this, ScanActivity::class.java)
+        startActivity(intent)
+    }
+
+    // Sets the navigation drawer and toolbar up
+    private fun setNavigationAndToolbar(){
         // Gets the supplier from SupplierLogic
         supplierLogic.getSupplier(object : ICallBackSupplier{
             override fun onFinishSupplier(sup: Supplier?) {
@@ -60,7 +110,7 @@ class SearchActivity : AppCompatActivity() {
                 menuItem.toString() == "Log out" -> logout()
                 menuItem.toString() == "Scan code" -> startScan()
             }
-           true
+            true
         }
 
         this.setSupportActionBar(findViewById(R.id.toolbar))
@@ -70,28 +120,5 @@ class SearchActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }
-    }
-
-    // Handles opening the drawer menu
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                mDrawerLayout.openDrawer(GravityCompat.START)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    // Shows the LogoutDialogFragment
-    private fun logout() {
-        val dialog = LogoutDialogFragment.newInstance()
-        dialog.show(supportFragmentManager, "LogoutDialog")
-    }
-
-    // Start the ScanActivity
-    private fun startScan() {
-        val intent = Intent(this, ScanActivity::class.java)
-        startActivity(intent)
     }
 }
