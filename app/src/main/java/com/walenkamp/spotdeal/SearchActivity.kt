@@ -18,6 +18,9 @@ import com.walenkamp.spotdeal.Entities.Supplier
 import com.walenkamp.spotdeal.Interface.ICallBackSupplier
 import com.walenkamp.spotdeal.Interface.ICallbackCustomers
 import kotlinx.android.synthetic.main.activity_search.*
+import androidx.recyclerview.widget.DividerItemDecoration
+
+
 
 class SearchActivity : AppCompatActivity() {
 
@@ -42,12 +45,15 @@ class SearchActivity : AppCompatActivity() {
 
         setNavigationAndToolbar()
 
-        rec_customer.adapter = adapter
-        rec_customer.layoutManager = LinearLayoutManager(this)
+
+
 
         customerLogic.getCustomers(object : ICallbackCustomers {
             override fun onFinishCustomers(customers: List<Customer>?) {
+                rec_customer.adapter = adapter
+                rec_customer.layoutManager = LinearLayoutManager(baseContext)
                 adapter.setCustomers(customers!!)
+                customer_progress.visibility = View.INVISIBLE
             }
         })
 

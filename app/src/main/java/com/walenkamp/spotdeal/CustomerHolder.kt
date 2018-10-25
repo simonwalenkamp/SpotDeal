@@ -11,6 +11,9 @@ class CustomerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     // Sets the customer data on the CustomerItem
     fun bind(customer: Customer) {
         itemView.customer_name_tv.text = customer.name
+        itemView.customer_address_tv.text = customer.address
+        itemView.customer_email_tv.text = customer.email
+        itemView.customer_phone_tv.text = customer.phone.toString()
 
         itemView.setOnClickListener {
             Log.d("SIMON", "${customer.name} Clicked!")
