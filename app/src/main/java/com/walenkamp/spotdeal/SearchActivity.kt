@@ -3,8 +3,10 @@ package com.walenkamp.spotdeal
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.core.view.GravityCompat
@@ -18,7 +20,6 @@ import com.walenkamp.spotdeal.Entities.Supplier
 import com.walenkamp.spotdeal.Interface.ICallBackSupplier
 import com.walenkamp.spotdeal.Interface.ICallbackCustomers
 import kotlinx.android.synthetic.main.activity_search.*
-import androidx.recyclerview.widget.DividerItemDecoration
 
 
 
@@ -32,6 +33,9 @@ class SearchActivity : AppCompatActivity() {
 
     // SupplierLogic instance
     private val supplierLogic: SupplierLogic = SupplierLogic()
+
+    // Customer list
+    private lateinit var allCustomers: List<Customer>
 
     // CustomerLogic instance
     private val customerLogic: CustomerLogic = CustomerLogic()
@@ -51,12 +55,25 @@ class SearchActivity : AppCompatActivity() {
                 supplier = sup!!
                 customerLogic.getCustomers(object : ICallbackCustomers {
                     override fun onFinishCustomers(customers: List<Customer>?) {
+                        allCustomers = customers!!
                         rec_customer.adapter = adapter
                         rec_customer.layoutManager = LinearLayoutManager(baseContext)
-                        adapter.setCustomers(customers!!)
+                        adapter.setCustomers(customers)
                         customer_progress.visibility = View.INVISIBLE
                     }
                 }, supplier.id)
+            }
+        })
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterCustomer(newText)
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                filterCustomer(query)
+                return true
             }
         })
     }
@@ -119,5 +136,25 @@ class SearchActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }
+    }
+
+    // Creates a new list of customers matching the result and sets that list to the adapter
+    private fun filterCustomer(text: String?) {
+        if(text == "") {
+            return
+        }
+        val newCustomerList = mutableListOf<Customer>()
+        for (cus in allCustomers) {
+            if (cus.name.contains("$text", true) ||
+                cus.address.contains("$text", true) ||
+                cus.email.contains("$text", true) ||
+                cus.phone.toString().contains("$text", true) &&
+                    !newCustomerList.contains(cus))
+            {
+                newCustomerList.add(cus)
+            }
+
+        }
+        adapter.setCustomers(newCustomerList)
     }
 }

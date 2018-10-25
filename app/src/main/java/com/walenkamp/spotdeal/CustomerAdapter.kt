@@ -31,7 +31,9 @@ class CustomerAdapter(private val context: Context): RecyclerView.Adapter<Recycl
 
     // Sets the customers
     fun setCustomers(customers: List<Customer>) {
+        results.clear()
         results.addAll(customers)
+        notifyDataSetChanged()
     }
 
 }
