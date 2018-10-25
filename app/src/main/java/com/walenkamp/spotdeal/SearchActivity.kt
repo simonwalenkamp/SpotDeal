@@ -45,19 +45,20 @@ class SearchActivity : AppCompatActivity() {
 
         setNavigationAndToolbar()
 
-
-
-
-        customerLogic.getCustomers(object : ICallbackCustomers {
-            override fun onFinishCustomers(customers: List<Customer>?) {
-                rec_customer.adapter = adapter
-                rec_customer.layoutManager = LinearLayoutManager(baseContext)
-                adapter.setCustomers(customers!!)
-                customer_progress.visibility = View.INVISIBLE
+        // Gets the supplier from SupplierLogic
+        supplierLogic.getSupplier(object : ICallBackSupplier{
+            override fun onFinishSupplier(sup: Supplier?) {
+                supplier = sup!!
+                customerLogic.getCustomers(object : ICallbackCustomers {
+                    override fun onFinishCustomers(customers: List<Customer>?) {
+                        rec_customer.adapter = adapter
+                        rec_customer.layoutManager = LinearLayoutManager(baseContext)
+                        adapter.setCustomers(customers!!)
+                        customer_progress.visibility = View.INVISIBLE
+                    }
+                }, supplier.id)
             }
         })
-
-
     }
 
     // Handles opening the drawer menu
@@ -85,14 +86,6 @@ class SearchActivity : AppCompatActivity() {
 
     // Sets the navigation drawer and toolbar up
     private fun setNavigationAndToolbar(){
-        // Gets the supplier from SupplierLogic
-        supplierLogic.getSupplier(object : ICallBackSupplier{
-            override fun onFinishSupplier(sup: Supplier?) {
-                supplier = sup!!
-            }
-        })
-
-
         mDrawerLayout = findViewById(R.id.drawer_layout)
 
         val navigationView: NavigationView = findViewById(R.id.nav_view)
