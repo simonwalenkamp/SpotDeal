@@ -141,6 +141,7 @@ class SearchActivity : AppCompatActivity() {
     // Creates a new list of customers matching the result and sets that list to the adapter
     private fun filterCustomer(text: String?) {
         if(text == "") {
+            adapter.setCustomers(allCustomers)
             return
         }
         val newCustomerList = mutableListOf<Customer>()
