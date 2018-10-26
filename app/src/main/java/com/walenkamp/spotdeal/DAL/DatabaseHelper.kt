@@ -15,6 +15,9 @@ import kotlin.coroutines.experimental.suspendCoroutine
 
 class DatabaseHelper {
 
+    // Logcat tag
+    private val TAG: String = "DatabaseHelper"
+
     // Instance of Firestore
     private val db = FirebaseFirestore.getInstance()
 
@@ -25,11 +28,16 @@ class DatabaseHelper {
     fun getSupplier(callback: ICallBackSupplier) {
         db.collection("suppliers").document(authManager.user!!.uid).get().addOnCompleteListener{ task ->
             if(task.isSuccessful) {
-                val doc = task.result!!
-                val supplier: Supplier? = doc.toObject(Supplier::class.java)
-                supplier?.id = doc.id
+                try {
+                    val doc = task.result!!
+                    val supplier: Supplier? = doc.toObject(Supplier::class.java)
+                    supplier?.id = doc.id
 
-                callback.onFinishSupplier(supplier)
+                    callback.onFinishSupplier(supplier)
+                } catch (e: Exception) {
+                    Log.d(TAG, e.message)
+                }
+
             }
         }
     }
@@ -41,12 +49,16 @@ class DatabaseHelper {
             db.collection("customers").get().addOnCompleteListener { task ->
                 if(task.isSuccessful) {
                     for (doc in task.result!!) {
-                        val customer = doc.toObject(Customer::class.java)
-                        customer.id = doc.id
-                        for (o in orderList) {
-                            if (customer.id == o.customerId && !customerList.contains(customer)) {
-                                customerList.add(customer)
+                        try {
+                            val customer = doc.toObject(Customer::class.java)
+                            customer.id = doc.id
+                            for (o in orderList) {
+                                if (customer.id == o.customerId && !customerList.contains(customer)) {
+                                    customerList.add(customer)
+                                }
                             }
+                        } catch (e: Exception) {
+                            Log.d(TAG, e.message)
                         }
                     }
                 }
@@ -61,8 +73,13 @@ class DatabaseHelper {
             .get().addOnCompleteListener { task ->
                 if(task.isSuccessful)
                     for (doc in task.result!!) {
-                        val o = doc.toObject(Order::class.java)
-                        orderList.add(o)
+                        try {
+                            val o = doc.toObject(Order::class.java)
+                            orderList.add(o)
+                        } catch (e: Exception) {
+                            Log.d(TAG, e.message)
+                        }
+
                     }
                 callback.onFinishOrders(orderList)
             }
