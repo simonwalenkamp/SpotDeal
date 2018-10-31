@@ -1,10 +1,11 @@
-package com.walenkamp.spotdeal
+package com.walenkamp.spotdeal.Activities
 
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.walenkamp.spotdeal.Entities.Customer
+import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.activity_customer.*
 
 const val CUSTOMER_ID        = "CUSTOMER_ID"

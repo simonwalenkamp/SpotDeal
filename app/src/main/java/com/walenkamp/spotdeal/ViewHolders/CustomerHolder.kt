@@ -1,9 +1,10 @@
-package com.walenkamp.spotdeal
+package com.walenkamp.spotdeal.ViewHolders
 
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.walenkamp.spotdeal.Activities.CUSTOMER_ID
+import com.walenkamp.spotdeal.Activities.CustomerActivity
 import com.walenkamp.spotdeal.Entities.Customer
 import kotlinx.android.synthetic.main.customer_list_item.view.*
 
@@ -17,7 +18,8 @@ class CustomerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.customer_phone_tv.text = customer.phone.toString()
 
         itemView.setOnClickListener {
-            val intent = Intent(itemView.context, CustomerActivity::class.java).putExtra(CUSTOMER_ID, customer)
+            val intent = Intent(itemView.context, CustomerActivity::class.java).putExtra(
+                CUSTOMER_ID, customer)
             itemView.context.startActivity(intent)
         }
     }

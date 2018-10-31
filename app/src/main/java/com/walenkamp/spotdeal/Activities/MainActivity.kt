@@ -1,9 +1,11 @@
-package com.walenkamp.spotdeal
+package com.walenkamp.spotdeal.Activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.walenkamp.spotdeal.Authentication.AuthManager
+import com.walenkamp.spotdeal.Fragments.LoginFragment
+import com.walenkamp.spotdeal.R
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,7 +30,9 @@ class MainActivity : AppCompatActivity() {
     private fun startLogin() {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.main_activity, LoginFragment.newInstance(), "loginFragment")
+            .replace(
+                R.id.main_activity,
+                LoginFragment.newInstance(), "loginFragment")
             .commit()
     }
 
