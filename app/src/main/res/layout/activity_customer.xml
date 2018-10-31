@@ -28,21 +28,6 @@
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_location"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginEnd="10dp"/>
-
-        <TextView
-                android:id="@+id/address_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Medium"/>
-
-        <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_email_24dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
@@ -68,6 +53,22 @@
                 android:id="@+id/phone_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Medium"/>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_location"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="10dp"/>
+
+        <TextView
+                android:id="@+id/address_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textIsSelectable="true"
                 style="@style/TextAppearance.AppCompat.Medium"/>
 
 

@@ -1,5 +1,7 @@
 package com.walenkamp.spotdeal
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.walenkamp.spotdeal.Entities.Customer
@@ -22,5 +24,29 @@ class CustomerActivity : AppCompatActivity() {
         email_tv.text = customer.email
         phone_tv.text = customer.phone.toString()
         address_tv.text = customer.address
+
+
+        phone_tv.setOnClickListener{
+            openDial()
+        }
+
+        email_tv.setOnClickListener {
+            openMail()
+        }
+
+    }
+
+    // Opens dial with customer phone nr
+    private fun openDial(){
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:" + phone_tv.text)
+        startActivity(intent)
+    }
+
+    // Opens mail with customer mail address
+    private fun openMail() {
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse("mailto:" + email_tv.text)
+        startActivity(intent)
     }
 }
