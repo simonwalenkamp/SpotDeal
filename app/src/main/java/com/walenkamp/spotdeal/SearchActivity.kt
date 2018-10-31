@@ -53,7 +53,6 @@ class SearchActivity : AppCompatActivity() {
         supplierLogic.getSupplier(object : ICallBackSupplier{
             override fun onFinishSupplier(sup: Supplier?) {
                 supplier = sup!!
-                    override fun onFinishCustomers(customers: List<Customer>?) {
                 getCustomers(supplier.id)
             }
         })
