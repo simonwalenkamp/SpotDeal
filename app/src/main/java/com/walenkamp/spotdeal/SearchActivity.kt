@@ -49,19 +49,12 @@ class SearchActivity : AppCompatActivity() {
 
         setNavigationAndToolbar()
 
-        // Gets the supplier from SupplierLogic
+        // Gets the supplier from SupplierLogic and calls the getCustomers function
         supplierLogic.getSupplier(object : ICallBackSupplier{
             override fun onFinishSupplier(sup: Supplier?) {
                 supplier = sup!!
-                customerLogic.getCustomers(object : ICallbackCustomers {
                     override fun onFinishCustomers(customers: List<Customer>?) {
-                        allCustomers = customers!!
-                        rec_customer.adapter = adapter
-                        rec_customer.layoutManager = LinearLayoutManager(baseContext)
-                        adapter.setCustomers(customers)
-                        customer_progress.visibility = View.INVISIBLE
-                    }
-                }, supplier.id)
+                getCustomers(supplier.id)
             }
         })
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
@@ -141,6 +134,7 @@ class SearchActivity : AppCompatActivity() {
     // Creates a new list of customers matching the result and sets that list to the adapter
     private fun filterCustomer(text: String?) {
         if(text == "") {
+            adapter.setCustomers(allCustomers)
             return
         }
         val newCustomerList = mutableListOf<Customer>()
@@ -156,5 +150,19 @@ class SearchActivity : AppCompatActivity() {
 
         }
         adapter.setCustomers(newCustomerList)
+    }
+
+    // Gets all customers and sets them to the adapter
+    private fun getCustomers(supplierId: String) {
+        customerLogic.getCustomers(object : ICallbackCustomers {
+            override fun onFinishCustomers(customers: List<Customer>?) {
+                allCustomers = customers!!
+                rec_customer.adapter = adapter
+                rec_customer.layoutManager = LinearLayoutManager(baseContext)
+                adapter.setCustomers(customers)
+                customer_progress.visibility = View.INVISIBLE
+            }
+        }, supplierId)
+
     }
 }
