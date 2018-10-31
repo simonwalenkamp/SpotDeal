@@ -1,7 +1,8 @@
-package com.walenkamp.spotdeal
+package com.walenkamp.spotdeal.Activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.walenkamp.spotdeal.R
 
 class ScanActivity : AppCompatActivity() {
 

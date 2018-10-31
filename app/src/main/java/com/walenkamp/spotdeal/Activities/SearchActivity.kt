@@ -1,9 +1,8 @@
-package com.walenkamp.spotdeal
+package com.walenkamp.spotdeal.Activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.SearchView
@@ -13,12 +12,15 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
+import com.walenkamp.spotdeal.Adapters.CustomerAdapter
 import com.walenkamp.spotdeal.BLL.CustomerLogic
 import com.walenkamp.spotdeal.BLL.SupplierLogic
 import com.walenkamp.spotdeal.Entities.Customer
 import com.walenkamp.spotdeal.Entities.Supplier
 import com.walenkamp.spotdeal.Interface.ICallBackSupplier
 import com.walenkamp.spotdeal.Interface.ICallbackCustomers
+import com.walenkamp.spotdeal.Fragments.LogoutDialogFragment
+import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.activity_search.*
 
 
@@ -49,19 +51,11 @@ class SearchActivity : AppCompatActivity() {
 
         setNavigationAndToolbar()
 
-        // Gets the supplier from SupplierLogic
+        // Gets the supplier from SupplierLogic and calls the getCustomers function
         supplierLogic.getSupplier(object : ICallBackSupplier{
             override fun onFinishSupplier(sup: Supplier?) {
                 supplier = sup!!
-                customerLogic.getCustomers(object : ICallbackCustomers {
-                    override fun onFinishCustomers(customers: List<Customer>?) {
-                        allCustomers = customers!!
-                        rec_customer.adapter = adapter
-                        rec_customer.layoutManager = LinearLayoutManager(baseContext)
-                        adapter.setCustomers(customers)
-                        customer_progress.visibility = View.INVISIBLE
-                    }
-                }, supplier.id)
+                getCustomers(supplier.id)
             }
         })
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
@@ -157,5 +151,19 @@ class SearchActivity : AppCompatActivity() {
 
         }
         adapter.setCustomers(newCustomerList)
+    }
+
+    // Gets all customers and sets them to the adapter
+    private fun getCustomers(supplierId: String) {
+        customerLogic.getCustomers(object : ICallbackCustomers {
+            override fun onFinishCustomers(customers: List<Customer>?) {
+                allCustomers = customers!!
+                rec_customer.adapter = adapter
+                rec_customer.layoutManager = LinearLayoutManager(baseContext)
+                adapter.setCustomers(customers)
+                customer_progress.visibility = View.INVISIBLE
+            }
+        }, supplierId)
+
     }
 }

@@ -1,4 +1,4 @@
-package com.walenkamp.spotdeal
+package com.walenkamp.spotdeal.Fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseUser
+import com.walenkamp.spotdeal.Activities.SearchActivity
 import com.walenkamp.spotdeal.Authentication.AuthManager
 import com.walenkamp.spotdeal.Interface.ICallBackUser
+import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.login_fragment.*
 
 

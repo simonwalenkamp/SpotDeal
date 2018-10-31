@@ -1,10 +1,12 @@
-package com.walenkamp.spotdeal
+package com.walenkamp.spotdeal.Adapters
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.walenkamp.spotdeal.ViewHolders.CustomerHolder
 import com.walenkamp.spotdeal.Entities.Customer
+import com.walenkamp.spotdeal.R
 
 class CustomerAdapter(private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
