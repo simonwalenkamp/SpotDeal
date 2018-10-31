@@ -5,6 +5,6 @@ data class Deal(
     var supplierId: String = "",
     var name: String = "",
     var price: Int = 0,
-    var imgId: String? = "",
+    var imageId: String? = "",
     var description: String? = "",
     var info: String? = "")

@@ -8,7 +8,9 @@ import com.walenkamp.spotdeal.Entities.Supplier
 import com.walenkamp.spotdeal.Interface.ICallBackSupplier
 import com.walenkamp.spotdeal.Interface.ICallbackCustomers
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Entities.Order
+import com.walenkamp.spotdeal.Interface.ICallbackDeals
 import com.walenkamp.spotdeal.Interface.ICallbackOrders
 import kotlin.coroutines.experimental.suspendCoroutine
 
@@ -83,5 +85,51 @@ class DatabaseHelper {
                     }
                 callback.onFinishOrders(orderList)
             }
+    }
+
+    // Gets all orders a customer has with a supplier
+    fun getOrdersByCustomer(callback: ICallbackOrders, customerId: String, supplierId: String) {
+        val orderList = mutableListOf<Order>()
+        db.collection("orders").whereEqualTo("customerId", customerId).whereEqualTo("supplierId", supplierId)
+            .get().addOnCompleteListener { task ->
+                if (task.isSuccessful)
+                    for (doc in task.result!!) {
+                        try {
+                            val o = doc.toObject(Order::class.java)
+                            orderList.add(o)
+                        } catch (e: Exception) {
+                            Log.d(TAG, e.message)
+                        }
+
+                    }
+                callback.onFinishOrders(orderList)
+            }
+    }
+
+    // Gets all deals for customer
+    fun getDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String) {
+        val dealList = mutableListOf<Deal>()
+
+        db.collection("deals").whereEqualTo("supplierId", supplierId).get().addOnCompleteListener { task ->
+            if(task.isSuccessful) {
+                for (doc in task.result!!) {
+                    try {
+                        val deal = doc.toObject(Deal::class.java)
+                        deal.id = doc.id
+                        Log.d("SIMON", orderList.size.toString())
+
+                        for (o in orderList) {
+                            Log.d("SIMON", deal.id)
+                            if (deal.id == o.dealId && !dealList.contains(deal)) {
+                                dealList.add(deal)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.d(TAG, e.message)
+                    }
+                }
+            }
+            callback.onFinishDeals(dealList)
+        }
     }
 }
