@@ -116,10 +116,7 @@ class DatabaseHelper {
                     try {
                         val deal = doc.toObject(Deal::class.java)
                         deal.id = doc.id
-                        Log.d("SIMON", orderList.size.toString())
-
                         for (o in orderList) {
-                            Log.d("SIMON", deal.id)
                             if (deal.id == o.dealId && !dealList.contains(deal)) {
                                 dealList.add(deal)
                             }
