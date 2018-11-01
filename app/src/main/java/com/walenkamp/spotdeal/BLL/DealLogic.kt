@@ -45,6 +45,20 @@ class DealLogic {
         }, customerId, supplierId)
     }
 
+    // Gets all deals a customer has with a supplier
+    fun getAllDeals(callback: ICallbackDeals, customerId: String, supplierId: String) {
+        dal.getOrdersByCustomer(object : ICallbackOrders {
+            override fun onFinishOrders(orders: List<Order>?) {
+                dal.getAllDeals(object : ICallbackDeals {
+                    override fun onFinishDeals(deals: List<Deal>?) {
+                        val dealList = deals
+                        callback.onFinishDeals(dealList)
+                    }
+                }, orders!!, supplierId)
+            }
+        }, customerId, supplierId)
+    }
+
     // Gets deal image
     fun getDealImage(callback: ICallbackDealImage, dealImageId: String) {
         storage.getDealImage(object : ICallbackDealImage {

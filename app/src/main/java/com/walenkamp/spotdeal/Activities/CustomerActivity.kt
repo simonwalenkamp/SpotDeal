@@ -80,6 +80,8 @@ class CustomerActivity : AppCompatActivity() {
         when(item?.itemId) {
             R.id.load_valid -> { getValidDeals(customer.id, supplier.id) }
             R.id.load_invalid -> { getInvalidDeals(customer.id, supplier.id) }
+            R.id.load_all -> { getAllDeals(customer.id, supplier.id) }
+
         }
         return super.onOptionsItemSelected(item)
     }
@@ -99,7 +101,7 @@ class CustomerActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    // Gets all deals a customer has with the supplier
+    // Gets all valid deals a customer has with the supplier
     private fun getValidDeals(customerId: String, supplierId: String) {
         status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE
@@ -119,6 +121,20 @@ class CustomerActivity : AppCompatActivity() {
     }
 
     // Gets all deals a customer has with the supplier
+    private fun getAllDeals(customerId: String, supplierId: String) {
+        status_tv.visibility = View.INVISIBLE
+        deal_progress.visibility = View.VISIBLE
+        dealLogic.getAllDeals(object : ICallbackDeals {
+            override fun onFinishDeals(deals: List<Deal>?) {
+                rec_deal.adapter = adapter
+                rec_deal.layoutManager = LinearLayoutManager(baseContext)
+                adapter.setDeals(deals!!)
+                deal_progress.visibility = View.INVISIBLE
+            }
+        }, customerId, supplierId)
+    }
+
+    // Gets all invalid deals a customer has with the supplier
     private fun getInvalidDeals(customerId: String, supplierId: String) {
         status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE

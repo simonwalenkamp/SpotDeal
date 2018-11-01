@@ -151,4 +151,27 @@ class DatabaseHelper {
             callback.onFinishDeals(dealList)
         }
     }
+
+    // Gets all deals for customer
+    fun getAllDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String) {
+        val dealList = mutableListOf<Deal>()
+        db.collection("deals").whereEqualTo("supplierId", supplierId).get().addOnCompleteListener { task ->
+            if(task.isSuccessful) {
+                for (doc in task.result!!) {
+                    try {
+                        val deal = doc.toObject(Deal::class.java)
+                        deal.id = doc.id
+                        for (o in orderList) {
+                            if (deal.id == o.dealId && !dealList.contains(deal)) {
+                                dealList.add(deal)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.d(TAG, e.message)
+                    }
+                }
+            }
+            callback.onFinishDeals(dealList)
+        }
+    }
 }

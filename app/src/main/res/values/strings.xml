@@ -9,6 +9,7 @@
     <string name="logout">Log out</string>
     <string name="valid">Show Active</string>
     <string name="invalid">Show Inactive</string>
+    <string name="all">Show All</string>
     <string name="scan">Scan code</string>
     <string name="status_no_valid">No active Deals</string>
     <string name="status_no_invalid">No inactive Deals</string>
