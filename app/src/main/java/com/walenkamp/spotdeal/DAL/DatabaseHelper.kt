@@ -106,10 +106,9 @@ class DatabaseHelper {
             }
     }
 
-    // Gets all deals for customer
-    fun getDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String) {
+    // Gets all valid deals for customer
+    fun getValidDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String) {
         val dealList = mutableListOf<Deal>()
-
         db.collection("deals").whereEqualTo("supplierId", supplierId).get().addOnCompleteListener { task ->
             if(task.isSuccessful) {
                 for (doc in task.result!!) {
@@ -117,7 +116,30 @@ class DatabaseHelper {
                         val deal = doc.toObject(Deal::class.java)
                         deal.id = doc.id
                         for (o in orderList) {
-                            if (deal.id == o.dealId && !dealList.contains(deal)) {
+                            if (deal.id == o.dealId && !dealList.contains(deal) && o.valid) {
+                                dealList.add(deal)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.d(TAG, e.message)
+                    }
+                }
+            }
+            callback.onFinishDeals(dealList)
+        }
+    }
+
+    // Gets all invalid deals for customer
+    fun getInvalidDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String) {
+        val dealList = mutableListOf<Deal>()
+        db.collection("deals").whereEqualTo("supplierId", supplierId).get().addOnCompleteListener { task ->
+            if(task.isSuccessful) {
+                for (doc in task.result!!) {
+                    try {
+                        val deal = doc.toObject(Deal::class.java)
+                        deal.id = doc.id
+                        for (o in orderList) {
+                            if (deal.id == o.dealId && !dealList.contains(deal) && !o.valid) {
                                 dealList.add(deal)
                             }
                         }

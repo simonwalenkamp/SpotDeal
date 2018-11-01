@@ -4,7 +4,10 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.walenkamp.spotdeal.Adapters.DealAdapter
 import com.walenkamp.spotdeal.BLL.DealLogic
@@ -43,6 +46,8 @@ class CustomerActivity : AppCompatActivity() {
 
         customer = intent.getSerializableExtra(CUSTOMER) as Customer
 
+        setSupportActionBar(toolbar_customer)
+
         toolbar_customer.title = customer.name
         email_tv.text = customer.email
         phone_tv.text = customer.phone.toString()
@@ -57,25 +62,77 @@ class CustomerActivity : AppCompatActivity() {
             openMail()
         }
 
-        // Gets the supplier from SupplierLogic and calls the getCustomers function
+        // Gets the supplier from SupplierLogic and calls the getValidDeals function
         supplierLogic.getSupplier(object : ICallBackSupplier {
             override fun onFinishSupplier(sup: Supplier?) {
                 supplier = sup!!
-                getDeals(customer.id ,supplier.id)
+                getValidDeals(customer.id ,supplier.id)
             }
         })
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.deal_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.load_valid -> { getValidDeals(customer.id, supplier.id) }
+            R.id.load_invalid -> { getInvalidDeals(customer.id, supplier.id) }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.let {
+            if (menu is MenuBuilder) {
+                try {
+                    val field = menu.javaClass.getDeclaredField("mOptionalIconsVisible")
+                    field.isAccessible = true
+                    field.setBoolean(menu, true)
+                } catch (ignored: Exception) {
+                    // ignored exception
+                }
+            }
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     // Gets all deals a customer has with the supplier
-    private fun getDeals(customerId: String, supplierId: String) {
-        dealLogic.getDeals(object : ICallbackDeals {
+    private fun getValidDeals(customerId: String, supplierId: String) {
+        status_tv.visibility = View.INVISIBLE
+        deal_progress.visibility = View.VISIBLE
+        dealLogic.getValidDeals(object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
+                if(deals!!.isEmpty()) {
+                    status_tv.text = getText(R.string.status_no_valid)
+                    status_tv.visibility = View.VISIBLE
+                }
                 rec_deal.adapter = adapter
                 rec_deal.layoutManager = LinearLayoutManager(baseContext)
-                adapter.setDeals(deals!!)
+                adapter.setDeals(deals)
                 deal_progress.visibility = View.INVISIBLE
             }
 
+        }, customerId, supplierId)
+    }
+
+    // Gets all deals a customer has with the supplier
+    private fun getInvalidDeals(customerId: String, supplierId: String) {
+        status_tv.visibility = View.INVISIBLE
+        deal_progress.visibility = View.VISIBLE
+        dealLogic.getInvalidDeals(object : ICallbackDeals {
+            override fun onFinishDeals(deals: List<Deal>?) {
+                if(deals!!.isEmpty()) {
+                    status_tv.text = getText(R.string.status_no_invalid)
+                    status_tv.visibility = View.VISIBLE
+                }
+                rec_deal.adapter = adapter
+                rec_deal.layoutManager = LinearLayoutManager(baseContext)
+                adapter.setDeals(deals)
+                deal_progress.visibility = View.INVISIBLE
+            }
         }, customerId, supplierId)
     }
 

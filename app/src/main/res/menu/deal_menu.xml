@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item
+                android:id="@+id/load_valid"
+                android:icon="@drawable/ic_valid"
+                android:title="@string/valid"/>
+        <item
+            android:id="@+id/load_invalid"
+            android:icon="@drawable/ic_invalid"
+            android:title="@string/invalid"/>
+</menu>
