@@ -164,6 +164,5 @@ class SearchActivity : AppCompatActivity() {
                 customer_progress.visibility = View.INVISIBLE
             }
         }, supplierId)
-
     }
 }
