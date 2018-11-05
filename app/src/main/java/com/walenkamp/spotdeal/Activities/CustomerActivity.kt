@@ -45,10 +45,10 @@ class CustomerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_customer)
 
         customer = intent.getSerializableExtra(CUSTOMER) as Customer
-
+        toolbar_customer.title = customer.name
         setSupportActionBar(toolbar_customer)
 
-        toolbar_customer.title = customer.name
+
         email_tv.text = customer.email
         phone_tv.text = customer.phone.toString()
         address_tv.text = customer.address

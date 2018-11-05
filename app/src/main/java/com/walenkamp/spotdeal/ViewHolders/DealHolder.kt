@@ -1,8 +1,11 @@
 package com.walenkamp.spotdeal.ViewHolders
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.walenkamp.spotdeal.Activities.DEAL
+import com.walenkamp.spotdeal.Activities.DealActivity
 import com.walenkamp.spotdeal.BLL.DealLogic
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Interface.ICallbackDealImage
@@ -21,6 +24,11 @@ class DealHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             getDealImage(deal.imageId!!)
         }
         itemView.deal_info_tv.text = deal.info
+        itemView.setOnClickListener {
+            val intent = Intent(itemView.context, DealActivity::class.java).putExtra(
+                DEAL, deal)
+            itemView.context.startActivity(intent)
+        }
     }
 
     // Gets deal image
