@@ -25,4 +25,13 @@ class OrderLogic {
             }
         }, supplierId)
     }
+
+    // Gets order by customer and deal
+    fun getOrdersByDeal(callback: ICallbackOrders, customerId: String, dealId: String){
+        orderDAO.getOrdersByDeal(object : ICallbackOrders{
+            override fun onFinishOrders(orders: List<Order>?) {
+                callback.onFinishOrders(orders)
+            }
+        }, customerId, dealId)
+    }
 }

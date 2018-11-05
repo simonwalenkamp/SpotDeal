@@ -111,6 +111,7 @@ class CustomerActivity : AppCompatActivity() {
                     status_tv.text = getText(R.string.status_no_valid)
                     status_tv.visibility = View.VISIBLE
                 }
+                adapter.customer = customer
                 rec_deal.adapter = adapter
                 rec_deal.layoutManager = LinearLayoutManager(baseContext)
                 adapter.setDeals(deals)

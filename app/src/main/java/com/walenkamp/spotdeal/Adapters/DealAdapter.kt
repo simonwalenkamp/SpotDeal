@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.walenkamp.spotdeal.Entities.Customer
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.R
 import com.walenkamp.spotdeal.ViewHolders.DealHolder
@@ -11,6 +12,7 @@ import com.walenkamp.spotdeal.ViewHolders.DealHolder
 class DealAdapter(private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     // Result list
     val results = mutableListOf<Deal>()
+    lateinit var customer: Customer
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflate = LayoutInflater.from(context).inflate(R.layout.deal_list_item, parent, false)
@@ -20,7 +22,7 @@ class DealAdapter(private val context: Context): RecyclerView.Adapter<RecyclerVi
     // binds the view holder
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is DealHolder) {
-            holder.bind(results[position])
+            holder.bind(results[position], customer)
         }
     }
 
