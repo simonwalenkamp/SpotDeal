@@ -27,6 +27,13 @@ class DealLogic {
                 dealDAO.getValidDeals(object : ICallbackDeals {
                     override fun onFinishDeals(deals: List<Deal>?) {
                         val dealList = deals
+                        for(deal in dealList!!) {
+                            storage.getDealImage(object : ICallbackDealImage{
+                                override fun onFinishDealImage(dealImage: Bitmap?) {
+                                    deal.image = dealImage!!
+                                }
+                            }, deal.imageId!!)
+                        }
                         callback.onFinishDeals(dealList)
                     }
                 }, orders!!, supplierId)
