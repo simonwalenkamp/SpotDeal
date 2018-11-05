@@ -11,9 +11,12 @@ class CustomerLogic {
     // Dal instance
     private val dal: DatabaseHelper = DatabaseHelper()
 
+    // OrderLogic instance
+    private val orderLogic: OrderLogic = OrderLogic()
+
     // Gets all customers
     fun getCustomers(callback: ICallbackCustomers, supplierId: String) {
-        dal.getOrders(object  : ICallbackOrders {
+        orderLogic.getOrders(object  : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
                 dal.getCustomers(object : ICallbackCustomers {
                     override fun onFinishCustomers(customers: List<Customer>?) {

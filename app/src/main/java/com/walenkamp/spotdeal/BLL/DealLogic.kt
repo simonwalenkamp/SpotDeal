@@ -17,9 +17,12 @@ class DealLogic {
     // Storage instance
     private val storage: StorageHelper = StorageHelper()
 
+    // OrderLogic instance
+    private val orderLogic: OrderLogic = OrderLogic()
+
     // Gets all valid deals a customer has with a supplier
     fun getValidDeals(callback: ICallbackDeals, customerId: String, supplierId: String) {
-        dal.getOrdersByCustomer(object : ICallbackOrders {
+        orderLogic.getOrdersByCustomer(object : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
                 dal.getValidDeals(object : ICallbackDeals {
                     override fun onFinishDeals(deals: List<Deal>?) {
@@ -33,7 +36,7 @@ class DealLogic {
 
     // Gets invalid deals a customer has with a supplier
     fun getInvalidDeals(callback: ICallbackDeals, customerId: String, supplierId: String) {
-        dal.getOrdersByCustomer(object : ICallbackOrders {
+        orderLogic.getOrdersByCustomer(object : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
                 dal.getInvalidDeals(object : ICallbackDeals {
                     override fun onFinishDeals(deals: List<Deal>?) {
@@ -47,7 +50,7 @@ class DealLogic {
 
     // Gets all deals a customer has with a supplier
     fun getAllDeals(callback: ICallbackDeals, customerId: String, supplierId: String) {
-        dal.getOrdersByCustomer(object : ICallbackOrders {
+        orderLogic.getOrdersByCustomer(object : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
                 dal.getAllDeals(object : ICallbackDeals {
                     override fun onFinishDeals(deals: List<Deal>?) {

@@ -24,23 +24,6 @@ class DatabaseHelper {
     // AuthManager instance
     private val authManager: AuthManager = AuthManager()
 
-    // Gets the supplier matching the current user
-    fun getSupplier(callback: ICallBackSupplier) {
-        db.collection("suppliers").document(authManager.user!!.uid).get().addOnCompleteListener{ task ->
-            if(task.isSuccessful) {
-                try {
-                    val doc = task.result!!
-                    val supplier: Supplier? = doc.toObject(Supplier::class.java)
-                    supplier?.id = doc.id
-
-                    callback.onFinishSupplier(supplier)
-                } catch (e: Exception) {
-                    Log.d(TAG, e.message)
-                }
-
-            }
-        }
-    }
 
     // Gets all customers that has orders with the supplier
     fun getCustomers(callback: ICallbackCustomers, orderList: List<Order>) {
@@ -72,25 +55,6 @@ class DatabaseHelper {
         db.collection("orders").whereEqualTo("supplierId", supplierId)
             .get().addOnCompleteListener { task ->
                 if(task.isSuccessful)
-                    for (doc in task.result!!) {
-                        try {
-                            val o = doc.toObject(Order::class.java)
-                            orderList.add(o)
-                        } catch (e: Exception) {
-                            Log.d(TAG, e.message)
-                        }
-
-                    }
-                callback.onFinishOrders(orderList)
-            }
-    }
-
-    // Gets all orders a customer has with a supplier
-    fun getOrdersByCustomer(callback: ICallbackOrders, customerId: String, supplierId: String) {
-        val orderList = mutableListOf<Order>()
-        db.collection("orders").whereEqualTo("customerId", customerId).whereEqualTo("supplierId", supplierId)
-            .get().addOnCompleteListener { task ->
-                if (task.isSuccessful)
                     for (doc in task.result!!) {
                         try {
                             val o = doc.toObject(Order::class.java)

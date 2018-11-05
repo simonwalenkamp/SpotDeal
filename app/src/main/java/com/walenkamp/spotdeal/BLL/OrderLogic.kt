@@ -1,4 +1,28 @@
 package com.walenkamp.spotdeal.BLL
 
+import com.walenkamp.spotdeal.DAL.OrderDAO
+import com.walenkamp.spotdeal.Entities.Order
+import com.walenkamp.spotdeal.Interface.ICallbackOrders
+
 class OrderLogic {
+    // Dal instance
+    private val orderDAO: OrderDAO = OrderDAO()
+
+    // Uses the orderDAO to a specific customers orders
+    fun getOrdersByCustomer(callback: ICallbackOrders, customerId: String, supplierId: String){
+        orderDAO.getOrdersByCustomer(object : ICallbackOrders {
+            override fun onFinishOrders(orders: List<Order>?) {
+                callback.onFinishOrders(orders)
+            }
+        }, customerId, supplierId)
+    }
+
+    // Uses the orderDAO to get orders by supplier
+    fun getOrders(callback: ICallbackOrders, supplierId: String) {
+        orderDAO.getOrders(object : ICallbackOrders {
+            override fun onFinishOrders(orders: List<Order>?) {
+                callback.onFinishOrders(orders)
+            }
+        }, supplierId)
+    }
 }
