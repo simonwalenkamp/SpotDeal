@@ -7,12 +7,10 @@ import com.walenkamp.spotdeal.Entities.Customer
 import com.walenkamp.spotdeal.Entities.Supplier
 import com.walenkamp.spotdeal.Interface.ICallBackSupplier
 import com.walenkamp.spotdeal.Interface.ICallbackCustomers
-import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Entities.Order
 import com.walenkamp.spotdeal.Interface.ICallbackDeals
 import com.walenkamp.spotdeal.Interface.ICallbackOrders
-import kotlin.coroutines.experimental.suspendCoroutine
 
 
 class DatabaseHelper {

@@ -17,6 +17,7 @@ class DealAdapter(private val context: Context): RecyclerView.Adapter<RecyclerVi
         return DealHolder(inflate)
     }
 
+    // binds the view holder
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is DealHolder) {
             holder.bind(results[position])

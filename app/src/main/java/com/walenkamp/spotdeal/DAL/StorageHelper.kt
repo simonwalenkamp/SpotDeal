@@ -3,7 +3,6 @@ package com.walenkamp.spotdeal.DAL
 import com.google.firebase.storage.FirebaseStorage
 import com.walenkamp.spotdeal.Interface.ICallbackDealImage
 import android.graphics.BitmapFactory
-import android.util.Log
 
 
 class StorageHelper {
