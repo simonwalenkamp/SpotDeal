@@ -15,5 +15,7 @@
     <string name="status_no_invalid">No inactive Deals</string>
     <string name="cancel">Cancel</string>
     <string name="logout_dialog">Are you sure you want to Log out?</string>
-
+    <string name="voucher">Voucher: </string>
+    <string name="valid_voucher">valid</string>
+    <string name="invalid_voucher">invalid</string>
 </resources>

@@ -63,4 +63,23 @@
             android:background="@android:color/darker_gray"
             app:layout_constraintTop_toBottomOf="@id/deal_info"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rec_order"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rec_separator_deal"/>
+
+    <ProgressBar
+            android:id="@+id/order_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_deal"
+            android:visibility="visible"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

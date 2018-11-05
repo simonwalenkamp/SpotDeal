@@ -4,6 +4,10 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.walenkamp.spotdeal.Adapters.DealAdapter
+import com.walenkamp.spotdeal.Adapters.OrderAdapter
 import com.walenkamp.spotdeal.BLL.OrderLogic
 import com.walenkamp.spotdeal.DAL.StorageHelper
 import com.walenkamp.spotdeal.Entities.Customer
@@ -12,6 +16,7 @@ import com.walenkamp.spotdeal.Entities.Order
 import com.walenkamp.spotdeal.Interface.ICallbackDealImage
 import com.walenkamp.spotdeal.Interface.ICallbackOrders
 import com.walenkamp.spotdeal.R
+import kotlinx.android.synthetic.main.activity_customer.*
 import kotlinx.android.synthetic.main.activity_deal.*
 
 const val DEAL        = "DEAL"
@@ -31,6 +36,9 @@ class DealActivity : AppCompatActivity() {
 
     // OrderLogic intance
     private var orderLogic: OrderLogic = OrderLogic()
+
+    // DealAdapter instance
+    private val adapter = OrderAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,9 +69,10 @@ class DealActivity : AppCompatActivity() {
     private fun getOrders() {
         orderLogic.getOrdersByDeal(object : ICallbackOrders{
             override fun onFinishOrders(orders: List<Order>?) {
-                for (o in orders!!){
-                    Log.d("SIMON", o.valid.toString())
-                }
+              rec_order.adapter = adapter
+              rec_order.layoutManager = LinearLayoutManager(baseContext)
+              adapter.setOrders(orders!!)
+                order_progress.visibility = View.INVISIBLE
             }
         }, customer.id, deal.id)
     }
