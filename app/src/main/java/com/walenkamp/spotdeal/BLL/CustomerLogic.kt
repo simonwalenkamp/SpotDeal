@@ -1,7 +1,6 @@
 package com.walenkamp.spotdeal.BLL
 
 import com.walenkamp.spotdeal.DAL.CustomerDAO
-import com.walenkamp.spotdeal.DAL.DatabaseHelper
 import com.walenkamp.spotdeal.Entities.Customer
 import com.walenkamp.spotdeal.Entities.Order
 import com.walenkamp.spotdeal.Interface.ICallbackCustomers

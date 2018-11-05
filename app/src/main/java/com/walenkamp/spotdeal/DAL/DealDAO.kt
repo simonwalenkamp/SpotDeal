@@ -2,27 +2,20 @@ package com.walenkamp.spotdeal.DAL
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.walenkamp.spotdeal.Authentication.AuthManager
-import com.walenkamp.spotdeal.Entities.Customer
-import com.walenkamp.spotdeal.Entities.Supplier
-import com.walenkamp.spotdeal.Interface.ICallBackSupplier
-import com.walenkamp.spotdeal.Interface.ICallbackCustomers
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Entities.Order
 import com.walenkamp.spotdeal.Interface.ICallbackDeals
-import com.walenkamp.spotdeal.Interface.ICallbackOrders
+import com.walenkamp.spotdeal.Interface.IDealDAO
 
-
-class DatabaseHelper {
-
+class DealDAO: IDealDAO {
     // Logcat tag
-    private val TAG: String = "DatabaseHelper"
+    private val TAG: String = "DealDAO"
 
     // Instance of Firestore
     private val db = FirebaseFirestore.getInstance()
 
     // Gets all valid deals for customer
-    fun getValidDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String) {
+    override fun getValidDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String) {
         val dealList = mutableListOf<Deal>()
         db.collection("deals").whereEqualTo("supplierId", supplierId).get().addOnCompleteListener { task ->
             if(task.isSuccessful) {
@@ -45,7 +38,7 @@ class DatabaseHelper {
     }
 
     // Gets all invalid deals for customer
-    fun getInvalidDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String) {
+    override fun getInvalidDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String) {
         val dealList = mutableListOf<Deal>()
         db.collection("deals").whereEqualTo("supplierId", supplierId).get().addOnCompleteListener { task ->
             if(task.isSuccessful) {
@@ -68,7 +61,7 @@ class DatabaseHelper {
     }
 
     // Gets all deals for customer
-    fun getAllDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String) {
+    override fun getAllDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String) {
         val dealList = mutableListOf<Deal>()
         db.collection("deals").whereEqualTo("supplierId", supplierId).get().addOnCompleteListener { task ->
             if(task.isSuccessful) {
