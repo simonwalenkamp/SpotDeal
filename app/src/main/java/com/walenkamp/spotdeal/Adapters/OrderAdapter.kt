@@ -12,7 +12,7 @@ class OrderAdapter(private val context: Context): RecyclerView.Adapter<RecyclerV
     // Result list
     val results = mutableListOf<Order>()
 
-    // Inflates the holder with CustomerItems
+    // Inflates the holder with OrderItems
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflate = LayoutInflater.from(context).inflate(R.layout.order_list_item, parent, false)
         return OrderHolder(inflate)
@@ -30,7 +30,7 @@ class OrderAdapter(private val context: Context): RecyclerView.Adapter<RecyclerV
         return results.size
     }
 
-    // Sets the customers
+    // Sets the orders
     fun setOrders(orders: List<Order>) {
         results.clear()
         results.addAll(orders)
