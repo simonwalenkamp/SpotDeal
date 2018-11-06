@@ -38,7 +38,7 @@ class DealActivity : AppCompatActivity() {
     private var orderLogic: OrderLogic = OrderLogic()
 
     // DealAdapter instance
-    private val adapter = OrderAdapter(this)
+    private val adapter = OrderAdapter(this, {order : Order -> itemClicked(order)})
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,21 +54,6 @@ class DealActivity : AppCompatActivity() {
         setImage()
 
         getOrders()
-        rec_order.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
-            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
-                Log.d("SIMON", "pressed")
-
-            }
-
-            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                Log.d("SIMON", "pressed")
-                return false
-            }
-
-            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-                Log.d("SIMON", "pressed")
-            }
-        })
     }
 
     // Uses the StorageHelper class the get the image of the deal
@@ -90,5 +75,10 @@ class DealActivity : AppCompatActivity() {
               order_progress.visibility = View.INVISIBLE
             }
         }, customer.id, deal.id)
+    }
+
+    // Adds the clicked order to ordersSelected
+    private fun itemClicked(order: Order) {
+        Log.d("SIMON", "Order clicked and order status: ${order.valid}")
     }
 }
