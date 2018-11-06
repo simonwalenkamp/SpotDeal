@@ -32,7 +32,7 @@ class DealActivity : AppCompatActivity() {
     private var storage: StorageHelper = StorageHelper()
 
     // List of orders
-    private lateinit var orders: List<Order>
+    val ordersSelected = mutableListOf<Order>()
 
     // OrderLogic intance
     private var orderLogic: OrderLogic = OrderLogic()
@@ -79,6 +79,10 @@ class DealActivity : AppCompatActivity() {
 
     // Adds the clicked order to ordersSelected
     private fun itemClicked(order: Order) {
-        Log.d("SIMON", "Order clicked and order status: ${order.valid}")
+        if(ordersSelected.contains(order)) {
+            ordersSelected.remove(order)
+            return
+        }
+        ordersSelected.add(order)
     }
 }

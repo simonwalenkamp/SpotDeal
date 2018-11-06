@@ -27,10 +27,6 @@ class OrderAdapter(private val context: Context, val clickListener: (Order) -> U
         }
     }
 
-    override fun getItemId(position: Int): Long {
-        return super.getItemId(position)
-    }
-
     // Gets the number of items
     override fun getItemCount(): Int {
         return results.size
