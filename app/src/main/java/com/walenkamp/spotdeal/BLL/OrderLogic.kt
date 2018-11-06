@@ -34,4 +34,13 @@ class OrderLogic {
             }
         }, customerId, dealId)
     }
+
+    // Updates orders
+    fun updateOrders(callback: ICallbackOrders, orders: List<Order>) {
+        orderDAO.updateOrders(object : ICallbackOrders{
+            override fun onFinishOrders(orders: List<Order>?) {
+                callback.onFinishOrders(orders)
+            }
+        }, orders)
+    }
 }

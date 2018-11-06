@@ -1,8 +1,10 @@
 package com.walenkamp.spotdeal.Activities
 
 import android.graphics.Bitmap
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.strictmode.WebViewMethodCalledOnWrongThreadViolation
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -68,6 +70,7 @@ class DealActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 if (seekBar?.progress!! >= 51) {
                     seekBar.progress = 94
+                    updateOrders()
                 } else {
                     seekBar.progress = 6
                 }
@@ -101,11 +104,26 @@ class DealActivity : AppCompatActivity() {
         if(ordersSelected.contains(order)) {
             ordersSelected.remove(order)
             if(ordersSelected.size == 0) {
-                layout_swipe.visibility = View.INVISIBLE
+                layout_swipe.visibility = View.GONE
             }
             return
         }
         layout_swipe.visibility = View.VISIBLE
+        order.valid = !order.valid
         ordersSelected.add(order)
+    }
+
+    // Updates orders
+    private fun updateOrders(){
+        Log.d("SIMON", "updated ${ordersSelected.size} orders!")
+        layout_swipe.visibility = View.GONE
+        rec_order.visibility = View.INVISIBLE
+        order_progress.visibility = View.VISIBLE
+        orderLogic.updateOrders(object : ICallbackOrders {
+            override fun onFinishOrders(orders: List<Order>?) {
+                onBackPressed()
+            }
+        }, ordersSelected)
+
     }
 }

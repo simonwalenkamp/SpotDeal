@@ -71,6 +71,17 @@ class CustomerActivity : AppCompatActivity() {
         })
     }
 
+    override fun onResume() {
+        // Gets the supplier from SupplierLogic and calls the getValidDeals function
+        supplierLogic.getSupplier(object : ICallBackSupplier {
+            override fun onFinishSupplier(sup: Supplier?) {
+                supplier = sup!!
+                getValidDeals(customer.id ,supplier.id)
+            }
+        })
+        super.onResume()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.deal_menu, menu)
         return true
@@ -103,6 +114,7 @@ class CustomerActivity : AppCompatActivity() {
 
     // Gets all valid deals a customer has with the supplier
     private fun getValidDeals(customerId: String, supplierId: String) {
+        rec_deal.visibility = View.INVISIBLE
         status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE
         dealLogic.getValidDeals(object : ICallbackDeals {
@@ -111,6 +123,7 @@ class CustomerActivity : AppCompatActivity() {
                     status_tv.text = getText(R.string.status_no_valid)
                     status_tv.visibility = View.VISIBLE
                 }
+                rec_deal.visibility = View.VISIBLE
                 adapter.customer = customer
                 rec_deal.adapter = adapter
                 rec_deal.layoutManager = LinearLayoutManager(baseContext)
@@ -123,10 +136,12 @@ class CustomerActivity : AppCompatActivity() {
 
     // Gets all deals a customer has with the supplier
     private fun getAllDeals(customerId: String, supplierId: String) {
+        rec_deal.visibility = View.INVISIBLE
         status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE
         dealLogic.getAllDeals(object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
+                rec_deal.visibility = View.VISIBLE
                 rec_deal.adapter = adapter
                 rec_deal.layoutManager = LinearLayoutManager(baseContext)
                 adapter.setDeals(deals!!)
@@ -137,6 +152,7 @@ class CustomerActivity : AppCompatActivity() {
 
     // Gets all invalid deals a customer has with the supplier
     private fun getInvalidDeals(customerId: String, supplierId: String) {
+        rec_deal.visibility = View.INVISIBLE
         status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE
         dealLogic.getInvalidDeals(object : ICallbackDeals {
@@ -145,6 +161,7 @@ class CustomerActivity : AppCompatActivity() {
                     status_tv.text = getText(R.string.status_no_invalid)
                     status_tv.visibility = View.VISIBLE
                 }
+                rec_deal.visibility = View.VISIBLE
                 rec_deal.adapter = adapter
                 rec_deal.layoutManager = LinearLayoutManager(baseContext)
                 adapter.setDeals(deals)

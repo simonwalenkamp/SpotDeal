@@ -22,6 +22,7 @@ class OrderDAO : IOrderDAO {
                     for (doc in task.result!!) {
                         try {
                             val o = doc.toObject(Order::class.java)
+                            o.id = doc.id
                             orderList.add(o)
                         } catch (e: Exception) {
                             Log.d(TAG, e.message)
@@ -40,6 +41,7 @@ class OrderDAO : IOrderDAO {
                     for (doc in task.result!!) {
                         try {
                             val o = doc.toObject(Order::class.java)
+                            o.id = doc.id
                             orderList.add(o)
                         } catch (e: Exception) {
                             Log.d(TAG, e.message)
@@ -58,6 +60,7 @@ class OrderDAO : IOrderDAO {
                     for (doc in task.result!!) {
                         try {
                             val o = doc.toObject(Order::class.java)
+                            o.id = doc.id
                             orderList.add(o)
                         } catch (e: Exception) {
                             Log.d(TAG, e.message)
@@ -65,5 +68,22 @@ class OrderDAO : IOrderDAO {
                     }
                 callback.onFinishOrders(orderList)
             }
+    }
+
+    // Updates orders
+    override fun updateOrders(callback: ICallbackOrders, orders: List<Order>) {
+        var updates = 0
+        for(o in orders) {
+            val ref = db.collection("orders").document(o.id)
+            o.id = ""
+                ref.set(o).addOnCompleteListener{ task ->
+                if(task.isSuccessful) {
+                    updates += 1
+                    if(updates == orders.size) {
+                        callback.onFinishOrders(orders)
+                    }
+                }
+            }
+        }
     }
 }
