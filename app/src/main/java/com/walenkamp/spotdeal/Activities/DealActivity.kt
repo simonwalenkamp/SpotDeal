@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.SeekBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.walenkamp.spotdeal.Adapters.OrderAdapter
@@ -54,6 +55,24 @@ class DealActivity : AppCompatActivity() {
         setImage()
 
         getOrders()
+        seek_bar.progress = 6
+        seek_bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                Log.d("SIMON", "Start")
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                Log.d("SIMON", "Start")
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                if (seekBar?.progress!! >= 51) {
+                    seekBar.progress = 94
+                } else {
+                    seekBar.progress = 6
+                }
+            }
+        })
     }
 
     // Uses the StorageHelper class the get the image of the deal
@@ -81,8 +100,12 @@ class DealActivity : AppCompatActivity() {
     private fun itemClicked(order: Order) {
         if(ordersSelected.contains(order)) {
             ordersSelected.remove(order)
+            if(ordersSelected.size == 0) {
+                layout_swipe.visibility = View.INVISIBLE
+            }
             return
         }
+        layout_swipe.visibility = View.VISIBLE
         ordersSelected.add(order)
     }
 }

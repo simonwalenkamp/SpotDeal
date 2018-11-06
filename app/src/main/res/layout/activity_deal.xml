@@ -67,7 +67,7 @@
             android:id="@+id/rec_order"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/layout_swipe"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rec_separator_deal"/>
@@ -81,5 +81,38 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar_deal"
             android:visibility="visible"/>
+
+    <LinearLayout
+            android:id="@+id/layout_swipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rec_order"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            android:layout_marginBottom="10dp">
+
+        <TextView
+                android:id="@+id/redeem_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/swipe_to_complete"/>
+
+            <SeekBar
+                    android:id="@+id/seek_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:thumbTintMode="src_over"
+                    android:thumb="@drawable/ic_swipe"
+                    android:clickable="false"
+                    android:splitTrack="false"
+                    android:progressDrawable="@drawable/custom_seekbar"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"/>
+
+    </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
