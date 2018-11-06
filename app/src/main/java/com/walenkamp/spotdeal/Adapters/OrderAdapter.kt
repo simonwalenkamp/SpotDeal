@@ -3,14 +3,19 @@ package com.walenkamp.spotdeal.Adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
 import com.walenkamp.spotdeal.Entities.Order
 import com.walenkamp.spotdeal.R
 import com.walenkamp.spotdeal.ViewHolders.OrderHolder
 
+
+
 class OrderAdapter(private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     // Result list
     val results = mutableListOf<Order>()
+
+    private lateinit var onItemClickListener: AdapterView.OnItemClickListener
 
     // Inflates the holder with OrderItems
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -23,6 +28,10 @@ class OrderAdapter(private val context: Context): RecyclerView.Adapter<RecyclerV
         if(holder is OrderHolder) {
             holder.bind(results[position])
         }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return super.getItemId(position)
     }
 
     // Gets the number of items

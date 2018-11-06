@@ -4,9 +4,10 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.walenkamp.spotdeal.Adapters.DealAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.walenkamp.spotdeal.Adapters.OrderAdapter
 import com.walenkamp.spotdeal.BLL.OrderLogic
 import com.walenkamp.spotdeal.DAL.StorageHelper
@@ -16,7 +17,6 @@ import com.walenkamp.spotdeal.Entities.Order
 import com.walenkamp.spotdeal.Interface.ICallbackDealImage
 import com.walenkamp.spotdeal.Interface.ICallbackOrders
 import com.walenkamp.spotdeal.R
-import kotlinx.android.synthetic.main.activity_customer.*
 import kotlinx.android.synthetic.main.activity_deal.*
 
 const val DEAL        = "DEAL"
@@ -54,6 +54,21 @@ class DealActivity : AppCompatActivity() {
         setImage()
 
         getOrders()
+        rec_order.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
+                Log.d("SIMON", "pressed")
+
+            }
+
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                Log.d("SIMON", "pressed")
+                return false
+            }
+
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+                Log.d("SIMON", "pressed")
+            }
+        })
     }
 
     // Uses the StorageHelper class the get the image of the deal
@@ -72,7 +87,7 @@ class DealActivity : AppCompatActivity() {
               rec_order.adapter = adapter
               rec_order.layoutManager = LinearLayoutManager(baseContext)
               adapter.setOrders(orders!!)
-                order_progress.visibility = View.INVISIBLE
+              order_progress.visibility = View.INVISIBLE
             }
         }, customer.id, deal.id)
     }
