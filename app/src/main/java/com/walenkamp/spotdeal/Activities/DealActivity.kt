@@ -1,16 +1,12 @@
 package com.walenkamp.spotdeal.Activities
 
 import android.graphics.Bitmap
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.strictmode.WebViewMethodCalledOnWrongThreadViolation
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.widget.SeekBar
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.walenkamp.spotdeal.Adapters.OrderAdapter
 import com.walenkamp.spotdeal.BLL.OrderLogic
 import com.walenkamp.spotdeal.DAL.StorageHelper
@@ -89,7 +85,7 @@ class DealActivity : AppCompatActivity() {
 
     // Gets the orders for the deal
     private fun getOrders() {
-        orderLogic.getOrdersByDeal(object : ICallbackOrders{
+        orderLogic.getValidOrdersByDeal(object : ICallbackOrders{
             override fun onFinishOrders(orders: List<Order>?) {
               rec_order.adapter = adapter
               rec_order.layoutManager = LinearLayoutManager(baseContext)

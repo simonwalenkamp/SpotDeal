@@ -26,9 +26,18 @@ class OrderLogic {
         }, supplierId)
     }
 
-    // Gets order by customer and deal
-    fun getOrdersByDeal(callback: ICallbackOrders, customerId: String, dealId: String){
-        orderDAO.getOrdersByDeal(object : ICallbackOrders{
+    // Gets valid orders by customer and deal
+    fun getValidOrdersByDeal(callback: ICallbackOrders, customerId: String, dealId: String){
+        orderDAO.getValidOrdersByDeal(object : ICallbackOrders{
+            override fun onFinishOrders(orders: List<Order>?) {
+                callback.onFinishOrders(orders)
+            }
+        }, customerId, dealId)
+    }
+
+    // Gets invalid orders by customer and deal
+    fun getInvalidOrdersByDeal(callback: ICallbackOrders, customerId: String, dealId: String){
+        orderDAO.getInvalidOrdersByDeal(object : ICallbackOrders{
             override fun onFinishOrders(orders: List<Order>?) {
                 callback.onFinishOrders(orders)
             }

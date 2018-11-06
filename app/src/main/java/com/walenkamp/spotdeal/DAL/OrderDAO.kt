@@ -51,10 +51,29 @@ class OrderDAO : IOrderDAO {
             }
     }
 
-    // Gets all orders a customer has with a supplier
-    override fun getOrdersByDeal(callback: ICallbackOrders, customerId: String, dealId: String) {
+    // Gets all valid orders a customer has with a supplier for deal
+    override fun getValidOrdersByDeal(callback: ICallbackOrders, customerId: String, dealId: String) {
         val orderList = mutableListOf<Order>()
-        db.collection("orders").whereEqualTo("customerId", customerId).whereEqualTo("dealId", dealId)
+        db.collection("orders").whereEqualTo("customerId", customerId).whereEqualTo("dealId", dealId).whereEqualTo("valid", true)
+            .get().addOnCompleteListener { task ->
+                if (task.isSuccessful)
+                    for (doc in task.result!!) {
+                        try {
+                            val o = doc.toObject(Order::class.java)
+                            o.id = doc.id
+                            orderList.add(o)
+                        } catch (e: Exception) {
+                            Log.d(TAG, e.message)
+                        }
+                    }
+                callback.onFinishOrders(orderList)
+            }
+    }
+
+    // Gets all invalid orders a customer has with a supplier for deal
+    override fun getInvalidOrdersByDeal(callback: ICallbackOrders, customerId: String, dealId: String) {
+        val orderList = mutableListOf<Order>()
+        db.collection("orders").whereEqualTo("customerId", customerId).whereEqualTo("dealId", dealId).whereEqualTo("valid", false)
             .get().addOnCompleteListener { task ->
                 if (task.isSuccessful)
                     for (doc in task.result!!) {
