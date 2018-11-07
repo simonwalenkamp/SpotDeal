@@ -62,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/colorGray"
             app:layout_constraintTop_toBottomOf="@id/deal_info"/>
 
     <CheckBox
@@ -103,7 +103,7 @@
             android:id="@+id/rec_separator_deal"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"
+            android:background="@color/colorGray"
             app:layout_constraintTop_toBottomOf="@id/orders_shown_tv"/>
 
     <androidx.recyclerview.widget.RecyclerView
