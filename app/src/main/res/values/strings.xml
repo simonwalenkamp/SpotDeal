@@ -27,6 +27,6 @@
     <string name="active_deals">Active Deals</string>
     <string name="inactive_deals">Inactive Deals</string>
     <string name="all_deals">All Deals</string>
-    <string name="valid_orders">Active Vouchers</string>
-    <string name="invalid_orders">Inactive Vouchers</string>
+    <string name="valid_orders">Valid Vouchers</string>
+    <string name="invalid_orders">Invalid Vouchers</string>
 </resources>

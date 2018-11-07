@@ -84,8 +84,14 @@ class DealActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
-            R.id.load_valid -> { getValidOrders() }
-            R.id.load_invalid -> { getInvalidOrders() }
+            R.id.load_valid -> {
+                getValidOrders()
+                displayValid()
+            }
+            R.id.load_invalid -> {
+                getInvalidOrders()
+                displayInvalid()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -184,5 +190,17 @@ class DealActivity : AppCompatActivity() {
             }
         }, ordersSelected)
 
+    }
+
+    // Show valid vouchers displayed
+    private fun displayValid() {
+        order_status_icon.setImageDrawable(getDrawable(R.drawable.ic_valid))
+        orders_shown_tv.text = getText(R.string.valid_orders)
+    }
+
+    // Show invalid displayed
+    private fun displayInvalid() {
+        order_status_icon.setImageDrawable(getDrawable(R.drawable.ic_invalid))
+        orders_shown_tv.text = getText(R.string.invalid_orders)
     }
 }

@@ -53,15 +53,58 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginBottom="4dp"
             app:layout_constraintTop_toBottomOf="@id/deal_image"
             app:layout_constraintStart_toEndOf="@id/deal_info_icon"/>
+    <View
+            android:id="@+id/deal_info_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintTop_toBottomOf="@id/deal_info"/>
+
+    <CheckBox
+            android:id="@+id/select_all_cb"
+            app:layout_constraintTop_toBottomOf="@id/deal_info_separator"
+            app:layout_constraintBottom_toTopOf="@id/rec_separator_deal"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <ImageView
+            android:id="@+id/order_status_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintTop_toBottomOf="@id/deal_info_separator"
+            app:layout_constraintBottom_toTopOf="@id/rec_separator_deal"
+            app:layout_constraintEnd_toStartOf="@id/orders_shown_tv"
+            android:src="@drawable/ic_valid"/>
+
+
+    <TextView
+            android:id="@+id/orders_shown_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/deal_info_separator"
+            app:layout_constraintBottom_toBottomOf="@id/rec_separator_deal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="10dp"
+            style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+            android:text="@string/valid_orders"/>
+
     <View
             android:id="@+id/rec_separator_deal"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"
-            app:layout_constraintTop_toBottomOf="@id/deal_info"/>
+            app:layout_constraintTop_toBottomOf="@id/orders_shown_tv"/>
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rec_order"
