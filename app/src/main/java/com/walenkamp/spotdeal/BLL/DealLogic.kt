@@ -1,7 +1,7 @@
 package com.walenkamp.spotdeal.BLL
 
 import android.graphics.Bitmap
-import com.walenkamp.spotdeal.DAL.DatabaseHelper
+import com.walenkamp.spotdeal.DAL.DealDAO
 import com.walenkamp.spotdeal.DAL.StorageHelper
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Entities.Order
@@ -12,16 +12,19 @@ import com.walenkamp.spotdeal.Interface.ICallbackOrders
 class DealLogic {
 
     // Dal instance
-    private val dal: DatabaseHelper = DatabaseHelper()
+    private val dealDAO: DealDAO = DealDAO()
 
     // Storage instance
     private val storage: StorageHelper = StorageHelper()
 
+    // OrderLogic instance
+    private val orderLogic: OrderLogic = OrderLogic()
+
     // Gets all valid deals a customer has with a supplier
     fun getValidDeals(callback: ICallbackDeals, customerId: String, supplierId: String) {
-        dal.getOrdersByCustomer(object : ICallbackOrders {
+        orderLogic.getOrdersByCustomer(object : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
-                dal.getValidDeals(object : ICallbackDeals {
+                dealDAO.getValidDeals(object : ICallbackDeals {
                     override fun onFinishDeals(deals: List<Deal>?) {
                         val dealList = deals
                         callback.onFinishDeals(dealList)
@@ -33,9 +36,9 @@ class DealLogic {
 
     // Gets invalid deals a customer has with a supplier
     fun getInvalidDeals(callback: ICallbackDeals, customerId: String, supplierId: String) {
-        dal.getOrdersByCustomer(object : ICallbackOrders {
+        orderLogic.getOrdersByCustomer(object : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
-                dal.getInvalidDeals(object : ICallbackDeals {
+                dealDAO.getInvalidDeals(object : ICallbackDeals {
                     override fun onFinishDeals(deals: List<Deal>?) {
                         val dealList = deals
                         callback.onFinishDeals(dealList)
@@ -47,9 +50,9 @@ class DealLogic {
 
     // Gets all deals a customer has with a supplier
     fun getAllDeals(callback: ICallbackDeals, customerId: String, supplierId: String) {
-        dal.getOrdersByCustomer(object : ICallbackOrders {
+        orderLogic.getOrdersByCustomer(object : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
-                dal.getAllDeals(object : ICallbackDeals {
+                dealDAO.getAllDeals(object : ICallbackDeals {
                     override fun onFinishDeals(deals: List<Deal>?) {
                         val dealList = deals
                         callback.onFinishDeals(dealList)

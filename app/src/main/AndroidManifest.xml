@@ -26,7 +26,11 @@
                 android:name=".Activities.ScanActivity"
                 android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Activities.CustomerActivity"
+        <activity
+                android:name=".Activities.CustomerActivity"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".Activities.DealActivity"
                   android:screenOrientation="portrait">
         </activity>
     </application>

@@ -45,14 +45,12 @@ class CustomerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_customer)
 
         customer = intent.getSerializableExtra(CUSTOMER) as Customer
-
+        toolbar_customer.title = customer.name
         setSupportActionBar(toolbar_customer)
 
-        toolbar_customer.title = customer.name
         email_tv.text = customer.email
         phone_tv.text = customer.phone.toString()
         address_tv.text = customer.address
-
 
         phone_tv.setOnClickListener{
             openDial()
@@ -71,6 +69,18 @@ class CustomerActivity : AppCompatActivity() {
         })
     }
 
+    override fun onResume() {
+        // Gets the supplier from SupplierLogic and calls the getValidDeals function
+        displayActive()
+        supplierLogic.getSupplier(object : ICallBackSupplier {
+            override fun onFinishSupplier(sup: Supplier?) {
+                supplier = sup!!
+                getValidDeals(customer.id ,supplier.id)
+            }
+        })
+        super.onResume()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.deal_menu, menu)
         return true
@@ -78,9 +88,18 @@ class CustomerActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
-            R.id.load_valid -> { getValidDeals(customer.id, supplier.id) }
-            R.id.load_invalid -> { getInvalidDeals(customer.id, supplier.id) }
-            R.id.load_all -> { getAllDeals(customer.id, supplier.id) }
+            R.id.load_active -> {
+                getValidDeals(customer.id, supplier.id)
+                displayActive()
+            }
+            R.id.load_inactive -> {
+                getInvalidDeals(customer.id, supplier.id)
+                displayInactive()
+            }
+            R.id.load_all -> {
+                getAllDeals(customer.id, supplier.id)
+                displayAll()
+            }
 
         }
         return super.onOptionsItemSelected(item)
@@ -103,14 +122,17 @@ class CustomerActivity : AppCompatActivity() {
 
     // Gets all valid deals a customer has with the supplier
     private fun getValidDeals(customerId: String, supplierId: String) {
+        rec_deal.visibility = View.INVISIBLE
         status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE
         dealLogic.getValidDeals(object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
                 if(deals!!.isEmpty()) {
-                    status_tv.text = getText(R.string.status_no_valid)
+                    status_tv.text = getText(R.string.status_no_active)
                     status_tv.visibility = View.VISIBLE
                 }
+                rec_deal.visibility = View.VISIBLE
+                adapter.customer = customer
                 rec_deal.adapter = adapter
                 rec_deal.layoutManager = LinearLayoutManager(baseContext)
                 adapter.setDeals(deals)
@@ -122,10 +144,12 @@ class CustomerActivity : AppCompatActivity() {
 
     // Gets all deals a customer has with the supplier
     private fun getAllDeals(customerId: String, supplierId: String) {
+        rec_deal.visibility = View.INVISIBLE
         status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE
         dealLogic.getAllDeals(object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
+                rec_deal.visibility = View.VISIBLE
                 rec_deal.adapter = adapter
                 rec_deal.layoutManager = LinearLayoutManager(baseContext)
                 adapter.setDeals(deals!!)
@@ -136,14 +160,16 @@ class CustomerActivity : AppCompatActivity() {
 
     // Gets all invalid deals a customer has with the supplier
     private fun getInvalidDeals(customerId: String, supplierId: String) {
+        rec_deal.visibility = View.INVISIBLE
         status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE
         dealLogic.getInvalidDeals(object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
                 if(deals!!.isEmpty()) {
-                    status_tv.text = getText(R.string.status_no_invalid)
+                    status_tv.text = getText(R.string.status_no_inactive)
                     status_tv.visibility = View.VISIBLE
                 }
+                rec_deal.visibility = View.VISIBLE
                 rec_deal.adapter = adapter
                 rec_deal.layoutManager = LinearLayoutManager(baseContext)
                 adapter.setDeals(deals)
@@ -164,5 +190,23 @@ class CustomerActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_SENDTO)
         intent.data = Uri.parse("mailto:" + email_tv.text)
         startActivity(intent)
+    }
+
+    // Displays active chosen
+    private fun displayActive(){
+        status_icon.setImageDrawable(getDrawable(R.drawable.ic_valid))
+        shown_tv.text = getText(R.string.active_deals)
+    }
+
+    // Displays inactive chosen
+    private fun displayInactive(){
+        status_icon.setImageDrawable(getDrawable(R.drawable.ic_invalid))
+        shown_tv.text = getText(R.string.inactive_deals)
+    }
+
+    // Displays all chosen
+    private fun displayAll(){
+        status_icon.setImageDrawable(getDrawable(R.drawable.ic_all))
+        shown_tv.text = getText(R.string.all_deals)
     }
 }

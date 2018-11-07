@@ -37,5 +37,4 @@ class CustomerAdapter(private val context: Context): RecyclerView.Adapter<Recycl
         results.addAll(customers)
         notifyDataSetChanged()
     }
-
 }
