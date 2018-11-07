@@ -74,11 +74,42 @@
     </GridLayout>
 
     <View
-            android:id="@+id/rec_separator"
+            android:id="@+id/shown_separator"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"
             app:layout_constraintTop_toBottomOf="@id/customer_grid"/>
+
+    <ImageView
+            android:id="@+id/status_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/shown_separator"
+            app:layout_constraintBottom_toTopOf="@id/rec_separator"
+            android:layout_marginStart="10dp"
+            app:srcCompat="@drawable/ic_valid"/>
+
+    <TextView
+            android:id="@+id/shown_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/shown_separator"
+            app:layout_constraintBottom_toBottomOf="@id/rec_separator"
+            app:layout_constraintStart_toEndOf="@id/status_icon"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="10dp"
+            style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+            android:text="@string/active_deals"/>
+
+    <View
+            android:id="@+id/rec_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintTop_toBottomOf="@id/shown_tv"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rec_deal"

@@ -87,9 +87,18 @@ class CustomerActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
-            R.id.load_active -> { getValidDeals(customer.id, supplier.id) }
-            R.id.load_inactive -> { getInvalidDeals(customer.id, supplier.id) }
-            R.id.load_all -> { getAllDeals(customer.id, supplier.id) }
+            R.id.load_active -> {
+                getValidDeals(customer.id, supplier.id)
+                displayActive()
+            }
+            R.id.load_inactive -> {
+                getInvalidDeals(customer.id, supplier.id)
+                displayInactive()
+            }
+            R.id.load_all -> {
+                getAllDeals(customer.id, supplier.id)
+                displayAll()
+            }
 
         }
         return super.onOptionsItemSelected(item)
@@ -180,5 +189,23 @@ class CustomerActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_SENDTO)
         intent.data = Uri.parse("mailto:" + email_tv.text)
         startActivity(intent)
+    }
+
+    // Displays active chosen
+    private fun displayActive(){
+        status_icon.setImageDrawable(getDrawable(R.drawable.ic_valid))
+        shown_tv.text = getText(R.string.active_deals)
+    }
+
+    // Displays inactive chosen
+    private fun displayInactive(){
+        status_icon.setImageDrawable(getDrawable(R.drawable.ic_invalid))
+        shown_tv.text = getText(R.string.inactive_deals)
+    }
+
+    // Displays all chosen
+    private fun displayAll(){
+        status_icon.setImageDrawable(getDrawable(R.drawable.ic_all))
+        shown_tv.text = getText(R.string.all_deals)
     }
 }
