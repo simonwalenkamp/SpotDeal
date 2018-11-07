@@ -71,6 +71,7 @@ class CustomerActivity : AppCompatActivity() {
 
     override fun onResume() {
         // Gets the supplier from SupplierLogic and calls the getValidDeals function
+        displayActive()
         supplierLogic.getSupplier(object : ICallBackSupplier {
             override fun onFinishSupplier(sup: Supplier?) {
                 supplier = sup!!

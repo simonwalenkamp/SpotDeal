@@ -14,6 +14,9 @@ class OrderAdapter(private val context: Context, val clickListener: (Order) -> U
     // Result list
     val results = mutableListOf<Order>()
 
+    // Determines if check boxes should be checked
+    var checkAllBoxes: Boolean = false
+
     // Inflates the holder with OrderItems
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflate = LayoutInflater.from(context).inflate(R.layout.order_list_item, parent, false)
@@ -23,7 +26,7 @@ class OrderAdapter(private val context: Context, val clickListener: (Order) -> U
     // binds the view holder and adds the clickListener
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is OrderHolder) {
-            holder.bind(results[position], clickListener)
+            holder.bind(results[position], clickListener, checkAllBoxes)
         }
     }
 

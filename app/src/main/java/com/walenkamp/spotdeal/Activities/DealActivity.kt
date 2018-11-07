@@ -33,8 +33,11 @@ class DealActivity : AppCompatActivity() {
     // Storage instance
     private var storage: StorageHelper = StorageHelper()
 
-    // List of orders
-    val ordersSelected = mutableListOf<Order>()
+    // List of orders selected
+    private val ordersSelected = mutableListOf<Order>()
+
+    // List of orders shown
+    private val ordersShown = mutableListOf<Order>()
 
     // OrderLogic intance
     private var orderLogic: OrderLogic = OrderLogic()
@@ -57,6 +60,10 @@ class DealActivity : AppCompatActivity() {
 
         getValidOrders()
         seek_bar.progress = 6
+        select_all_cb.setOnClickListener {
+            handleSelectAll()
+        }
+
         seek_bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 Log.d("SIMON", "Start")
@@ -123,6 +130,7 @@ class DealActivity : AppCompatActivity() {
     // Gets the orders for the deal
     private fun getValidOrders() {
         ordersSelected.clear()
+        ordersShown.clear()
         status_order_tv.visibility = View.INVISIBLE
         redeem_tv.text = getText(R.string.swipe_to_complete)
         rec_order.visibility = View.INVISIBLE
@@ -136,7 +144,8 @@ class DealActivity : AppCompatActivity() {
               rec_order.visibility = View.VISIBLE
               rec_order.adapter = adapter
               rec_order.layoutManager = LinearLayoutManager(baseContext)
-              adapter.setOrders(orders)
+              ordersShown.addAll(orders)
+              adapter.setOrders(ordersShown)
               order_progress.visibility = View.INVISIBLE
             }
         }, customer.id, deal.id)
@@ -145,6 +154,7 @@ class DealActivity : AppCompatActivity() {
     // Gets the orders for the deal
     private fun getInvalidOrders() {
         ordersSelected.clear()
+        ordersShown.clear()
         status_order_tv.visibility = View.INVISIBLE
         redeem_tv.text = getText(R.string.swipe_to_reopen)
         rec_order.visibility = View.INVISIBLE
@@ -158,7 +168,8 @@ class DealActivity : AppCompatActivity() {
                 rec_order.visibility = View.VISIBLE
                 rec_order.adapter = adapter
                 rec_order.layoutManager = LinearLayoutManager(baseContext)
-                adapter.setOrders(orders)
+                ordersShown.addAll(orders)
+                adapter.setOrders(ordersShown)
                 order_progress.visibility = View.INVISIBLE
             }
         }, customer.id, deal.id)
@@ -174,16 +185,17 @@ class DealActivity : AppCompatActivity() {
             return
         }
         layout_swipe.visibility = View.VISIBLE
-        order.valid = !order.valid
         ordersSelected.add(order)
     }
 
     // Updates orders
     private fun updateOrders(){
-        Log.d("SIMON", "updated ${ordersSelected.size} orders!")
         layout_swipe.visibility = View.GONE
         rec_order.visibility = View.INVISIBLE
         order_progress.visibility = View.VISIBLE
+        for (o in ordersSelected) {
+            o.valid = !o.valid
+        }
         orderLogic.updateOrders(object : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
                 onBackPressed()
@@ -202,5 +214,36 @@ class DealActivity : AppCompatActivity() {
     private fun displayInvalid() {
         order_status_icon.setImageDrawable(getDrawable(R.drawable.ic_invalid))
         orders_shown_tv.text = getText(R.string.invalid_orders)
+    }
+
+    // Checks or unchecks all checkboxes
+    private fun handleSelectAll() {
+        if(ordersShown.isEmpty()) {
+            select_all_cb.isChecked = false
+            return
+        } else if(ordersSelected.size == ordersShown.size){
+            uncheckAllBoxes()
+            ordersSelected.clear()
+            layout_swipe.visibility = View.INVISIBLE
+            select_all_cb.isChecked = false
+            return
+        } else {
+            ordersSelected.clear()
+            ordersSelected.addAll(ordersShown)
+            checkAllBoxes()
+            layout_swipe.visibility = View.VISIBLE
+        }
+    }
+
+    // Checks all checkboxes in recyclerView
+    private fun checkAllBoxes() {
+        adapter.checkAllBoxes = true
+        adapter.notifyDataSetChanged()
+    }
+
+    // Unchecks all checkboxes in recyclerView
+    private fun uncheckAllBoxes() {
+        adapter.checkAllBoxes = false
+        adapter.notifyDataSetChanged()
     }
 }
