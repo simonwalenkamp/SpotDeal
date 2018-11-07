@@ -48,11 +48,9 @@ class CustomerActivity : AppCompatActivity() {
         toolbar_customer.title = customer.name
         setSupportActionBar(toolbar_customer)
 
-
         email_tv.text = customer.email
         phone_tv.text = customer.phone.toString()
         address_tv.text = customer.address
-
 
         phone_tv.setOnClickListener{
             openDial()
@@ -89,8 +87,8 @@ class CustomerActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
-            R.id.load_valid -> { getValidDeals(customer.id, supplier.id) }
-            R.id.load_invalid -> { getInvalidDeals(customer.id, supplier.id) }
+            R.id.load_active -> { getValidDeals(customer.id, supplier.id) }
+            R.id.load_inactive -> { getInvalidDeals(customer.id, supplier.id) }
             R.id.load_all -> { getAllDeals(customer.id, supplier.id) }
 
         }
@@ -120,7 +118,7 @@ class CustomerActivity : AppCompatActivity() {
         dealLogic.getValidDeals(object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
                 if(deals!!.isEmpty()) {
-                    status_tv.text = getText(R.string.status_no_valid)
+                    status_tv.text = getText(R.string.status_no_active)
                     status_tv.visibility = View.VISIBLE
                 }
                 rec_deal.visibility = View.VISIBLE
@@ -158,7 +156,7 @@ class CustomerActivity : AppCompatActivity() {
         dealLogic.getInvalidDeals(object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
                 if(deals!!.isEmpty()) {
-                    status_tv.text = getText(R.string.status_no_invalid)
+                    status_tv.text = getText(R.string.status_no_inactive)
                     status_tv.visibility = View.VISIBLE
                 }
                 rec_deal.visibility = View.VISIBLE

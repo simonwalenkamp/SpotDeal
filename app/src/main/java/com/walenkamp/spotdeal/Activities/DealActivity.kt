@@ -4,8 +4,11 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.SeekBar
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.walenkamp.spotdeal.Adapters.OrderAdapter
 import com.walenkamp.spotdeal.BLL.OrderLogic
@@ -52,7 +55,7 @@ class DealActivity : AppCompatActivity() {
         deal_info.text = deal.info
         setImage()
 
-        getOrders()
+        getValidOrders()
         seek_bar.progress = 6
         seek_bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -74,6 +77,34 @@ class DealActivity : AppCompatActivity() {
         })
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.order_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.load_valid -> { getValidOrders() }
+            R.id.load_invalid -> { getInvalidOrders() }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.let {
+            if (menu is MenuBuilder) {
+                try {
+                    val field = menu.javaClass.getDeclaredField("mOptionalIconsVisible")
+                    field.isAccessible = true
+                    field.setBoolean(menu, true)
+                } catch (ignored: Exception) {
+                    // ignored exception
+                }
+            }
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     // Uses the StorageHelper class the get the image of the deal
     private fun setImage(){
         storage.getDealImage(object : ICallbackDealImage {
@@ -84,13 +115,45 @@ class DealActivity : AppCompatActivity() {
     }
 
     // Gets the orders for the deal
-    private fun getOrders() {
+    private fun getValidOrders() {
+        ordersSelected.clear()
+        status_order_tv.visibility = View.INVISIBLE
+        redeem_tv.text = getText(R.string.swipe_to_complete)
+        rec_order.visibility = View.INVISIBLE
+        order_progress.visibility = View.VISIBLE
         orderLogic.getValidOrdersByDeal(object : ICallbackOrders{
             override fun onFinishOrders(orders: List<Order>?) {
+                if(orders!!.isEmpty()) {
+                    status_order_tv.text = getText(R.string.status_no_valid)
+                    status_order_tv.visibility = View.VISIBLE
+                }
+              rec_order.visibility = View.VISIBLE
               rec_order.adapter = adapter
               rec_order.layoutManager = LinearLayoutManager(baseContext)
-              adapter.setOrders(orders!!)
+              adapter.setOrders(orders)
               order_progress.visibility = View.INVISIBLE
+            }
+        }, customer.id, deal.id)
+    }
+
+    // Gets the orders for the deal
+    private fun getInvalidOrders() {
+        ordersSelected.clear()
+        status_order_tv.visibility = View.INVISIBLE
+        redeem_tv.text = getText(R.string.swipe_to_reopen)
+        rec_order.visibility = View.INVISIBLE
+        order_progress.visibility = View.VISIBLE
+        orderLogic.getInvalidOrdersByDeal(object : ICallbackOrders{
+            override fun onFinishOrders(orders: List<Order>?) {
+                if(orders!!.isEmpty()) {
+                    status_order_tv.text = getText(R.string.status_no_invalid)
+                    status_order_tv.visibility = View.VISIBLE
+                }
+                rec_order.visibility = View.VISIBLE
+                rec_order.adapter = adapter
+                rec_order.layoutManager = LinearLayoutManager(baseContext)
+                adapter.setOrders(orders)
+                order_progress.visibility = View.INVISIBLE
             }
         }, customer.id, deal.id)
     }

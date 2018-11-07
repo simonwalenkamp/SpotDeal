@@ -7,17 +7,22 @@
     <string name="error_email">Please Enter a Valid Email Address</string>
     <string name="error_password">Please Enter a Valid Password</string>
     <string name="logout">Log out</string>
-    <string name="valid">Show Active</string>
-    <string name="invalid">Show Inactive</string>
+    <string name="active">Show Active</string>
+    <string name="inactive">Show Inactive</string>
+    <string name="valid">Show Valid</string>
+    <string name="invalid">Show Invalid</string>
     <string name="all">Show All</string>
     <string name="scan">Scan code</string>
-    <string name="status_no_valid">No active Deals</string>
-    <string name="status_no_invalid">No inactive Deals</string>
+    <string name="status_no_active">No active Deals</string>
+    <string name="status_no_inactive">No inactive Deals</string>
+    <string name="status_no_valid">No valid Orders</string>
+    <string name="status_no_invalid">No invalid Orders</string>
     <string name="cancel">Cancel</string>
     <string name="logout_dialog">Are you sure you want to Log out?</string>
     <string name="voucher">Voucher: </string>
     <string name="valid_voucher">valid</string>
     <string name="invalid_voucher">invalid</string>
     <string name="swipe_to_complete">Swipe to redeem</string>
+    <string name="swipe_to_reopen">Swipe to reopen</string>
 
 </resources>
