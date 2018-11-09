@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">SpotDeal</string>
-    <string name="login_btn">Login</string>
+    <string name="login_btn">Sign in</string>
     <string name="email_et">Email</string>
     <string name="password_et">Password</string>
-    <string name="error_wrong_combination">Invalid Email or Password Combination</string>
-    <string name="error_email">Please Enter a Valid Email Address</string>
+    <string name="error_wrong_combination">Invalid Email or Password combination</string>
+    <string name="error_email">Please enter a valid Email address</string>
     <string name="error_password">Please Enter a Valid Password</string>
     <string name="logout">Log out</string>
     <string name="active">Show Active</string>

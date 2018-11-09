@@ -11,19 +11,29 @@
 
   <style name="BoldText" parent="AppTheme">
     <item name="android:fontFamily">@font/lato_bold</item>
+    <item name="android:textSize">18sp</item>
   </style>
 
   <style name="ItalicText" parent="AppTheme">
     <item name="android:fontFamily">@font/lato_lightitalic</item>
+    <item name="android:textSize">18sp</item>
   </style>
 
   <style name="Text" parent="AppTheme">
     <item name="android:fontFamily">@font/lato_regular</item>
+    <item name="android:textSize">18sp</item>
   </style>
 
   <style name="Toolbar" parent="AppTheme">
     <item name="titleTextColor">@color/colorWhite</item>
     <item name="android:background">@color/colorPrimaryLight</item>
+  </style>
+
+  <style name="ButtonText" parent="AppTheme">
+    <item name="android:fontFamily">@font/lato_bold</item>
+    <item name="android:textColor">@color/colorWhite</item>
+    <item name="android:textSize">18sp</item>
+    <item name="android:background">@color/colorPrimary</item>
   </style>
 
   <style name="OverFlow" parent="@style/Widget.AppCompat.Light.ActionButton.Overflow">
