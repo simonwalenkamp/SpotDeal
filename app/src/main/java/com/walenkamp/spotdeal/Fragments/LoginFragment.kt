@@ -1,10 +1,10 @@
 package com.walenkamp.spotdeal.Fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.inputmethod.InputMethodManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseUser
 import com.walenkamp.spotdeal.Activities.SearchActivity
@@ -12,9 +12,6 @@ import com.walenkamp.spotdeal.Authentication.AuthManager
 import com.walenkamp.spotdeal.Interface.ICallBackUser
 import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.login_fragment.*
-
-
-
 
 class LoginFragment : androidx.fragment.app.Fragment() {
 
@@ -42,6 +39,8 @@ class LoginFragment : androidx.fragment.app.Fragment() {
     // If for some reason the user is not authenticated a snackbar while show with a message why
     private fun login() {
         progress.visibility = View.VISIBLE
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
         if(email_et.text.toString() == "" || email_et.text == null) {
             progress.visibility = View.INVISIBLE
             Snackbar.make(view!!, R.string.error_email, Snackbar.LENGTH_LONG).show()
