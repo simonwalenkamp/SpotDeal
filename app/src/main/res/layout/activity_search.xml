@@ -19,10 +19,16 @@
 
         <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
+                style="@style/Toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:titleTextColor="@color/colorWhite"
-                android:background="@color/colorPrimary"/>
+                android:layout_height="?attr/actionBarSize">
+        <ImageView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_marginEnd="?attr/actionBarSize"
+                android:src="@drawable/toolbar_logo"/>
+        </androidx.appcompat.widget.Toolbar>
 
         <androidx.appcompat.widget.SearchView
                 android:id="@+id/search"

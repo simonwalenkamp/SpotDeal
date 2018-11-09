@@ -134,8 +134,8 @@ class SearchActivity : AppCompatActivity() {
             }
             true
         }
-
         this.setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         val actionbar: ActionBar? = this.supportActionBar
 
         actionbar?.apply {

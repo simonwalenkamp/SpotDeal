@@ -57,9 +57,6 @@ class CustomerActivity : AppCompatActivity() {
         phone_tv.text = customer.phone.toString()
         address_tv.text = customer.address
 
-        separator = Separator(this)
-        rec_deal.addItemDecoration(separator)
-
         phone_tv.setOnClickListener{
             openDial()
         }
