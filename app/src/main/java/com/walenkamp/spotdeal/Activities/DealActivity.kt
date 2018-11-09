@@ -19,6 +19,8 @@ import com.walenkamp.spotdeal.Entities.Order
 import com.walenkamp.spotdeal.Interface.ICallbackDealImage
 import com.walenkamp.spotdeal.Interface.ICallbackOrders
 import com.walenkamp.spotdeal.R
+import com.walenkamp.spotdeal.Separator
+import kotlinx.android.synthetic.main.activity_customer.*
 import kotlinx.android.synthetic.main.activity_deal.*
 
 const val DEAL        = "DEAL"
@@ -43,7 +45,10 @@ class DealActivity : AppCompatActivity() {
     private var orderLogic: OrderLogic = OrderLogic()
 
     // DealAdapter instance
-    private val adapter = OrderAdapter(this, {order : Order -> itemClicked(order)})
+    private val adapter = OrderAdapter(this) { order : Order -> itemClicked(order)}
+
+    // Separator instance
+    private lateinit var separator: Separator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +58,9 @@ class DealActivity : AppCompatActivity() {
         customer = intent.getSerializableExtra(CUSTOMER) as Customer
         toolbar_deal.title = deal.name
         setSupportActionBar(toolbar_deal)
+
+        separator = Separator(this)
+        rec_order.addItemDecoration(separator)
 
         deal_description.text = deal.description
         deal_info.text = deal.info
@@ -224,7 +232,7 @@ class DealActivity : AppCompatActivity() {
         } else if(ordersSelected.size == ordersShown.size){
             uncheckAllBoxes()
             ordersSelected.clear()
-            layout_swipe.visibility = View.INVISIBLE
+            layout_swipe.visibility = View.GONE
             select_all_cb.isChecked = false
             return
         } else {

@@ -33,6 +33,13 @@
                 app:queryBackground="@android:color/transparent"
                 app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
+        <View
+                android:id="@+id/search_separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorGray"
+                app:layout_constraintTop_toBottomOf="@id/search"/>
+
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rec_customer"
                 android:layout_width="0dp"
@@ -40,7 +47,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/search"/>
+                app:layout_constraintTop_toBottomOf="@id/search_separator"/>
 
         <ProgressBar
                 android:id="@+id/customer_progress"

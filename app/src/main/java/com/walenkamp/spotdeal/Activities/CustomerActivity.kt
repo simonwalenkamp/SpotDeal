@@ -19,6 +19,8 @@ import com.walenkamp.spotdeal.Interface.ICallBackSupplier
 import com.walenkamp.spotdeal.Interface.ICallbackDeals
 import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.activity_customer.*
+import com.walenkamp.spotdeal.Separator
+
 
 const val CUSTOMER        = "CUSTOMER"
 
@@ -39,6 +41,9 @@ class CustomerActivity : AppCompatActivity() {
     // DealAdapter instance
     private val adapter = DealAdapter(this)
 
+    // Separator instance
+    private lateinit var separator: Separator
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +56,9 @@ class CustomerActivity : AppCompatActivity() {
         email_tv.text = customer.email
         phone_tv.text = customer.phone.toString()
         address_tv.text = customer.address
+
+        separator = Separator(this)
+        rec_deal.addItemDecoration(separator)
 
         phone_tv.setOnClickListener{
             openDial()
