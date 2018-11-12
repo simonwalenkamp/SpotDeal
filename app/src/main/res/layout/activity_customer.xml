@@ -15,12 +15,12 @@
 
     <GridLayout
             android:id="@+id/customer_grid"
+            android:background="@drawable/rec_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:rowCount="3"
             android:columnCount="2"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="10dp"
             app:layout_constraintTop_toBottomOf="@id/toolbar_customer">
 
 
@@ -31,13 +31,15 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"/>
 
         <TextView
                 android:id="@+id/email_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Medium"/>
+                android:layout_gravity="center_vertical"
+                style="@style/Text"/>
 
         <ImageView
                 android:layout_width="wrap_content"
@@ -46,13 +48,15 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"/>
 
         <TextView
                 android:id="@+id/phone_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Medium"/>
+                android:layout_gravity="center_vertical"
+                style="@style/Text"/>
 
         <ImageView
                 android:layout_width="wrap_content"
@@ -61,6 +65,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"/>
 
         <TextView
@@ -68,7 +73,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textIsSelectable="true"
-                style="@style/TextAppearance.AppCompat.Medium"/>
+                android:layout_gravity="center_vertical"
+                style="@style/Text"/>
     </GridLayout>
 
     <View
@@ -76,7 +82,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorGray"
-            app:layout_constraintTop_toBottomOf="@id/customer_grid"/>
+            app:layout_constraintTop_toBottomOf="@id/customer_grid"
+            android:layout_marginBottom="10dp"/>
 
     <ImageView
             android:id="@+id/status_icon"
@@ -86,6 +93,8 @@
             app:layout_constraintTop_toBottomOf="@id/shown_separator"
             app:layout_constraintBottom_toTopOf="@id/rec_separator"
             android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             app:srcCompat="@drawable/ic_valid"/>
 
     <TextView
@@ -99,7 +108,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:layout_marginStart="10dp"
-            style="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+            style="@style/BoldText"
             android:text="@string/active_deals"/>
 
     <View
@@ -107,7 +116,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorGray"
-            app:layout_constraintTop_toBottomOf="@id/shown_tv"/>
+            app:layout_constraintTop_toBottomOf="@id/shown_tv"
+            android:layout_marginTop="10dp"/>
 
 
     <androidx.recyclerview.widget.RecyclerView
