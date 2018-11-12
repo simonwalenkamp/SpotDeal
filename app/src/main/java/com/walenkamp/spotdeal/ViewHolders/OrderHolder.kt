@@ -1,6 +1,7 @@
 package com.walenkamp.spotdeal.ViewHolders
 
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.walenkamp.spotdeal.Entities.Order
 import com.walenkamp.spotdeal.R
@@ -10,6 +11,8 @@ class OrderHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     // Sets the deal data on the DealItem
     fun bind(order: Order, clickListener: (Order) -> Unit, shouldBeChecked: Boolean) {
+        itemView.background = ContextCompat.getDrawable(itemView.context, R.drawable.rec_background)
+
         if(order.valid) {
             itemView.status.text = itemView.resources.getText(R.string.valid_voucher)
             itemView.status.setTextColor(itemView.resources.getColor(R.color.colorGreen))
@@ -18,6 +21,8 @@ class OrderHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             itemView.status.setTextColor(itemView.resources.getColor(R.color.colorRed))
         }
 
+
+        itemView.voucher.text = order.id
         itemView.checkbox.isChecked = shouldBeChecked
 
         itemView.setOnClickListener {

@@ -3,6 +3,7 @@ package com.walenkamp.spotdeal.ViewHolders
 import android.content.Intent
 import android.graphics.Bitmap
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.walenkamp.spotdeal.Activities.CUSTOMER
 import com.walenkamp.spotdeal.Activities.DEAL
@@ -11,6 +12,7 @@ import com.walenkamp.spotdeal.BLL.DealLogic
 import com.walenkamp.spotdeal.Entities.Customer
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Interface.ICallbackDealImage
+import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.deal_list_item.view.*
 
 class DealHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -20,6 +22,9 @@ class DealHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     // Sets the deal data on the DealItem
     fun bind(deal: Deal, customer: Customer) {
+
+        itemView.background = ContextCompat.getDrawable(itemView.context, R.drawable.rec_background)
+
         itemView.deal_name_tv.text = deal.name
         itemView.deal_description_tv.text = deal.description
         if (deal.imageId != null && deal.imageId != "") {

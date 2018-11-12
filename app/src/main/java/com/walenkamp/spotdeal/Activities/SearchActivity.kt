@@ -1,10 +1,8 @@
 package com.walenkamp.spotdeal.Activities
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.MenuItem
 import android.view.View
 import android.widget.SearchView
@@ -24,9 +22,11 @@ import com.walenkamp.spotdeal.Interface.ICallbackCustomers
 import com.walenkamp.spotdeal.Fragments.LogoutDialogFragment
 import com.walenkamp.spotdeal.R
 import com.walenkamp.spotdeal.Separator
-import kotlinx.android.synthetic.main.activity_customer.*
-import kotlinx.android.synthetic.main.activity_deal.*
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.drawer_header.*
+import android.view.WindowManager
+import android.os.Build
+
 
 
 
@@ -113,13 +113,15 @@ class SearchActivity : AppCompatActivity() {
 
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         val headerView: View = navigationView.getHeaderView(0)
-        val supplierNameTV: TextView = headerView.findViewById(R.id.header_tv)
 
         // Gets the supplier from SupplierLogic
         supplierLogic.getSupplier(object : ICallBackSupplier{
             override fun onFinishSupplier(sup: Supplier?) {
                 supplier = sup!!
-                supplierNameTV.text = supplier.name
+                header_name_tv.text = supplier.name
+                header_email_tv.text = supplier.email
+                header_phone_tv.text = supplier.phone.toString()
+                header_address_tv.text = supplier.address
             }
         })
 

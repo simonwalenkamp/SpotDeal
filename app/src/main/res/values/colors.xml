@@ -4,8 +4,9 @@
     <color name="colorPrimaryLight">#ff8f4d</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorGreen">#008000</color>
-    <color name="colorGray">#cdcdcd</color>
+    <color name="colorGray">#ececec</color>
     <color name="colorDarkGray">#c1c1c1</color>
     <color name="colorLightGray">#f9f9f9</color>
     <color name="colorRed">#d90000</color>
+    <color name="colorText">#4c4c4c</color>
 </resources>

@@ -23,8 +23,7 @@
             app:layout_constraintStart_toEndOf="@id/checkbox"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            style="@style/TextAppearance.AppCompat.Large"
-            android:text="@string/voucher"/>
+            style="@style/TextAppearance.AppCompat.Large"/>
 
     <TextView
             android:id="@+id/status"
