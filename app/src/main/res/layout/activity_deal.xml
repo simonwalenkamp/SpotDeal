@@ -125,7 +125,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_deal"
+            app:layout_constraintTop_toBottomOf="@id/rec_separator_deal"
             android:visibility="visible"/>
 
     <TextView
@@ -137,7 +137,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar_deal"/>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_swipe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -147,17 +147,15 @@
             android:visibility="gone"
             android:layout_marginBottom="10dp">
 
-        <TextView
-                android:id="@+id/redeem_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/swipe_to_complete"/>
 
             <SeekBar
                     android:id="@+id/seek_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:thumbTintMode="src_over"
                     android:thumb="@drawable/ic_swipe"
                     android:clickable="false"
@@ -166,7 +164,20 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"/>
 
-    </LinearLayout>
+        <TextView
+                android:id="@+id/redeem_tv"
+                style="@style/BoldText"
+                android:textColor="@color/colorLightGray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/swipe_to_complete"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

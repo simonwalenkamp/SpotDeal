@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/background"
+          android:right="20dp"
+          android:left="20dp"
           android:gravity="center_vertical|fill_horizontal">
-        <shape android:shape="rectangle"
-               android:tint="@color/common_google_signin_btn_text_light_focused">
-            <size android:height="40dp" />
-            <corners android:radius="150dp" />
-            <solid android:color="@color/common_google_signin_btn_text_light_focused" />
+        <shape android:shape="rectangle">
+            <size android:height="60dp"/>
+            <corners android:radius="150dp"/>
+            <gradient
+                    android:angle="0"
+                    android:endColor="@color/colorPrimary"
+                    android:centerColor="@color/colorPrimaryLight"
+                    android:startColor="@color/colorLightGray"
+                    android:type="linear"/>
         </shape>
     </item>
-
+    <item android:id="@android:id/progress"
+          android:gravity="center_vertical"
+    android:right="-25dp">
+        <scale android:scaleWidth="90%">
+            <selector>
+                <item android:state_enabled="false"
+                      android:drawable="@android:color/transparent"/>
+                <item>
+                    <shape android:shape="rectangle">
+                        <size android:height="60dp" android:width="120dp"/>
+                        <corners android:radius="150dp"/>
+                        <solid android:color="@color/colorLightGray"/>
+                    </shape>
+                </item>
+            </selector>
+        </scale>
+    </item>
 </layer-list>

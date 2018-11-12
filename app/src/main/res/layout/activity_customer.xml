@@ -15,7 +15,6 @@
 
     <GridLayout
             android:id="@+id/customer_grid"
-            android:background="@drawable/rec_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:rowCount="3"
@@ -136,7 +135,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_customer"
+            app:layout_constraintTop_toBottomOf="@id/rec_separator"
             android:visibility="visible"/>
 
     <TextView

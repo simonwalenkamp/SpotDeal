@@ -67,26 +67,35 @@ class DealActivity : AppCompatActivity() {
         setImage()
 
         getValidOrders()
-        seek_bar.progress = 6
+        seek_bar.progress = 16
         select_all_cb.setOnClickListener {
             handleSelectAll()
         }
 
         seek_bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                Log.d("SIMON", "Start")
+                var p = progress
+                if (p < 16){
+                    p = 16
+                    seekBar?.progress = p
+                }
+                if (p > 84){
+                    p = 84
+                    seekBar?.progress = p
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                Log.d("SIMON", "Start")
+                redeem_tv.visibility = View.INVISIBLE
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 if (seekBar?.progress!! >= 51) {
-                    seekBar.progress = 94
+                    seekBar.progress = 84
                     updateOrders()
                 } else {
-                    seekBar.progress = 6
+                    redeem_tv.visibility = View.VISIBLE
+                    seekBar.progress = 16
                 }
             }
         })

@@ -112,7 +112,6 @@ class SearchActivity : AppCompatActivity() {
         mDrawerLayout = findViewById(R.id.drawer_layout)
 
         val navigationView: NavigationView = findViewById(R.id.nav_view)
-        val headerView: View = navigationView.getHeaderView(0)
 
         // Gets the supplier from SupplierLogic
         supplierLogic.getSupplier(object : ICallBackSupplier{
