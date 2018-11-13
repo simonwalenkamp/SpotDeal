@@ -94,7 +94,6 @@ class OrderDAO : IOrderDAO {
         var updates = 0
         for(o in orders) {
             val ref = db.collection("orders").document(o.id)
-            o.id = ""
                 ref.set(o).addOnCompleteListener{ task ->
                 if(task.isSuccessful) {
                     updates += 1

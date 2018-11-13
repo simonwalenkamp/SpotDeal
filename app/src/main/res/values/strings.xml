@@ -13,13 +13,14 @@
     <string name="invalid">Show Invalid</string>
     <string name="all">Show All</string>
     <string name="scan">Scan code</string>
+    <string name="history">Order history</string>
     <string name="status_no_active">No active Deals</string>
     <string name="status_no_inactive">No inactive Deals</string>
     <string name="status_no_valid">No valid Vouchers</string>
     <string name="status_no_invalid">No invalid Vouchers</string>
     <string name="cancel">Cancel</string>
     <string name="logout_dialog">Are you sure you want to Log out?</string>
-    <string name="voucher">Voucher: </string>
+    <string name="voucher">Voucher:</string>
     <string name="valid_voucher">valid</string>
     <string name="invalid_voucher">invalid</string>
     <string name="swipe_to_complete">Swipe to redeem</string>

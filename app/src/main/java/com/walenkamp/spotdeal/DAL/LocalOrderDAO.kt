@@ -19,12 +19,13 @@ private val TABLE_NAME = "order_table"
 class LocalOrderDAO(c: Context) {
     private val contex: Context = c
 
-    // the insert statement used to write to table
-    private val INSERT = ("insert into " + TABLE_NAME
-            + "(id, supplierId, dealId, customerId, valid) values (?, ?, ?, ?, ?)")
 
     // OpenHelper instance
     private var openHelper = OpenHelper(contex)
+
+    // the insert statement used to write to table
+    private val INSERT = ("insert into " + TABLE_NAME
+            + "(id, supplierId, dealId, customerId, valid) values (?, ?, ?, ?, ?)")
 
     // SQLLiteDatabase instance
     private val db: SQLiteDatabase = openHelper.writableDatabase
@@ -48,33 +49,24 @@ class LocalOrderDAO(c: Context) {
         }
     }
 
-    // Gets order history
-    fun getAllSavedOrders(): List<Order> {
+    // Gets all saved orders where supplierId matches given id
+    fun getAllSavedOrders(id: String): List<Order> {
         ordersSaved.clear()
-        val cursor = this.db.query(
-            TABLE_NAME,
-            arrayOf(
-                "id",
-                "supplierId",
-                "dealId",
-                "customerId",
-                "valid"
-            ), null, null, null, null, null, null)
-
-        if(cursor.moveToFirst()) {
-            do {
-                ordersSaved.add(Order(
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getString(3),
-                    cursor.getString(4),
-                    cursor.getString(5)!!.toBoolean()
-                ))
-            } while (cursor.moveToNext())
+        val order = Order()
+        val selectQuery = "SELECT * FROM $TABLE_NAME WHERE supplierId = '$id'"
+        val cursor = db.rawQuery(selectQuery, null)
+        if(cursor != null) {
+            cursor.moveToFirst()
+            while (cursor.moveToNext()) {
+                order.id = cursor.getString(cursor.getColumnIndex("id"))
+                order.supplierId = cursor.getString(cursor.getColumnIndex("supplierId"))
+                order.dealId = cursor.getString(cursor.getColumnIndex("dealId"))
+                order.customerId = cursor.getString(cursor.getColumnIndex("customerId"))
+                order.valid = cursor.getString(cursor.getColumnIndex("valid")).toBoolean()
+                ordersSaved.add(order)
+            }
         }
-        if (!cursor.isClosed) {
-            cursor.close()
-        }
+        cursor.close()
         return ordersSaved
     }
 
@@ -85,7 +77,7 @@ class LocalOrderDAO(c: Context) {
         override fun onCreate(db: SQLiteDatabase) {
             db.execSQL(
                 "CREATE TABLE " + TABLE_NAME
-                        + " (id INTEGER PRIMARY KEY, name TEXT)"
+                        + " (id TEXT, supplierId TEXT, dealId TEXT, customerId TEXT, valid TEXT)"
             )
 
         }

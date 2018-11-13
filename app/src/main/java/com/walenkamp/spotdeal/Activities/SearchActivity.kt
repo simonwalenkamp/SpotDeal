@@ -107,6 +107,12 @@ class SearchActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    // Start the OrderHistoryActivity
+    private fun startHistory() {
+        val intent = Intent(this, OrderHistoryActivity::class.java).putExtra(SUPPLIER_ID, supplier.id)
+        startActivity(intent)
+    }
+
     // Sets the navigation drawer and toolbar up
     private fun setNavigationAndToolbar(){
         mDrawerLayout = findViewById(R.id.drawer_layout)
@@ -130,8 +136,10 @@ class SearchActivity : AppCompatActivity() {
             // close drawer when item is tapped
             mDrawerLayout.closeDrawers()
             when {
-                menuItem.toString() == "Log out" -> logout()
-                menuItem.toString() == "Scan code" -> startScan()
+                menuItem.toString() == getString(R.string.logout) -> logout()
+                menuItem.toString() == getString(R.string.scan) -> startScan()
+                menuItem.toString() == getString(R.string.history) -> startHistory()
+
             }
             true
         }

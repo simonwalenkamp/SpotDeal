@@ -11,6 +11,7 @@ import android.widget.SeekBar
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.walenkamp.spotdeal.Adapters.OrderAdapter
+import com.walenkamp.spotdeal.BLL.HistoryLogic
 import com.walenkamp.spotdeal.BLL.OrderLogic
 import com.walenkamp.spotdeal.DAL.StorageHelper
 import com.walenkamp.spotdeal.Entities.Customer
@@ -44,6 +45,9 @@ class DealActivity : AppCompatActivity() {
     // OrderLogic intance
     private var orderLogic: OrderLogic = OrderLogic()
 
+    // HistoryLogic instance
+    private lateinit var historyLogic: HistoryLogic
+
     // DealAdapter instance
     private val adapter = OrderAdapter(this) { order : Order -> itemClicked(order)}
 
@@ -53,6 +57,8 @@ class DealActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deal)
+
+        historyLogic = HistoryLogic(this)
 
         deal = intent.getSerializableExtra(DEAL) as Deal
         customer = intent.getSerializableExtra(CUSTOMER) as Customer
@@ -215,6 +221,7 @@ class DealActivity : AppCompatActivity() {
         }
         orderLogic.updateOrders(object : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
+                historyLogic.saveOrders(ordersSelected)
                 onBackPressed()
             }
         }, ordersSelected)

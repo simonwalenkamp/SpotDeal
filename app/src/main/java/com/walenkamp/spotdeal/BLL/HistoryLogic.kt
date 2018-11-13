@@ -10,8 +10,8 @@ class HistoryLogic(c: Context) {
     private val  localOrderDAO: LocalOrderDAO = LocalOrderDAO(c)
 
     // Get the order history
-    fun getHistory(): List<Order>{
-        return localOrderDAO.getAllSavedOrders()
+    fun getHistory(supplierId: String): List<Order>{
+        return localOrderDAO.getAllSavedOrders(supplierId)
     }
 
     // Saves a list of orders
