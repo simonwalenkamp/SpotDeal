@@ -9,16 +9,16 @@ import kotlinx.android.synthetic.main.order_list_item.view.*
 
 class OrderHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    // Sets the deal data on the DealItem
+    // Sets the deal data on the OrderItem
     fun bind(order: Order, clickListener: (Order) -> Unit, shouldBeChecked: Boolean) {
         itemView.background = ContextCompat.getDrawable(itemView.context, R.drawable.rec_background)
 
         if(order.valid) {
             itemView.status.text = itemView.resources.getText(R.string.valid_voucher)
-            itemView.status.setTextColor(itemView.resources.getColor(R.color.colorGreen))
+            itemView.status.setTextColor(ContextCompat.getColor(itemView.context, R.color.colorGreen))
         } else {
             itemView.status.text = itemView.resources.getText(R.string.invalid_voucher)
-            itemView.status.setTextColor(itemView.resources.getColor(R.color.colorRed))
+            itemView.status.setTextColor(ContextCompat.getColor(itemView.context, R.color.colorRed))
         }
 
 

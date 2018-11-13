@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteStatement
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.walenkamp.spotdeal.Entities.Order
+import com.walenkamp.spotdeal.Interface.ICallbackOrders
 
 // Database name
 private val DATABASE_NAME = "orders.db"
@@ -37,8 +38,8 @@ class LocalOrderDAO(c: Context) {
     private val ordersSaved = mutableListOf<Order>()
 
     // Saves a list of orders
-    fun saveOrders(orders: List<Order>) {
-        for (o in orders) {
+    fun saveOrders(orderList: List<Order>) {
+        for (o in orderList) {
             insertStmt.bindString(1, o.id)
             insertStmt.bindString(2, o.supplierId)
             insertStmt.bindString(3, o.dealId)
@@ -50,14 +51,14 @@ class LocalOrderDAO(c: Context) {
     }
 
     // Gets all saved orders where supplierId matches given id
-    fun getAllSavedOrders(id: String): List<Order> {
+    fun getAllSavedOrdersBySupplierId(id: String, callback: ICallbackOrders) {
         ordersSaved.clear()
-        val order = Order()
         val selectQuery = "SELECT * FROM $TABLE_NAME WHERE supplierId = '$id'"
         val cursor = db.rawQuery(selectQuery, null)
         if(cursor != null) {
             cursor.moveToFirst()
             while (cursor.moveToNext()) {
+                val order = Order()
                 order.id = cursor.getString(cursor.getColumnIndex("id"))
                 order.supplierId = cursor.getString(cursor.getColumnIndex("supplierId"))
                 order.dealId = cursor.getString(cursor.getColumnIndex("dealId"))
@@ -67,7 +68,28 @@ class LocalOrderDAO(c: Context) {
             }
         }
         cursor.close()
-        return ordersSaved
+        callback.onFinishOrders(ordersSaved.asReversed())
+    }
+
+    // Gets all saved orders
+    fun getAllSavedOrders( callback: ICallbackOrders) {
+        ordersSaved.clear()
+        val selectQuery = "SELECT * FROM $TABLE_NAME"
+        val cursor = db.rawQuery(selectQuery, null)
+        if(cursor != null) {
+            cursor.moveToFirst()
+            while (cursor.moveToNext()) {
+                val order = Order()
+                order.id = cursor.getString(cursor.getColumnIndex("id"))
+                order.supplierId = cursor.getString(cursor.getColumnIndex("supplierId"))
+                order.dealId = cursor.getString(cursor.getColumnIndex("dealId"))
+                order.customerId = cursor.getString(cursor.getColumnIndex("customerId"))
+                order.valid = cursor.getString(cursor.getColumnIndex("valid")).toBoolean()
+                ordersSaved.add(order)
+            }
+        }
+        cursor.close()
+        callback.onFinishOrders(ordersSaved.asReversed())
     }
 
     // Inner class helps with creating and updating the local database
