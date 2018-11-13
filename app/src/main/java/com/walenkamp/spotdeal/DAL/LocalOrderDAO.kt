@@ -19,9 +19,11 @@ private val TABLE_NAME = "order_table"
 class LocalOrderDAO(c: Context) {
     private val contex: Context = c
 
+    // the insert statement used to write to table
     private val INSERT = ("insert into " + TABLE_NAME
             + "(id, supplierId, dealId, customerId, valid) values (?, ?, ?, ?, ?)")
 
+    // OpenHelper instance
     private var openHelper = OpenHelper(contex)
 
     // SQLLiteDatabase instance
@@ -30,12 +32,10 @@ class LocalOrderDAO(c: Context) {
     // Statement (query)
     private val insertStmt: SQLiteStatement = db.compileStatement(INSERT)
 
-    // LocalOrderDAO instance
-    private val localOrderDAO : LocalOrderDAO = LocalOrderDAO(contex)
-
+    // List of orderHistory
     private val ordersSaved = mutableListOf<Order>()
 
-
+    // Saves a list of orders
     fun saveOrders(orders: List<Order>) {
         for (o in orders) {
             insertStmt.bindString(1, o.id)
@@ -48,6 +48,7 @@ class LocalOrderDAO(c: Context) {
         }
     }
 
+    // Gets order history
     fun getAllSavedOrders(): List<Order> {
         ordersSaved.clear()
         val cursor = this.db.query(
@@ -77,6 +78,7 @@ class LocalOrderDAO(c: Context) {
         return ordersSaved
     }
 
+    // Inner class helps with creating and updating the local database
     private class OpenHelper internal constructor(context: Context) :
         SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
