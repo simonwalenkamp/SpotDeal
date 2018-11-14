@@ -6,4 +6,5 @@ interface IDealDAO {
     fun getValidDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String)
     fun getInvalidDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String)
     fun getAllDeals(callback: ICallbackDeals, orderList: List<Order>, supplierId: String)
+    fun getDealById(id: String, callback: ICallbackDeal)
 }

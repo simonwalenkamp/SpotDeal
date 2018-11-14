@@ -3,6 +3,7 @@ package com.walenkamp.spotdeal.BLL
 import com.walenkamp.spotdeal.DAL.CustomerDAO
 import com.walenkamp.spotdeal.Entities.Customer
 import com.walenkamp.spotdeal.Entities.Order
+import com.walenkamp.spotdeal.Interface.ICallbackCustomer
 import com.walenkamp.spotdeal.Interface.ICallbackCustomers
 import com.walenkamp.spotdeal.Interface.ICallbackOrders
 
@@ -26,5 +27,14 @@ class CustomerLogic {
                 }, orders!!)
             }
         }, supplierId)
+    }
+
+    // Gets spicific customer
+    fun getCustomerById(id: String, callback: ICallbackCustomer) {
+        customerDAO.getCustomerById(id, object : ICallbackCustomer{
+            override fun onFinishCustomer(customer: Customer?) {
+                callback.onFinishCustomer(customer)
+            }
+        })
     }
 }

@@ -5,6 +5,7 @@ import com.walenkamp.spotdeal.DAL.DealDAO
 import com.walenkamp.spotdeal.DAL.StorageHelper
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Entities.Order
+import com.walenkamp.spotdeal.Interface.ICallbackDeal
 import com.walenkamp.spotdeal.Interface.ICallbackDealImage
 import com.walenkamp.spotdeal.Interface.ICallbackDeals
 import com.walenkamp.spotdeal.Interface.ICallbackOrders
@@ -69,5 +70,14 @@ class DealLogic {
                 callback.onFinishDealImage(dealImage)
             }
         }, dealImageId)
+    }
+
+    // Gets specific deal
+    fun getDealById(id: String, callback: ICallbackDeal) {
+        dealDAO.getDealById(id, object : ICallbackDeal{
+            override fun onFinishDeal(deal: Deal?) {
+                callback.onFinishDeal(deal)
+            }
+        })
     }
 }

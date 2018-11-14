@@ -3,6 +3,7 @@ package com.walenkamp.spotdeal.Activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.walenkamp.spotdeal.Adapters.HistoryAdapter
 import com.walenkamp.spotdeal.BLL.HistoryLogic
@@ -37,13 +38,19 @@ class OrderHistoryActivity : AppCompatActivity() {
         supplierId = intent.getSerializableExtra(SUPPLIER_ID) as String
 
         getHistory()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        getHistory()
     }
 
     // Gets history and sets them to the recyclerView
     private fun getHistory() {
+        history_progress.visibility = View.VISIBLE
         historyLogic.getHistory(supplierId, object : ICallbackOrders{
             override fun onFinishOrders(orders: List<Order>?) {
+                history_progress.visibility = View.INVISIBLE
                 rec_history.adapter = adapter
                 rec_history.layoutManager = LinearLayoutManager(baseContext)
                 adapter.setOrders(orders!!)

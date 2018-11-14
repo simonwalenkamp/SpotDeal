@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.SeekBar
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.walenkamp.spotdeal.Adapters.OrderAdapter
 import com.walenkamp.spotdeal.BLL.HistoryLogic
 import com.walenkamp.spotdeal.BLL.OrderLogic
@@ -25,6 +26,7 @@ import kotlinx.android.synthetic.main.activity_customer.*
 import kotlinx.android.synthetic.main.activity_deal.*
 
 const val DEAL        = "DEAL"
+const val SHOW_INVALID = "SHOW_INVALID"
 
 class DealActivity : AppCompatActivity() {
     // Deal instance
@@ -62,17 +64,22 @@ class DealActivity : AppCompatActivity() {
 
         deal = intent.getSerializableExtra(DEAL) as Deal
         customer = intent.getSerializableExtra(CUSTOMER) as Customer
-        toolbar_deal.title = deal.name
+        toolbar_deal.title = customer.name
         setSupportActionBar(toolbar_deal)
 
         separator = Separator(this)
         rec_order.addItemDecoration(separator)
 
+        deal_name.text = deal.name
         deal_description.text = deal.description
         deal_info.text = deal.info
         setImage()
 
-        getValidOrders()
+        if(!intent.getBooleanExtra(SHOW_INVALID, true)){
+            getInvalidOrders()
+        } else {
+            getValidOrders()
+        }
         seek_bar.progress = 16
         select_all_cb.setOnClickListener {
             handleSelectAll()
@@ -116,11 +123,9 @@ class DealActivity : AppCompatActivity() {
         when(item?.itemId) {
             R.id.load_valid -> {
                 getValidOrders()
-                displayValid()
             }
             R.id.load_invalid -> {
                 getInvalidOrders()
-                displayInvalid()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -154,16 +159,17 @@ class DealActivity : AppCompatActivity() {
     private fun getValidOrders() {
         ordersSelected.clear()
         ordersShown.clear()
-        status_order_tv.visibility = View.INVISIBLE
         redeem_tv.text = getText(R.string.swipe_to_complete)
         rec_order.visibility = View.INVISIBLE
         order_progress.visibility = View.VISIBLE
         orderLogic.getValidOrdersByDeal(object : ICallbackOrders{
             override fun onFinishOrders(orders: List<Order>?) {
                 if(orders!!.isEmpty()) {
-                    status_order_tv.text = getText(R.string.status_no_valid)
-                    status_order_tv.visibility = View.VISIBLE
+                    Snackbar.make(constraint_deal, R.string.status_no_valid, Snackbar.LENGTH_LONG).show()
+                    getInvalidOrders()
+                    return
                 }
+              displayValid()
               rec_order.visibility = View.VISIBLE
               rec_order.adapter = adapter
               rec_order.layoutManager = LinearLayoutManager(baseContext)
@@ -178,16 +184,17 @@ class DealActivity : AppCompatActivity() {
     private fun getInvalidOrders() {
         ordersSelected.clear()
         ordersShown.clear()
-        status_order_tv.visibility = View.INVISIBLE
         redeem_tv.text = getText(R.string.swipe_to_reopen)
         rec_order.visibility = View.INVISIBLE
         order_progress.visibility = View.VISIBLE
         orderLogic.getInvalidOrdersByDeal(object : ICallbackOrders{
             override fun onFinishOrders(orders: List<Order>?) {
                 if(orders!!.isEmpty()) {
-                    status_order_tv.text = getText(R.string.status_no_invalid)
-                    status_order_tv.visibility = View.VISIBLE
+                    Snackbar.make(constraint_deal, R.string.status_no_invalid, Snackbar.LENGTH_LONG).show()
+                    getValidOrders()
+                    return
                 }
+                displayInvalid()
                 rec_order.visibility = View.VISIBLE
                 rec_order.adapter = adapter
                 rec_order.layoutManager = LinearLayoutManager(baseContext)

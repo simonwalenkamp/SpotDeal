@@ -6,6 +6,7 @@
         android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_history_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
@@ -33,6 +34,16 @@
                 android:layout_marginStart="10dp"
                 android:text="@string/valid_voucher"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+            android:id="@+id/progress_history_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="invisible"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

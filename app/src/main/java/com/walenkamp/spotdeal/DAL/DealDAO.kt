@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Entities.Order
+import com.walenkamp.spotdeal.Interface.ICallbackDeal
 import com.walenkamp.spotdeal.Interface.ICallbackDeals
 import com.walenkamp.spotdeal.Interface.IDealDAO
 
@@ -80,6 +81,23 @@ class DealDAO: IDealDAO {
                 }
             }
             callback.onFinishDeals(dealList)
+        }
+    }
+
+    // Gets specific deal
+    override fun getDealById(id: String, callback: ICallbackDeal) {
+        db.collection("deals").document(id).get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                try {
+                    val doc = task.result!!
+                    val d: Deal? = doc.toObject(Deal::class.java)
+                    d?.id = doc.id
+
+                    callback.onFinishDeal(d)
+                } catch (e: Exception) {
+                    Log.d(TAG, e.message)
+                }
+            }
         }
     }
 }

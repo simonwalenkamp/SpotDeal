@@ -26,8 +26,7 @@ import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.drawer_header.*
 import android.view.WindowManager
 import android.os.Build
-
-
+import android.view.Menu
 
 
 class SearchActivity : AppCompatActivity() {
@@ -131,15 +130,12 @@ class SearchActivity : AppCompatActivity() {
         })
 
         navigationView.setNavigationItemSelectedListener { menuItem ->
-            // set item as selected to persist highlight
-            menuItem.isChecked = true
             // close drawer when item is tapped
             mDrawerLayout.closeDrawers()
             when {
                 menuItem.toString() == getString(R.string.logout) -> logout()
                 menuItem.toString() == getString(R.string.scan) -> startScan()
                 menuItem.toString() == getString(R.string.history) -> startHistory()
-
             }
             true
         }

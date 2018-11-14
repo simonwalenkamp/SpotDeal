@@ -5,10 +5,12 @@
         <item
                 android:id="@+id/nav_scan"
                 android:icon="@drawable/ic_camera"
+                android:checkable="false"
                 android:title="@string/scan"/>
         <item
                 android:id="@+id/nav_history"
                 android:icon="@drawable/ic_history"
+                android:checkable="false"
                 android:title="@string/history"/>
     </group>
     <group android:checkableBehavior="single"
@@ -16,6 +18,7 @@
     <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout_24dp"
+            android:checkable="false"
             android:title="@string/logout"/>
 </group>
 </menu>
