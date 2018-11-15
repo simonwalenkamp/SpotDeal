@@ -4,8 +4,11 @@ import android.content.Context
 import android.database.sqlite.SQLiteStatement
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import com.walenkamp.spotdeal.Entities.Order
+import com.walenkamp.spotdeal.Interface.ICallbackDone
 import com.walenkamp.spotdeal.Interface.ICallbackOrders
+import java.util.*
 
 // Database name
 private val DATABASE_NAME = "orders.db"
@@ -26,7 +29,7 @@ class LocalOrderDAO(c: Context) {
 
     // the insert statement used to write to table
     private val INSERT = ("insert into " + TABLE_NAME
-            + "(id, supplierId, dealId, customerId, valid) values (?, ?, ?, ?, ?)")
+            + "(row_id, id, supplierId, dealId, customerId, valid) values (?, ?, ?, ?, ?, ?)")
 
     // SQLLiteDatabase instance
     private val db: SQLiteDatabase = openHelper.writableDatabase
@@ -40,11 +43,12 @@ class LocalOrderDAO(c: Context) {
     // Saves a list of orders
     fun saveOrders(orderList: List<Order>) {
         for (o in orderList) {
-            insertStmt.bindString(1, o.id)
-            insertStmt.bindString(2, o.supplierId)
-            insertStmt.bindString(3, o.dealId)
-            insertStmt.bindString(4, o.customerId)
-            insertStmt.bindString(5, o.valid.toString())
+            insertStmt.bindString(1, UUID.randomUUID().toString())
+            insertStmt.bindString(2, o.id)
+            insertStmt.bindString(3, o.supplierId)
+            insertStmt.bindString(4, o.dealId)
+            insertStmt.bindString(5, o.customerId)
+            insertStmt.bindString(6, o.valid.toString())
 
             insertStmt.execute()
         }
@@ -92,6 +96,17 @@ class LocalOrderDAO(c: Context) {
         callback.onFinishOrders(ordersSaved.asReversed())
     }
 
+    // Removes the first X rows to maintain the limit
+    fun deleteRows(limit: Int, callback: ICallbackDone) {
+        val cursor = db.query(TABLE_NAME, null, null, null, null, null, null)
+            repeat(limit){
+                cursor.moveToNext()
+                val rowId = cursor.getString(cursor.getColumnIndex("row_id"))
+                db.delete(TABLE_NAME, "row_id" + "=?",  arrayOf(rowId))
+            }
+                callback.onFinishTask("done")
+    }
+
     // Inner class helps with creating and updating the local database
     private class OpenHelper internal constructor(context: Context) :
         SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -99,7 +114,7 @@ class LocalOrderDAO(c: Context) {
         override fun onCreate(db: SQLiteDatabase) {
             db.execSQL(
                 "CREATE TABLE " + TABLE_NAME
-                        + " (id TEXT, supplierId TEXT, dealId TEXT, customerId TEXT, valid TEXT)"
+                        + " (row_id TEXT PRIMARY KEY, id TEXT, supplierId TEXT, dealId TEXT, customerId TEXT, valid TEXT)"
             )
 
         }
