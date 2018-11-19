@@ -1,13 +1,263 @@
 package com.walenkamp.spotdeal.Activities
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.graphics.ImageFormat
+import android.graphics.SurfaceTexture
+import android.hardware.camera2.*
+import android.hardware.camera2.params.StreamConfigurationMap
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
+import android.util.Size
+import android.util.SparseIntArray
+import android.view.Surface
+import android.view.TextureView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 import com.walenkamp.spotdeal.R
+import com.walenkamp.spotdeal.SizeComparer
+import kotlinx.android.synthetic.main.activity_scan.*
+import java.util.*
 
 class ScanActivity : AppCompatActivity() {
+
+    // Permission request code
+    private val REQUEST_CAMERA_PERMISSION_RESULT = 0
+
+    // CameraDevice instance
+    private var cameraDevice: CameraDevice? = null
+
+    // cameraId instance
+    private var cameraId: String? = null
+
+    private val ORIENTATIONS: SparseIntArray = SparseIntArray()
+
+    init {
+        ORIENTATIONS.append(Surface.ROTATION_0, 0)
+        ORIENTATIONS.append(Surface.ROTATION_90, 90)
+        ORIENTATIONS.append(Surface.ROTATION_180, 180)
+        ORIENTATIONS.append(Surface.ROTATION_270, 270)
+    }
+
+    // the size of the camera preview
+    private lateinit var previewSize: Size
+
+    // Capture request builder instance
+    private lateinit var captureRequestBuilder: CaptureRequest.Builder
+
+    // Background handler thread instance
+    private var backgroundHandlerThread: HandlerThread? = null
+
+    // Background handler instance
+    private var backgroundHandler: Handler? = null
+
+    // Is called when CameraDevice changes state
+    private var stateCallback = object : CameraDevice.StateCallback() {
+        override fun onOpened(camera: CameraDevice) {
+            cameraDevice = camera
+            camera_view
+            startPreview()
+        }
+
+        override fun onClosed(camera: CameraDevice) {
+            super.onClosed(camera)
+            camera.close()
+            cameraDevice = null
+        }
+
+        override fun onDisconnected(camera: CameraDevice) {
+            camera.close()
+            cameraDevice = null        }
+
+        override fun onError(camera: CameraDevice, error: Int) {
+            camera.close()
+            cameraDevice = null        }
+    }
+
+    // Handles lifecycle events on a TextureView
+    private val surfaceTextureListener = object : TextureView.SurfaceTextureListener {
+        override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, width: Int, height: Int) {
+            Toast.makeText(applicationContext, "TextureView changed", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
+            Toast.makeText(applicationContext, "TextureView updated", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
+            Toast.makeText(applicationContext, "TextureView destroyed", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
+            setUpCamera(width, height)
+            connectCamera()
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
     }
+
+    override fun onResume() {
+        super.onResume()
+        startBackgroundThread()
+        if(camera_view.isAvailable) {
+            setUpCamera(camera_view.width, camera_view.height)
+            connectCamera()
+        } else {
+            camera_view.surfaceTextureListener = surfaceTextureListener
+        }
+    }
+
+    override fun onPause() {
+        closeCamera()
+        stopBackgroundThread()
+        super.onPause()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CAMERA_PERMISSION_RESULT) {
+            if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Snackbar.make(scan_view, "Camera access permission needed", Snackbar.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    // Connects the camera
+    private fun connectCamera(){
+        val cameraManager : CameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    cameraManager.openCamera(cameraId!!, stateCallback, backgroundHandler)
+
+                } else {
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                        Snackbar.make(scan_view, "Required access to camera", Snackbar.LENGTH_LONG).show()
+                    }
+                    requestPermissions(arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION_RESULT)
+                }
+            } else {
+                cameraManager.openCamera(cameraId!!, stateCallback, backgroundHandler)
+            }
+        } catch (e : CameraAccessException) {
+            e.printStackTrace()
+        }
+    }
+
+    // Sets up the camera to the rear facing camera
+    private fun setUpCamera(width: Int, height: Int) {
+        val cameraManager : CameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        try {
+            for (id in cameraManager.cameraIdList) {
+                val cameraCharacteristics = cameraManager.getCameraCharacteristics(id)
+                if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT) {
+                    continue
+                }
+                val deviceOrientation = windowManager.defaultDisplay.rotation
+                val totalRotation = sensorToDeviceRotation(cameraCharacteristics, deviceOrientation)
+                val swapRotation: Boolean = totalRotation == 90 || totalRotation == 270
+                var rotatedWidth = width
+                var rotatedHeight = height
+                if (swapRotation) {
+                    rotatedWidth = height
+                    rotatedHeight = width
+                }
+                val map: StreamConfigurationMap = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: continue
+                previewSize = chooseOptimalSize(map.getOutputSizes(ImageFormat.JPEG), rotatedWidth, rotatedHeight)
+                cameraId = id
+                return
+            }
+        } catch (e : CameraAccessException) {
+            e.printStackTrace()
+        }
+    }
+
+    // Closes the cameraDevice
+    private fun closeCamera() {
+        if (cameraDevice != null) {
+            cameraDevice?.close()
+            cameraDevice = null
+        }
+    }
+
+    // Starts background thread
+    private fun startBackgroundThread() {
+        backgroundHandlerThread = HandlerThread("CameraBackground").also { it.start()
+            backgroundHandler = Handler(it.looper)}
+    }
+
+    // Stops background thread
+    private fun stopBackgroundThread() {
+        backgroundHandlerThread?.quitSafely()
+        try {
+            backgroundHandlerThread?.join()
+            backgroundHandlerThread = null
+            backgroundHandler = null
+        } catch (e : InterruptedException) {
+            e.printStackTrace()
+        }
+    }
+
+    // Chooses the optimal size for the camera that matches where it shows
+    private fun chooseOptimalSize(choices: Array<Size>, width: Int, height: Int ): Size {
+        val bigEnough = ArrayList<Size>()
+        for (option in choices) {
+            if (option.height == option.width * height / width &&
+                option.width >= width && option.height >= height) {
+                bigEnough.add(option)
+            }
+        }
+        return if (bigEnough.size > 0 ) {
+            Collections.min(bigEnough, SizeComparer())
+        } else {
+            choices[0]
+        }
+    }
+
+    private fun sensorToDeviceRotation(cameraCharacteristics: CameraCharacteristics, deviceOrientation: Int): Int {
+        val sensorOrientation = cameraCharacteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
+        var orientation = deviceOrientation
+        orientation = ORIENTATIONS.get(deviceOrientation)
+        return (sensorOrientation!! + orientation + 360) %360
+    }
+
+    // Starts the preview
+    private fun startPreview() {
+        val surfaceTexture = camera_view.surfaceTexture
+        surfaceTexture.setDefaultBufferSize(previewSize.width, previewSize.height)
+        val previewSurface = Surface(surfaceTexture)
+
+        try {
+            captureRequestBuilder = cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+            captureRequestBuilder.addTarget(previewSurface)
+
+            cameraDevice?.createCaptureSession(Arrays.asList(previewSurface), object : CameraCaptureSession.StateCallback(){
+                override fun onConfigureFailed(session: CameraCaptureSession) {
+                    Snackbar.make(camera_view, "Unable to set up preview", Snackbar.LENGTH_LONG).show()
+                }
+
+                override fun onConfigured(session: CameraCaptureSession) {
+                    try {
+                        session.setRepeatingRequest(captureRequestBuilder.build(), null, backgroundHandler)
+                    } catch (e : CameraAccessException) {
+                        e.printStackTrace()
+                    }
+                }
+
+            }, null)
+        } catch (e : CameraAccessException) {
+            e.printStackTrace()
+        }
+    }
+
 }
