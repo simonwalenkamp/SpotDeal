@@ -16,12 +16,17 @@ import android.util.Size
 import android.util.SparseIntArray
 import android.view.Surface
 import android.view.TextureView
-import android.widget.Toast
+import android.view.View
+import android.view.animation.AccelerateInterpolator
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.activity_scan.*
 import java.util.*
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.widget.ImageView
+
 
 class ScanActivity : AppCompatActivity() {
 
@@ -100,6 +105,8 @@ class ScanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
+
+        fadeOutAndHide()
     }
 
     override fun onResume() {
@@ -271,4 +278,25 @@ class ScanActivity : AppCompatActivity() {
         }
     }
 
+    private fun fadeOutAndHide() {
+        val fade = AlphaAnimation(1f, 0f)
+        fade.interpolator = AccelerateInterpolator() //and this
+        fade.startOffset = 1000
+        fade.duration = 1000
+
+        fade.setAnimationListener(object : Animation.AnimationListener{
+            override fun onAnimationRepeat(animation: Animation?) {
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                qr_img_view.visibility = View.GONE
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
+        })
+
+        qr_img_view.animation = fade
+
+    }
 }
