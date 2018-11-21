@@ -9,4 +9,6 @@
     <color name="colorLightGray">#f9f9f9</color>
     <color name="colorRed">#d90000</color>
     <color name="colorText">#4c4c4c</color>
+
+    <color name="semitransparent">#CC000000</color>
 </resources>
