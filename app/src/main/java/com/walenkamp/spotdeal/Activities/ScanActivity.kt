@@ -25,7 +25,6 @@ import kotlinx.android.synthetic.main.activity_scan.*
 import java.util.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import android.widget.ImageView
 
 
 class ScanActivity : AppCompatActivity() {
@@ -39,16 +38,10 @@ class ScanActivity : AppCompatActivity() {
     // cameraId instance
     private var cameraId: String? = null
 
-    private val ORIENTATIONS: SparseIntArray = SparseIntArray()
+    // List of orientation possibilities
+    private val orientations: SparseIntArray = SparseIntArray()
 
-    init {
-        ORIENTATIONS.append(Surface.ROTATION_0, 0)
-        ORIENTATIONS.append(Surface.ROTATION_90, 90)
-        ORIENTATIONS.append(Surface.ROTATION_180, 180)
-        ORIENTATIONS.append(Surface.ROTATION_270, 270)
-    }
-
-    // the size of the camera preview
+    // The size of the camera preview
     private lateinit var previewSize: Size
 
     // Capture request builder instance
@@ -59,6 +52,13 @@ class ScanActivity : AppCompatActivity() {
 
     // Background handler instance
     private var backgroundHandler: Handler? = null
+
+    init {
+        orientations.append(Surface.ROTATION_0, 0)
+        orientations.append(Surface.ROTATION_90, 90)
+        orientations.append(Surface.ROTATION_180, 180)
+        orientations.append(Surface.ROTATION_270, 270)
+    }
 
     // Is called when CameraDevice changes state
     private var stateCallback = object : CameraDevice.StateCallback() {
@@ -166,11 +166,22 @@ class ScanActivity : AppCompatActivity() {
                 if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT) {
                     continue
                 }
+                // Holds the orientation of the device
                 val deviceOrientation = windowManager.defaultDisplay.rotation
+
+                // Holds the rotation of the sensor and device combined
                 val totalRotation = sensorToDeviceRotation(cameraCharacteristics, deviceOrientation)
+
+                // Checks if the rotation is set to landscape and is true if so
                 val swapRotation: Boolean = totalRotation == 90 || totalRotation == 270
+
+                // Holds the rotated width
                 var rotatedWidth = width
+
+                // Holds the rotated width
                 var rotatedHeight = height
+
+                // Swaps width and height if in landscape
                 if (swapRotation) {
                     rotatedWidth = height
                     rotatedHeight = width
@@ -213,39 +224,38 @@ class ScanActivity : AppCompatActivity() {
 
     // Chooses the optimal size for the camera that matches where it shows
     private fun chooseOptimalSize(choices: Array<Size>, width: Int, height: Int ): Size {
-        val ASPECT_TOLERANCE = 0.1
+        val aspectTolerance = 0.1
         val targetRatio = height / width
 
         var optimalSize: Size? = null
         var minDiff = Int.MAX_VALUE
 
-        val targetHeight = height
 
         for (size in choices) {
             val ratio = size.width / size.height
-            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue
-            if (Math.abs(size.height - targetHeight) < minDiff) {
+            if (Math.abs(ratio - targetRatio) > aspectTolerance) continue
+            if (Math.abs(size.height - height) < minDiff) {
                 optimalSize = size
-                minDiff = Math.abs(size.height - targetHeight)
+                minDiff = Math.abs(size.height - height)
             }
         }
 
         if (optimalSize == null) {
             minDiff = Int.MAX_VALUE
             for (size in choices) {
-                if (Math.abs(size.height - targetHeight.toDouble()) < minDiff) {
+                if (Math.abs(size.height - height.toDouble()) < minDiff) {
                     optimalSize = size
-                    minDiff = Math.abs(size.height - targetHeight)
+                    minDiff = Math.abs(size.height - height)
                 }
             }
         }
         return optimalSize!!
     }
 
+    // Calculates how much the rotation combined is redundant
     private fun sensorToDeviceRotation(cameraCharacteristics: CameraCharacteristics, deviceOrientation: Int): Int {
         val sensorOrientation = cameraCharacteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
-        var orientation = deviceOrientation
-        orientation = ORIENTATIONS.get(deviceOrientation)
+        var orientation = orientations.get(deviceOrientation)
         return (sensorOrientation!! + orientation + 360) %360
     }
 
@@ -278,6 +288,7 @@ class ScanActivity : AppCompatActivity() {
         }
     }
 
+    // Creates fade out animation to animate the qr code
     private fun fadeOutAndHide() {
         val fade = AlphaAnimation(1f, 0f)
         fade.interpolator = AccelerateInterpolator() //and this
@@ -295,8 +306,6 @@ class ScanActivity : AppCompatActivity() {
             override fun onAnimationStart(animation: Animation?) {
             }
         })
-
         qr_img_view.animation = fade
-
     }
 }
