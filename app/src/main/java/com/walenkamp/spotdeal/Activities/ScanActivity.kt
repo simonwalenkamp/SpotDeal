@@ -20,7 +20,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.walenkamp.spotdeal.R
-import com.walenkamp.spotdeal.SizeComparer
 import kotlinx.android.synthetic.main.activity_scan.*
 import java.util.*
 
@@ -82,15 +81,12 @@ class ScanActivity : AppCompatActivity() {
     // Handles lifecycle events on a TextureView
     private val surfaceTextureListener = object : TextureView.SurfaceTextureListener {
         override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, width: Int, height: Int) {
-            Toast.makeText(applicationContext, "TextureView changed", Toast.LENGTH_SHORT).show()
         }
 
         override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
-            Toast.makeText(applicationContext, "TextureView updated", Toast.LENGTH_SHORT).show()
         }
 
         override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
-            Toast.makeText(applicationContext, "TextureView destroyed", Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -173,7 +169,7 @@ class ScanActivity : AppCompatActivity() {
                     rotatedHeight = width
                 }
                 val map: StreamConfigurationMap = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: continue
-                previewSize = chooseOptimalSize(map.getOutputSizes(ImageFormat.JPEG), rotatedWidth, rotatedHeight)
+                previewSize = chooseOptimalSize(map.getOutputSizes(ImageFormat.YUV_420_888), rotatedWidth, rotatedHeight)
                 cameraId = id
                 return
             }
@@ -210,18 +206,33 @@ class ScanActivity : AppCompatActivity() {
 
     // Chooses the optimal size for the camera that matches where it shows
     private fun chooseOptimalSize(choices: Array<Size>, width: Int, height: Int ): Size {
-        val bigEnough = ArrayList<Size>()
-        for (option in choices) {
-            if (option.height == option.width * height / width &&
-                option.width >= width && option.height >= height) {
-                bigEnough.add(option)
+        val ASPECT_TOLERANCE = 0.1
+        val targetRatio = height / width
+
+        var optimalSize: Size? = null
+        var minDiff = Int.MAX_VALUE
+
+        val targetHeight = height
+
+        for (size in choices) {
+            val ratio = size.width / size.height
+            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue
+            if (Math.abs(size.height - targetHeight) < minDiff) {
+                optimalSize = size
+                minDiff = Math.abs(size.height - targetHeight)
             }
         }
-        return if (bigEnough.size > 0 ) {
-            Collections.min(bigEnough, SizeComparer())
-        } else {
-            choices[0]
+
+        if (optimalSize == null) {
+            minDiff = Int.MAX_VALUE
+            for (size in choices) {
+                if (Math.abs(size.height - targetHeight.toDouble()) < minDiff) {
+                    optimalSize = size
+                    minDiff = Math.abs(size.height - targetHeight)
+                }
+            }
         }
+        return optimalSize!!
     }
 
     private fun sensorToDeviceRotation(cameraCharacteristics: CameraCharacteristics, deviceOrientation: Int): Int {
