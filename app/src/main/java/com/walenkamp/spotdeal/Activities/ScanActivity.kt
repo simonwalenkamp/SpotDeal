@@ -2,6 +2,7 @@ package com.walenkamp.spotdeal.Activities
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.*
 import android.hardware.camera2.*
@@ -29,6 +30,15 @@ import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.walenkamp.spotdeal.BLL.CustomerLogic
+import com.walenkamp.spotdeal.BLL.DealLogic
+import com.walenkamp.spotdeal.BLL.OrderLogic
+import com.walenkamp.spotdeal.Entities.Customer
+import com.walenkamp.spotdeal.Entities.Deal
+import com.walenkamp.spotdeal.Entities.Order
+import com.walenkamp.spotdeal.Interface.ICallbackCustomer
+import com.walenkamp.spotdeal.Interface.ICallbackDeal
+import com.walenkamp.spotdeal.Interface.ICallbackOrder
 
 class ScanActivity : AppCompatActivity() {
     // Permission request code
@@ -42,6 +52,15 @@ class ScanActivity : AppCompatActivity() {
 
     // List of orientation possibilities
     private val orientations: SparseIntArray = SparseIntArray()
+
+    // DealLogic instance
+    private val dealLogic = DealLogic()
+
+    // CustomerLogic instance
+    private val customerLogic = CustomerLogic()
+
+    // OrderLogic instance
+    private val orderLogic = OrderLogic()
 
     // The size of the camera preview
     private lateinit var previewSize: Size
@@ -130,6 +149,7 @@ class ScanActivity : AppCompatActivity() {
         if(camera_view.isAvailable) {
             setUpCamera(camera_view.width, camera_view.height)
             connectCamera()
+            camera_view.surfaceTextureListener = surfaceTextureListener
         } else {
             camera_view.surfaceTextureListener = surfaceTextureListener
         }
@@ -138,6 +158,7 @@ class ScanActivity : AppCompatActivity() {
     override fun onPause() {
         closeCamera()
         stopBackgroundThread()
+        camera_view.surfaceTextureListener = null
         super.onPause()
     }
 
@@ -332,22 +353,37 @@ class ScanActivity : AppCompatActivity() {
         val barcodeDetector = FirebaseVision.getInstance().getVisionBarcodeDetector(options)
 
         barcodeDetector.detectInImage(image)
-            .addOnSuccessListener { result -> processResult(result) }
+            .addOnSuccessListener { result ->
+                if(result.isNotEmpty()) {
+                    processResult(result[0])
+                }
+            }
             .addOnFailureListener{ e -> Toast.makeText(baseContext, e.message, Toast.LENGTH_LONG).show() }
     }
 
-    private fun processResult(result: List<FirebaseVisionBarcode>) {
-        for(item in result) {
-            val raw_value = item.rawValue
-            val value_type = item.valueType
+    private fun processResult(result: FirebaseVisionBarcode) {
+            val raw_value = result.rawValue
+            val value_type = result.valueType
 
             //Show info in dialog
             when(value_type) {
                 FirebaseVisionBarcode.TYPE_TEXT -> {
-                    Snackbar.make(scan_view, raw_value.toString(), Snackbar.LENGTH_LONG).show()
+                    orderLogic.getOrderById(raw_value.toString(), object : ICallbackOrder {
+                        override fun onFinishOrder(order: Order?) {
+                            dealLogic.getDealById(order!!.dealId, object : ICallbackDeal {
+                                override fun onFinishDeal(deal: Deal?) {
+                                    customerLogic.getCustomerById(order.customerId, object : ICallbackCustomer {
+                                        override fun onFinishCustomer(customer: Customer?) {
+                                            val intent = Intent(scan_view.context, DealActivity::class.java).putExtra(
+                                                DEAL, deal).putExtra(CUSTOMER, customer).putExtra(SHOW_INVALID, order.valid)
+                                            scan_view.context.startActivity(intent)
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
                 }
             }
-        }
-
     }
 }

@@ -3,6 +3,7 @@ package com.walenkamp.spotdeal.DAL
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.walenkamp.spotdeal.Entities.Order
+import com.walenkamp.spotdeal.Interface.ICallbackOrder
 import com.walenkamp.spotdeal.Interface.ICallbackOrders
 import com.walenkamp.spotdeal.Interface.IOrderDAO
 
@@ -100,6 +101,23 @@ class OrderDAO : IOrderDAO {
                     if(updates == orders.size) {
                         callback.onFinishOrders(orders)
                     }
+                }
+            }
+        }
+    }
+
+    // Gets order by its id
+    override fun getOrderById(id: String, callback: ICallbackOrder) {
+        db.collection("orders").document(id).get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                try {
+                    val doc = task.result!!
+                    val o: Order? = doc.toObject(Order::class.java)
+                    o?.id = doc.id
+
+                    callback.onFinishOrder(o)
+                } catch (e: Exception) {
+                    Log.d(TAG, e.message)
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.walenkamp.spotdeal.BLL
 
 import com.walenkamp.spotdeal.DAL.OrderDAO
 import com.walenkamp.spotdeal.Entities.Order
+import com.walenkamp.spotdeal.Interface.ICallbackOrder
 import com.walenkamp.spotdeal.Interface.ICallbackOrders
 
 class OrderLogic {
@@ -51,5 +52,14 @@ class OrderLogic {
                 callback.onFinishOrders(orders)
             }
         }, orders)
+    }
+
+    // Gets order by id
+    fun getOrderById(id: String, callback: ICallbackOrder) {
+        orderDAO.getOrderById(id, object : ICallbackOrder {
+            override fun onFinishOrder(order: Order?) {
+                callback.onFinishOrder(order)
+            }
+        })
     }
 }

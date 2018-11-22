@@ -8,4 +8,5 @@ interface IOrderDAO {
     fun getValidOrdersByDeal(callback: ICallbackOrders, customerId: String, dealId: String)
     fun getInvalidOrdersByDeal(callback: ICallbackOrders, customerId: String, dealId: String)
     fun updateOrders(callback: ICallbackOrders, orders: List<Order>)
+    fun getOrderById(id: String, callback: ICallbackOrder)
 }
