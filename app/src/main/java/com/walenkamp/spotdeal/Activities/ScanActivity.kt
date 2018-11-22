@@ -3,8 +3,7 @@ package com.walenkamp.spotdeal.Activities
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.ImageFormat
-import android.graphics.SurfaceTexture
+import android.graphics.*
 import android.hardware.camera2.*
 import android.hardware.camera2.params.StreamConfigurationMap
 import android.os.Build
@@ -25,10 +24,13 @@ import kotlinx.android.synthetic.main.activity_scan.*
 import java.util.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-
+import android.widget.Toast
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
+import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOptions
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
 
 class ScanActivity : AppCompatActivity() {
-
     // Permission request code
     private val REQUEST_CAMERA_PERMISSION_RESULT = 0
 
@@ -89,6 +91,20 @@ class ScanActivity : AppCompatActivity() {
         }
 
         override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
+            val originalBitmap = camera_view.bitmap
+
+            val heightToCrop = top_view.height
+            val widthToCrop = left_view.width
+
+            val croppedBitmap1 = Bitmap.createBitmap(originalBitmap, widthToCrop, heightToCrop, border.width + widthToCrop, border.height + heightToCrop)
+
+            val matrix = Matrix()
+            matrix.preRotate(180F)
+
+            val rotatedBitmap = Bitmap.createBitmap(croppedBitmap1, 0, 0, croppedBitmap1.width, croppedBitmap1.height, matrix, true)
+            val croppedBitmap2 = Bitmap.createBitmap(rotatedBitmap, widthToCrop, heightToCrop, border.width, border.height, matrix, true)
+
+            scan(croppedBitmap2)
         }
 
         override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
@@ -100,7 +116,6 @@ class ScanActivity : AppCompatActivity() {
             connectCamera()
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -255,7 +270,7 @@ class ScanActivity : AppCompatActivity() {
     // Calculates how much the rotation combined is redundant
     private fun sensorToDeviceRotation(cameraCharacteristics: CameraCharacteristics, deviceOrientation: Int): Int {
         val sensorOrientation = cameraCharacteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
-        var orientation = orientations.get(deviceOrientation)
+        val orientation = orientations.get(deviceOrientation)
         return (sensorOrientation!! + orientation + 360) %360
     }
 
@@ -307,5 +322,32 @@ class ScanActivity : AppCompatActivity() {
             }
         })
         qr_img_view.animation = fade
+    }
+    private fun scan(bitmap: Bitmap?) {
+        val image = FirebaseVisionImage.fromBitmap(bitmap!!)
+        val options = FirebaseVisionBarcodeDetectorOptions.Builder().setBarcodeFormats(
+            FirebaseVisionBarcode.FORMAT_QR_CODE
+        ).build()
+
+        val barcodeDetector = FirebaseVision.getInstance().getVisionBarcodeDetector(options)
+
+        barcodeDetector.detectInImage(image)
+            .addOnSuccessListener { result -> processResult(result) }
+            .addOnFailureListener{ e -> Toast.makeText(baseContext, e.message, Toast.LENGTH_LONG).show() }
+    }
+
+    private fun processResult(result: List<FirebaseVisionBarcode>) {
+        for(item in result) {
+            val raw_value = item.rawValue
+            val value_type = item.valueType
+
+            //Show info in dialog
+            when(value_type) {
+                FirebaseVisionBarcode.TYPE_TEXT -> {
+                    Snackbar.make(scan_view, raw_value.toString(), Snackbar.LENGTH_LONG).show()
+                }
+            }
+        }
+
     }
 }
