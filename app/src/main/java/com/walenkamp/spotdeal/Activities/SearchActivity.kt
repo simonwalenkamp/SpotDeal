@@ -102,7 +102,7 @@ class SearchActivity : AppCompatActivity() {
 
     // Start the ScanActivity
     private fun startScan() {
-        val intent = Intent(this, ScanActivity::class.java)
+        val intent = Intent(this, ScanActivity::class.java).putExtra(SUPPLIER_ID, supplier.id)
         startActivity(intent)
     }
 

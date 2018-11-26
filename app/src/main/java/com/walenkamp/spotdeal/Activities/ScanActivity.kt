@@ -41,6 +41,9 @@ import com.walenkamp.spotdeal.Interface.ICallbackDeal
 import com.walenkamp.spotdeal.Interface.ICallbackOrder
 
 class ScanActivity : AppCompatActivity() {
+    // SupplierId
+    private var supplierId: String = ""
+
     // Permission request code
     private val REQUEST_CAMERA_PERMISSION_RESULT = 0
 
@@ -73,6 +76,15 @@ class ScanActivity : AppCompatActivity() {
 
     // Background handler instance
     private var backgroundHandler: Handler? = null
+
+    // Specifies the options used for the barcode detector (chooses QR code format)
+    private val options = FirebaseVisionBarcodeDetectorOptions.Builder().setBarcodeFormats(
+        FirebaseVisionBarcode.FORMAT_QR_CODE
+    ).build()
+
+    // FirebaseVision instance of a barcodeDetector
+    private val barcodeDetector = FirebaseVision.getInstance().getVisionBarcodeDetector(options)
+
 
     init {
         orientations.append(Surface.ROTATION_0, 0)
@@ -139,6 +151,8 @@ class ScanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
+
+        supplierId = intent.getSerializableExtra(SUPPLIER_ID) as String
 
         fadeOutAndHide()
     }
@@ -344,14 +358,10 @@ class ScanActivity : AppCompatActivity() {
         })
         qr_img_view.animation = fade
     }
+
+    // Uses the barcode detector to if the bitmap from the parameter contains a QR code (only processes the first result)
     private fun scan(bitmap: Bitmap?) {
         val image = FirebaseVisionImage.fromBitmap(bitmap!!)
-        val options = FirebaseVisionBarcodeDetectorOptions.Builder().setBarcodeFormats(
-            FirebaseVisionBarcode.FORMAT_QR_CODE
-        ).build()
-
-        val barcodeDetector = FirebaseVision.getInstance().getVisionBarcodeDetector(options)
-
         barcodeDetector.detectInImage(image)
             .addOnSuccessListener { result ->
                 if(result.isNotEmpty()) {
@@ -361,26 +371,35 @@ class ScanActivity : AppCompatActivity() {
             .addOnFailureListener{ e -> Toast.makeText(baseContext, e.message, Toast.LENGTH_LONG).show() }
     }
 
+    // Decodes the QR code to a string and uses that string to get an order
+    // Return if that order is not supplied by the current supplier
     private fun processResult(result: FirebaseVisionBarcode) {
             val raw_value = result.rawValue
             val value_type = result.valueType
 
-            //Show info in dialog
             when(value_type) {
                 FirebaseVisionBarcode.TYPE_TEXT -> {
                     orderLogic.getOrderById(raw_value.toString(), object : ICallbackOrder {
                         override fun onFinishOrder(order: Order?) {
-                            dealLogic.getDealById(order!!.dealId, object : ICallbackDeal {
-                                override fun onFinishDeal(deal: Deal?) {
-                                    customerLogic.getCustomerById(order.customerId, object : ICallbackCustomer {
-                                        override fun onFinishCustomer(customer: Customer?) {
-                                            val intent = Intent(scan_view.context, DealActivity::class.java).putExtra(
-                                                DEAL, deal).putExtra(CUSTOMER, customer).putExtra(SHOW_INVALID, order.valid)
-                                            scan_view.context.startActivity(intent)
-                                        }
-                                    })
-                                }
-                            })
+                            if(order == null || order.supplierId != supplierId) {
+                                return
+                            } else {
+                                closeCamera()
+                                stopBackgroundThread()
+                                scan_progress.visibility = View.VISIBLE
+                                dealLogic.getDealById(order.dealId, object : ICallbackDeal {
+                                    override fun onFinishDeal(deal: Deal?) {
+                                        customerLogic.getCustomerById(order.customerId, object : ICallbackCustomer {
+                                            override fun onFinishCustomer(customer: Customer?) {
+                                                val intent = Intent(scan_view.context, DealActivity::class.java).putExtra(
+                                                    DEAL, deal).putExtra(CUSTOMER, customer).putExtra(SHOW_INVALID, order.valid)
+                                                scan_view.context.startActivity(intent)
+                                                finish()
+                                            }
+                                        })
+                                    }
+                                })
+                            }
                         }
                     })
                 }
