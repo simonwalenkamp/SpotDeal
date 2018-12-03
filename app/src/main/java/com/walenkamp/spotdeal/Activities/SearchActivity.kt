@@ -112,11 +112,18 @@ class SearchActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    // Start the DealListActivity
+    private fun startDealList() {
+        val intent = Intent(this, DealListActivity::class.java).putExtra(SUPPLIER_ID, supplier.id)
+        startActivity(intent)
+    }
+
+
     // Sets the navigation drawer and toolbar up
     private fun setNavigationAndToolbar(){
         mDrawerLayout = findViewById(R.id.drawer_layout)
 
-        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val navigationView: NavigationView = this.findViewById(R.id.nav_view)
 
         // Gets the supplier from SupplierLogic
         supplierLogic.getSupplier(object : ICallBackSupplier{
@@ -136,6 +143,7 @@ class SearchActivity : AppCompatActivity() {
                 menuItem.toString() == getString(R.string.logout) -> logout()
                 menuItem.toString() == getString(R.string.scan) -> startScan()
                 menuItem.toString() == getString(R.string.history) -> startHistory()
+                menuItem.toString() == getString(R.string.deals) -> startDealList()
             }
             true
         }

@@ -13,6 +13,7 @@
     <string name="invalid">Show Invalid</string>
     <string name="all">Show All</string>
     <string name="scan">Scan code</string>
+    <string name="deals">Deals</string>
     <string name="history">History</string>
     <string name="status_no_active">No active Deals</string>
     <string name="status_no_inactive">No inactive Deals</string>

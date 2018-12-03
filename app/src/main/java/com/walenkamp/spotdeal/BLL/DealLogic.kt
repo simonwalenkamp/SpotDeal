@@ -22,7 +22,7 @@ class DealLogic {
     private val orderLogic: OrderLogic = OrderLogic()
 
     // Gets all valid deals a customer has with a supplier
-    fun getValidDeals(callback: ICallbackDeals, customerId: String, supplierId: String) {
+    fun getValidDealsForCustomer(callback: ICallbackDeals, customerId: String, supplierId: String) {
         orderLogic.getOrdersByCustomer(object : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
                 dealDAO.getValidDeals(object : ICallbackDeals {
@@ -36,7 +36,7 @@ class DealLogic {
     }
 
     // Gets invalid deals a customer has with a supplier
-    fun getInvalidDeals(callback: ICallbackDeals, customerId: String, supplierId: String) {
+    fun getInvalidDealsForCustomer(callback: ICallbackDeals, customerId: String, supplierId: String) {
         orderLogic.getOrdersByCustomer(object : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
                 dealDAO.getInvalidDeals(object : ICallbackDeals {
@@ -50,7 +50,7 @@ class DealLogic {
     }
 
     // Gets all deals a customer has with a supplier
-    fun getAllDeals(callback: ICallbackDeals, customerId: String, supplierId: String) {
+    fun getAllDealsForCustomer(callback: ICallbackDeals, customerId: String, supplierId: String) {
         orderLogic.getOrdersByCustomer(object : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
                 dealDAO.getAllDeals(object : ICallbackDeals {
@@ -77,6 +77,15 @@ class DealLogic {
         dealDAO.getDealById(id, object : ICallbackDeal{
             override fun onFinishDeal(deal: Deal?) {
                 callback.onFinishDeal(deal)
+            }
+        })
+    }
+
+    // Gets all deals for supplier
+    fun getAllDealsForSupplier(supplierId: String, callback: ICallbackDeals) {
+        dealDAO.getAllDealsForSupplier(supplierId, object : ICallbackDeals {
+            override fun onFinishDeals(deals: List<Deal>?) {
+                callback.onFinishDeals(deals)
             }
         })
     }

@@ -130,7 +130,7 @@ class CustomerActivity : AppCompatActivity() {
         rec_deal.visibility = View.INVISIBLE
         status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE
-        dealLogic.getValidDeals(object : ICallbackDeals {
+        dealLogic.getValidDealsForCustomer(object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
                 if(deals!!.isEmpty()) {
                     status_tv.text = getText(R.string.status_no_active)
@@ -152,7 +152,7 @@ class CustomerActivity : AppCompatActivity() {
         rec_deal.visibility = View.INVISIBLE
         status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE
-        dealLogic.getAllDeals(object : ICallbackDeals {
+        dealLogic.getAllDealsForCustomer(object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
                 rec_deal.visibility = View.VISIBLE
                 rec_deal.adapter = adapter
@@ -168,7 +168,7 @@ class CustomerActivity : AppCompatActivity() {
         rec_deal.visibility = View.INVISIBLE
         status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE
-        dealLogic.getInvalidDeals(object : ICallbackDeals {
+        dealLogic.getInvalidDealsForCustomer(object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
                 if(deals!!.isEmpty()) {
                     status_tv.text = getText(R.string.status_no_inactive)

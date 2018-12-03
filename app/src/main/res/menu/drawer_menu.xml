@@ -8,6 +8,11 @@
                 android:checkable="false"
                 android:title="@string/scan"/>
         <item
+            android:id="@+id/nav_deal"
+            android:icon="@drawable/ic_deal_list"
+            android:checkable="false"
+            android:title="@string/deals"/>
+        <item
                 android:id="@+id/nav_history"
                 android:icon="@drawable/ic_history"
                 android:checkable="false"
