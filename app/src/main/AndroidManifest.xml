@@ -42,6 +42,8 @@
         </activity>
         <activity android:name=".Activities.DealListActivity">
         </activity>
+        <activity android:name=".Activities.SupplierDealActivity">
+        </activity>
     </application>
 
 </manifest>
