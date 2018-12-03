@@ -7,10 +7,30 @@
         android:layout_height="match_parent"
         tools:context=".Activities.DealListActivity">
 
-    <TextView
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_deal_list"
+            style="@style/Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="@string/deals"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rec_deal_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_deal_list"/>
+
+    <ProgressBar
+            android:id="@+id/progress_deal_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DealList"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
