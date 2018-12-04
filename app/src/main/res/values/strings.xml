@@ -31,4 +31,6 @@
     <string name="all_deals">All Deals</string>
     <string name="valid_orders">Valid Vouchers</string>
     <string name="invalid_orders">Invalid Vouchers</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

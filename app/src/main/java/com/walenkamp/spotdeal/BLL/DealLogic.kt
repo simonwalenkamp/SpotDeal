@@ -5,10 +5,7 @@ import com.walenkamp.spotdeal.DAL.DealDAO
 import com.walenkamp.spotdeal.DAL.StorageHelper
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Entities.Order
-import com.walenkamp.spotdeal.Interface.ICallbackDeal
-import com.walenkamp.spotdeal.Interface.ICallbackDealImage
-import com.walenkamp.spotdeal.Interface.ICallbackDeals
-import com.walenkamp.spotdeal.Interface.ICallbackOrders
+import com.walenkamp.spotdeal.Interface.*
 
 class DealLogic {
 
@@ -86,6 +83,23 @@ class DealLogic {
         dealDAO.getAllDealsForSupplier(supplierId, object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
                 callback.onFinishDeals(deals)
+            }
+        })
+    }
+
+    // Deletes a deal if it has no active orders
+    fun deleteDeal(dealId: String, callback: ICallbackCouldDelete) {
+        orderLogic.getActiveOrdersByDeal(dealId, object : ICallbackOrders {
+            override fun onFinishOrders(orders: List<Order>?) {
+                if(orders!!.isEmpty()) {
+                    dealDAO.deleteDeal(dealId, object : ICallbackCouldDelete{
+                        override fun onFinishCouldDelete(couldDelete: Boolean) {
+                            callback.onFinishCouldDelete(couldDelete)
+                        }
+                    })
+                } else {
+                    callback.onFinishCouldDelete(false)
+                }
             }
         })
     }

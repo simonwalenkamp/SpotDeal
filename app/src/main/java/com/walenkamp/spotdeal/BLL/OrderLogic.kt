@@ -62,4 +62,13 @@ class OrderLogic {
             }
         })
     }
+
+    // Gets active orders by deal
+    fun getActiveOrdersByDeal(dealId: String, callback: ICallbackOrders) {
+        orderDAO.getActiveOrdersByDeal(dealId, object : ICallbackOrders{
+            override fun onFinishOrders(orders: List<Order>?) {
+                callback.onFinishOrders(orders)
+            }
+        })
+    }
 }

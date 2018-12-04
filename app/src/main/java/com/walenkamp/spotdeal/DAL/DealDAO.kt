@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Entities.Order
+import com.walenkamp.spotdeal.Interface.ICallbackCouldDelete
 import com.walenkamp.spotdeal.Interface.ICallbackDeal
 import com.walenkamp.spotdeal.Interface.ICallbackDeals
 import com.walenkamp.spotdeal.Interface.IDealDAO
@@ -116,6 +117,17 @@ class DealDAO: IDealDAO {
                     }
                 }
                 callback.onFinishDeals(dealList)
+            }
+        }
+    }
+
+    // Deletes deal by its id
+    override fun deleteDeal(dealId: String, callback: ICallbackCouldDelete) {
+        db.collection("deals").document(dealId).delete().addOnCompleteListener{ task ->
+            if(task.isSuccessful) {
+                callback.onFinishCouldDelete(true)
+            } else {
+                callback.onFinishCouldDelete(false)
             }
         }
     }

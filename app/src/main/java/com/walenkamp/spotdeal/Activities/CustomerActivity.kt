@@ -41,9 +41,6 @@ class CustomerActivity : AppCompatActivity() {
     // DealAdapter instance
     private val adapter = DealAdapter(this)
 
-    // Separator instance
-    private lateinit var separator: Separator
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

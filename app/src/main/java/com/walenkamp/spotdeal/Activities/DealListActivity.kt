@@ -25,14 +25,19 @@ class DealListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deal_list)
 
+    }
+
+    override fun onResume() {
+        progress_deal_list.visibility = View.VISIBLE
         getDeals(intent.getStringExtra(SUPPLIER_ID))
+        super.onResume()
     }
 
     // Gets all deals for a supplier
     private fun getDeals(supplierId: String) {
         dealLogic.getAllDealsForSupplier(supplierId, object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
-                progress_deal_list.visibility = View.GONE
+                progress_deal_list.visibility = View.INVISIBLE
                 rec_deal_list.adapter = adapter
                 rec_deal_list.layoutManager = LinearLayoutManager(baseContext)
 
