@@ -42,8 +42,9 @@ class SupplierDealActivity : AppCompatActivity() {
         setContentView(R.layout.activity_supplier_deal)
 
         deal = intent.getSerializableExtra(DEAL) as Deal
-        setSupportActionBar(toolbar_supplier_deal)
         toolbar_supplier_deal.title = deal.name
+
+        setSupportActionBar(toolbar_supplier_deal)
 
         setDeal(deal)
         getCustomers(deal.id)

@@ -1,5 +1,6 @@
 package com.walenkamp.spotdeal.Activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -22,11 +23,14 @@ class DealListActivity : AppCompatActivity() {
     // DealListAdapter instance
     private val adapter: DealListAdapter = DealListAdapter(this)
 
+    // SupplierId
+    private lateinit var supplierId: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deal_list)
         setSupportActionBar(toolbar_deal_list)
-
+        supplierId = intent.getStringExtra(SUPPLIER_ID)
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.deal_list_menu, menu)
@@ -63,7 +67,9 @@ class DealListActivity : AppCompatActivity() {
         })
     }
 
+    // Start the CreateDealActivity
     private fun startCreateDeal() {
-        Log.d("SIMON", "add deal")
+        val intent = Intent(this, CreateDealActivity::class.java).putExtra(SUPPLIER_ID, supplierId)
+        startActivity(intent)
     }
 }

@@ -44,11 +44,17 @@
                 android:launchMode="singleInstance"
                 android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Activities.DealListActivity"
-                  android:launchMode="singleInstance"
-                  android:screenOrientation="portrait">
+        <activity
+                android:name=".Activities.DealListActivity"
+                android:launchMode="singleInstance"
+                android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Activities.SupplierDealActivity"
+        <activity
+                android:name=".Activities.SupplierDealActivity"
+                android:launchMode="singleInstance"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".Activities.CreateDealActivity"
                   android:launchMode="singleInstance"
                   android:screenOrientation="portrait">
         </activity>
