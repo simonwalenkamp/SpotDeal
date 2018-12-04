@@ -2,6 +2,9 @@ package com.walenkamp.spotdeal.Activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.walenkamp.spotdeal.Adapters.DealListAdapter
@@ -22,7 +25,21 @@ class DealListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deal_list)
+        setSupportActionBar(toolbar_deal_list)
 
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.deal_list_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.add_deal -> {
+                startCreateDeal()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
@@ -44,5 +61,9 @@ class DealListActivity : AppCompatActivity() {
                 adapter.setDeals(deals!!)
             }
         })
+    }
+
+    private fun startCreateDeal() {
+        Log.d("SIMON", "add deal")
     }
 }
