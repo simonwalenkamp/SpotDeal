@@ -2,7 +2,6 @@ package com.walenkamp.spotdeal.Activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.walenkamp.spotdeal.Adapters.DealListAdapter
@@ -10,7 +9,6 @@ import com.walenkamp.spotdeal.BLL.DealLogic
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Interface.ICallbackDeals
 import com.walenkamp.spotdeal.R
-import kotlinx.android.synthetic.main.activity_customer.*
 import kotlinx.android.synthetic.main.activity_deal_list.*
 
 class DealListActivity : AppCompatActivity() {
@@ -29,6 +27,7 @@ class DealListActivity : AppCompatActivity() {
 
     override fun onResume() {
         progress_deal_list.visibility = View.VISIBLE
+        rec_deal_list.visibility = View.INVISIBLE
         getDeals(intent.getStringExtra(SUPPLIER_ID))
         super.onResume()
     }
@@ -38,6 +37,7 @@ class DealListActivity : AppCompatActivity() {
         dealLogic.getAllDealsForSupplier(supplierId, object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
                 progress_deal_list.visibility = View.INVISIBLE
+                rec_deal_list.visibility = View.VISIBLE
                 rec_deal_list.adapter = adapter
                 rec_deal_list.layoutManager = LinearLayoutManager(baseContext)
 

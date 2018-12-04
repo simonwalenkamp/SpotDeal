@@ -37,4 +37,17 @@ class CustomerLogic {
             }
         })
     }
+
+    //Get customers by deal
+    fun getCustomerByDeal(dealId: String, callback: ICallbackCustomers) {
+        orderLogic.getActiveOrdersByDeal(dealId, object : ICallbackOrders {
+            override fun onFinishOrders(orders: List<Order>?) {
+                customerDAO.getCustomers(object : ICallbackCustomers{
+                    override fun onFinishCustomers(customers: List<Customer>?) {
+                        callback.onFinishCustomers(customers)
+                    }
+                }, orders!!)
+            }
+        })
+    }
 }

@@ -6,23 +6,36 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.view.menu.MenuBuilder
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import com.walenkamp.spotdeal.Adapters.CustomerAdapter
+import com.walenkamp.spotdeal.BLL.CustomerLogic
 import com.walenkamp.spotdeal.BLL.DealLogic
+import com.walenkamp.spotdeal.Entities.Customer
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Interface.ICallbackCouldDelete
+import com.walenkamp.spotdeal.Interface.ICallbackCustomers
 import com.walenkamp.spotdeal.Interface.ICallbackDealImage
 import com.walenkamp.spotdeal.R
+import kotlinx.android.synthetic.main.activity_deal_list.*
 import kotlinx.android.synthetic.main.activity_supplier_deal.*
 import kotlin.math.log
 
 class SupplierDealActivity : AppCompatActivity() {
+
+    // CustomerLogic
+    private val customerLogic: CustomerLogic = CustomerLogic()
 
     // DealLogic instance
     private val dealLogic: DealLogic = DealLogic()
 
     // Deal instance
     private lateinit var deal: Deal
+
+    // CustomerAdapter instance
+    private val adapter: CustomerAdapter = CustomerAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +46,7 @@ class SupplierDealActivity : AppCompatActivity() {
         toolbar_supplier_deal.title = deal.name
 
         setDeal(deal)
+        getCustomers(deal.id)
     }
 
     // Sets the deal
@@ -89,5 +103,22 @@ class SupplierDealActivity : AppCompatActivity() {
             }
         }
         return super.onPrepareOptionsMenu(menu)
+    }
+
+    // Gets customers who have an order on this deal
+    private fun getCustomers(dealId: String){
+        customerLogic.getCustomerByDeal(dealId, object : ICallbackCustomers {
+            override fun onFinishCustomers(customers: List<Customer>?) {
+                if(customers!!.isEmpty()) {
+                    Snackbar.make(supplier_deal_constraint, "Deal has no active vouchers!", Snackbar.LENGTH_LONG).show()
+                }
+                progress_supplier_deal.visibility = View.INVISIBLE
+                rec_supplier_deal.visibility = View.VISIBLE
+                rec_supplier_deal.adapter = adapter
+                rec_supplier_deal.layoutManager = LinearLayoutManager(baseContext)
+
+                adapter.setCustomers(customers)
+            }
+        })
     }
 }
