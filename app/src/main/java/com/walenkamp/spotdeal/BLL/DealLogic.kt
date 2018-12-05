@@ -61,12 +61,12 @@ class DealLogic {
     }
 
     // Gets deal image
-    fun getDealImage(callback: ICallbackDealImage, dealImageId: String) {
+    fun getDealImage(callback: ICallbackDealImage, id: String) {
         storage.getDealImage(object : ICallbackDealImage {
             override fun onFinishDealImage(dealImage: Bitmap?) {
                 callback.onFinishDealImage(dealImage)
             }
-        }, dealImageId)
+        }, id)
     }
 
     // Gets specific deal
@@ -88,18 +88,31 @@ class DealLogic {
     }
 
     // Deletes a deal if it has no active orders
-    fun deleteDeal(dealId: String, callback: ICallbackCouldDelete) {
+    fun deleteDeal(dealId: String, callback: ICallbackFinished) {
         orderLogic.getActiveOrdersByDeal(dealId, object : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
                 if(orders!!.isEmpty()) {
-                    dealDAO.deleteDeal(dealId, object : ICallbackCouldDelete{
-                        override fun onFinishCouldDelete(couldDelete: Boolean) {
-                            callback.onFinishCouldDelete(couldDelete)
+                    dealDAO.deleteDeal(dealId, object : ICallbackFinished{
+                        override fun onFinishFinished(couldDelete: Boolean) {
+                            callback.onFinishFinished(couldDelete)
                         }
                     })
                 } else {
-                    callback.onFinishCouldDelete(false)
+                    callback.onFinishFinished(false)
                 }
+            }
+        })
+    }
+
+    // Creates new deal
+    fun createDeal(d: Deal, img: Bitmap, callback: ICallbackFinished) {
+        dealDAO.createDeal(d, object : ICallbackDeal {
+            override fun onFinishDeal(deal: Deal?) {
+                storage.saveImage(img, deal!!.id, object : ICallbackFinished {
+                    override fun onFinishFinished(couldDelete: Boolean) {
+                        callback.onFinishFinished(true)
+                    }
+                })
             }
         })
     }

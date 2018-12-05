@@ -1,10 +1,11 @@
 package com.walenkamp.spotdeal.DAL
 
 import android.util.Log
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Entities.Order
-import com.walenkamp.spotdeal.Interface.ICallbackCouldDelete
+import com.walenkamp.spotdeal.Interface.ICallbackFinished
 import com.walenkamp.spotdeal.Interface.ICallbackDeal
 import com.walenkamp.spotdeal.Interface.ICallbackDeals
 import com.walenkamp.spotdeal.Interface.IDealDAO
@@ -122,12 +123,26 @@ class DealDAO: IDealDAO {
     }
 
     // Deletes deal by its id
-    override fun deleteDeal(dealId: String, callback: ICallbackCouldDelete) {
+    override fun deleteDeal(dealId: String, callback: ICallbackFinished) {
         db.collection("deals").document(dealId).delete().addOnCompleteListener{ task ->
             if(task.isSuccessful) {
-                callback.onFinishCouldDelete(true)
+                callback.onFinishFinished(true)
             } else {
-                callback.onFinishCouldDelete(false)
+                callback.onFinishFinished(false)
+            }
+        }
+    }
+
+    // Creates a new deal
+    override fun createDeal(deal: Deal, callback: ICallbackDeal) {
+        db.collection("deals").add(deal).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                try {
+                    deal.id = task.result!!.id
+                    callback.onFinishDeal(deal)
+                } catch (e: Exception) {
+                    Log.d(TAG, e.message)
+                }
             }
         }
     }

@@ -12,6 +12,7 @@ import androidx.appcompat.view.menu.MenuBuilder
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.walenkamp.spotdeal.Adapters.OrderAdapter
+import com.walenkamp.spotdeal.BLL.DealLogic
 import com.walenkamp.spotdeal.BLL.HistoryLogic
 import com.walenkamp.spotdeal.BLL.OrderLogic
 import com.walenkamp.spotdeal.DAL.StorageHelper
@@ -36,7 +37,7 @@ class DealActivity : AppCompatActivity() {
     private lateinit var customer: Customer
 
     // Storage instance
-    private var storage: StorageHelper = StorageHelper()
+    private var dealLogic: DealLogic = DealLogic()
 
     // List of orders selected
     private val ordersSelected = mutableListOf<Order>()
@@ -148,11 +149,11 @@ class DealActivity : AppCompatActivity() {
 
     // Uses the StorageHelper class the get the image of the deal
     private fun setImage(){
-        storage.getDealImage(object : ICallbackDealImage {
+        dealLogic.getDealImage(object : ICallbackDealImage {
             override fun onFinishDealImage(dealImage: Bitmap?) {
                 deal_image.setImageBitmap(dealImage)
             }
-        }, deal.imageId!!)
+        }, deal.id)
     }
 
     // Gets the orders for the deal

@@ -25,9 +25,7 @@ class DealListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.background = ContextCompat.getDrawable(itemView.context, R.drawable.rec_background)
         itemView.deal_name_tv.text = deal.name
         itemView.deal_description_tv.text = deal.description
-        if (deal.imageId != null && deal.imageId != "") {
-            getDealImage(deal.imageId!!)
-        }
+        getDealImage(deal.id)
         itemView.deal_info_tv.text = deal.info
         itemView.setOnClickListener{
             val intent = Intent(itemView.context, SupplierDealActivity::class.java).putExtra(

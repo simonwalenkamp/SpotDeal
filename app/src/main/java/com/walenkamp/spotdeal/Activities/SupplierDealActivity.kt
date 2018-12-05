@@ -15,13 +15,11 @@ import com.walenkamp.spotdeal.BLL.CustomerLogic
 import com.walenkamp.spotdeal.BLL.DealLogic
 import com.walenkamp.spotdeal.Entities.Customer
 import com.walenkamp.spotdeal.Entities.Deal
-import com.walenkamp.spotdeal.Interface.ICallbackCouldDelete
+import com.walenkamp.spotdeal.Interface.ICallbackFinished
 import com.walenkamp.spotdeal.Interface.ICallbackCustomers
 import com.walenkamp.spotdeal.Interface.ICallbackDealImage
 import com.walenkamp.spotdeal.R
-import kotlinx.android.synthetic.main.activity_deal_list.*
 import kotlinx.android.synthetic.main.activity_supplier_deal.*
-import kotlin.math.log
 
 class SupplierDealActivity : AppCompatActivity() {
 
@@ -58,7 +56,7 @@ class SupplierDealActivity : AppCompatActivity() {
             override fun onFinishDealImage(dealImage: Bitmap?) {
                 supplier_deal_image.setImageBitmap(dealImage)
             }
-        }, deal.imageId!!)
+        }, deal.id)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -80,8 +78,8 @@ class SupplierDealActivity : AppCompatActivity() {
 
     // Deletes deal
     private fun deleteDeal(id: String) {
-        dealLogic.deleteDeal(id, object : ICallbackCouldDelete {
-            override fun onFinishCouldDelete(couldDelete: Boolean) {
+        dealLogic.deleteDeal(id, object : ICallbackFinished {
+            override fun onFinishFinished(couldDelete: Boolean) {
                 if(couldDelete) {
                     finish()
                 } else {
