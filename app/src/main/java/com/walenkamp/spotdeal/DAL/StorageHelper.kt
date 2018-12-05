@@ -41,6 +41,10 @@ class StorageHelper {
                 callback.onFinishFinished(false)
             }
         }
+    }
 
+    // Deletes an image in storage by its id
+    fun deleteImage(id: String) {
+        storageRef.child(id).delete()
     }
 }

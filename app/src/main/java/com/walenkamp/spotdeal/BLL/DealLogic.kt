@@ -95,6 +95,7 @@ class DealLogic {
                     dealDAO.deleteDeal(dealId, object : ICallbackFinished{
                         override fun onFinishFinished(couldDelete: Boolean) {
                             callback.onFinishFinished(couldDelete)
+                            storage.deleteImage(dealId)
                         }
                     })
                 } else {
