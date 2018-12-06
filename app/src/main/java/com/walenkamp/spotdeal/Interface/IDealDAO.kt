@@ -11,4 +11,5 @@ interface IDealDAO {
     fun getAllDealsForSupplier(supplierId: String, callback: ICallbackDeals)
     fun deleteDeal(dealId: String, callback: ICallbackFinished)
     fun createDeal(deal: Deal, callback: ICallbackDeal)
+    fun editDeal(deal: Deal, callback: ICallbackDeal)
 }

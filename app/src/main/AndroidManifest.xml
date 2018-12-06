@@ -54,7 +54,12 @@
                 android:launchMode="singleInstance"
                 android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Activities.CreateDealActivity"
+        <activity
+                android:name=".Activities.CreateDealActivity"
+                android:launchMode="singleInstance"
+                android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".Activities.EditDealActivity"
                   android:launchMode="singleInstance"
                   android:screenOrientation="portrait">
         </activity>

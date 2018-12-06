@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import com.walenkamp.spotdeal.BLL.DealLogic
@@ -14,8 +15,14 @@ import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Interface.ICallbackFinished
 import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.activity_create_deal.*
+import java.lang.Exception
+
+// Pick file request code
+val PICKFILE_REQUEST_CODE = 1234
 
 class CreateDealActivity : AppCompatActivity() {
+
+    private val TAG = "CREATE_DEAL_ACTIVITY"
 
     // Pick file request code
     private val PICKFILE_REQUEST_CODE = 1234
@@ -60,20 +67,25 @@ class CreateDealActivity : AppCompatActivity() {
             !create_deal_description.text.isEmpty() &&
             !create_deal_info.text.isEmpty() &&
             !create_deal_price.text.isEmpty()) {
-            val deal = Deal("",
-                supplierId,
-                create_deal_name.text.toString(),
-                create_deal_price.text.toString().toFloat(),
-                create_deal_description.text.toString(),
-                create_deal_info.text.toString())
+            try {
+                val deal = Deal("",
+                    supplierId,
+                    create_deal_name.text.toString(),
+                    create_deal_price.text.toString().toFloat(),
+                    create_deal_description.text.toString(),
+                    create_deal_info.text.toString())
 
-            val bitmap: Bitmap = (create_deal_image.drawable as BitmapDrawable).bitmap
-            updateLayout()
-            dealLogic.createDeal(deal, bitmap, object : ICallbackFinished {
-                override fun onFinishFinished(couldDelete: Boolean) {
-                    finish()
-                }
-            })
+                val bitmap: Bitmap = (create_deal_image.drawable as BitmapDrawable).bitmap
+                updateLayout()
+                dealLogic.createDeal(deal, bitmap, object : ICallbackFinished {
+                    override fun onFinishFinished(finished: Boolean) {
+                        finish()
+                    }
+                })
+            } catch (e: Exception) {
+                Snackbar.make(create_deal_constraint, "Please select an image", Snackbar.LENGTH_LONG).show()
+                Log.d(TAG, e.message)
+            }
         } else {
             Snackbar.make(create_deal_constraint, "Please fill in all fields", Snackbar.LENGTH_LONG).show()
         }

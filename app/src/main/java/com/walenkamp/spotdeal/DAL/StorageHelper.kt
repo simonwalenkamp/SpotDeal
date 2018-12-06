@@ -47,4 +47,17 @@ class StorageHelper {
     fun deleteImage(id: String) {
         storageRef.child(id).delete()
     }
+
+    // Replaces an image in storage
+    fun editImage(img: Bitmap, id: String, callback: ICallbackFinished) {
+        storageRef.child(id).delete().addOnCompleteListener {task ->
+            if (task.isSuccessful) {
+                saveImage(img, id, object : ICallbackFinished{
+                    override fun onFinishFinished(finished: Boolean) {
+                        callback.onFinishFinished(true)
+                    }
+                })
+            }
+        }
+    }
 }

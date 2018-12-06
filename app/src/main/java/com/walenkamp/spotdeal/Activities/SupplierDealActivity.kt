@@ -1,5 +1,6 @@
 package com.walenkamp.spotdeal.Activities
 
+import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,6 +18,7 @@ import com.walenkamp.spotdeal.Entities.Customer
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Interface.ICallbackFinished
 import com.walenkamp.spotdeal.Interface.ICallbackCustomers
+import com.walenkamp.spotdeal.Interface.ICallbackDeal
 import com.walenkamp.spotdeal.Interface.ICallbackDealImage
 import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.activity_supplier_deal.*
@@ -48,6 +50,13 @@ class SupplierDealActivity : AppCompatActivity() {
         getCustomers(deal.id)
     }
 
+    override fun onRestart() {
+        super.onRestart()
+
+        hideLayout()
+        getDeal()
+    }
+
     // Sets the deal
     private fun setDeal(deal: Deal) {
         supplier_deal_description.text = deal.description
@@ -67,7 +76,7 @@ class SupplierDealActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             R.id.edit_deal -> {
-                Log.d("SIMON", "edit")
+                startEditDeal()
             }
             R.id.delete_deal -> {
                 deleteDeal(deal.id)
@@ -76,11 +85,17 @@ class SupplierDealActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    // Starts the EditDealActivity
+    private fun startEditDeal() {
+        val intent = Intent(this, EditDealActivity::class.java).putExtra(DEAL, deal)
+        startActivity(intent)
+    }
+
     // Deletes deal
     private fun deleteDeal(id: String) {
         dealLogic.deleteDeal(id, object : ICallbackFinished {
-            override fun onFinishFinished(couldDelete: Boolean) {
-                if(couldDelete) {
+            override fun onFinishFinished(finished: Boolean) {
+                if(finished) {
                     finish()
                 } else {
                     Snackbar.make(supplier_deal_constraint, "Could not delete... Check if the deal has active orders!", Snackbar.LENGTH_LONG).show()
@@ -117,6 +132,48 @@ class SupplierDealActivity : AppCompatActivity() {
                 rec_supplier_deal.layoutManager = LinearLayoutManager(baseContext)
 
                 adapter.setCustomers(customers)
+            }
+        })
+    }
+
+    // Shows layout
+    private fun showLayout() {
+        supplier_deal_image.visibility = View.VISIBLE
+        supplier_deal_info.visibility = View.VISIBLE
+        supplier_deal_description.visibility = View.VISIBLE
+        toolbar_supplier_deal.visibility = View.VISIBLE
+        rec_supplier_deal.visibility = View.VISIBLE
+        supplier_deal_separator.visibility = View.VISIBLE
+        supplier_deal_info_icon.visibility = View.VISIBLE
+
+        progress_supplier_deal_deal.visibility = View.INVISIBLE
+    }
+
+    // Hides layout to show progress
+    private fun hideLayout() {
+        supplier_deal_image.visibility = View.INVISIBLE
+        supplier_deal_info.visibility = View.INVISIBLE
+        supplier_deal_description.visibility = View.INVISIBLE
+        toolbar_supplier_deal.visibility = View.INVISIBLE
+        rec_supplier_deal.visibility = View.INVISIBLE
+        supplier_deal_separator.visibility = View.INVISIBLE
+        supplier_deal_info_icon.visibility = View.INVISIBLE
+
+
+        progress_supplier_deal_deal.visibility = View.VISIBLE
+    }
+
+    // Gets updated deal
+    private fun getDeal() {
+        dealLogic.getDealById(deal.id, object : ICallbackDeal{
+            override fun onFinishDeal(deal: Deal?) {
+                setDeal(deal!!)
+                dealLogic.getDealImage(object : ICallbackDealImage{
+                    override fun onFinishDealImage(dealImage: Bitmap?) {
+                        supplier_deal_image.setImageBitmap(dealImage)
+                        showLayout()
+                    }
+                }, deal.id)
             }
         })
     }

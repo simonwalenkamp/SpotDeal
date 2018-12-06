@@ -146,4 +146,17 @@ class DealDAO: IDealDAO {
             }
         }
     }
+
+    // Edits a deal
+    override fun editDeal(deal: Deal, callback: ICallbackDeal) {
+        db.collection("deals").document(deal.id).set(deal).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                try {
+                    callback.onFinishDeal(deal)
+                } catch (e: Exception) {
+                    Log.d(TAG, e.message)
+                }
+            }
+        }
+    }
 }
