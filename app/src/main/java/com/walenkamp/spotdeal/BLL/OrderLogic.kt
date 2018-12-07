@@ -71,4 +71,13 @@ class OrderLogic {
             }
         })
     }
+
+    // Gets all orders by deal
+    fun getAllOrdersByDeal(dealId: String, callback: ICallbackOrders) {
+        orderDAO.getAllOrdersByDeal(dealId, object : ICallbackOrders{
+            override fun onFinishOrders(orders: List<Order>?) {
+                callback.onFinishOrders(orders)
+            }
+        })
+    }
 }

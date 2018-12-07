@@ -141,4 +141,23 @@ class OrderDAO : IOrderDAO {
                 callback.onFinishOrders(orderList)
             }
     }
+
+    // Gets all orders by deal
+    override fun getAllOrdersByDeal(dealId: String, callback: ICallbackOrders) {
+        val orderList = mutableListOf<Order>()
+        db.collection("orders").whereEqualTo("dealId", dealId)
+            .get().addOnCompleteListener { task ->
+                if(task.isSuccessful)
+                    for (doc in task.result!!) {
+                        try {
+                            val o = doc.toObject(Order::class.java)
+                            o.id = doc.id
+                            orderList.add(o)
+                        } catch (e: Exception) {
+                            Log.d(TAG, e.message)
+                        }
+                    }
+                callback.onFinishOrders(orderList)
+            }
+    }
 }

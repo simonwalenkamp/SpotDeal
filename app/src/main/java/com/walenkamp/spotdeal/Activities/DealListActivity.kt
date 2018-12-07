@@ -57,12 +57,18 @@ class DealListActivity : AppCompatActivity() {
     private fun getDeals(supplierId: String) {
         dealLogic.getAllDealsForSupplier(supplierId, object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
+                if(deals!!.isEmpty()) {
+                    status_deal_list.visibility = View.VISIBLE
+                    progress_deal_list.visibility = View.INVISIBLE
+                    return
+                }
+                status_deal_list.visibility = View.VISIBLE
                 progress_deal_list.visibility = View.INVISIBLE
                 rec_deal_list.visibility = View.VISIBLE
                 rec_deal_list.adapter = adapter
                 rec_deal_list.layoutManager = LinearLayoutManager(baseContext)
 
-                adapter.setDeals(deals!!)
+                adapter.setDeals(deals)
             }
         })
     }

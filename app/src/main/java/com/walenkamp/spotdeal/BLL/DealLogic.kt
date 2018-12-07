@@ -87,9 +87,9 @@ class DealLogic {
         })
     }
 
-    // Deletes a deal if it has no active orders
+    // Deletes a deal if it has no orders
     fun deleteDeal(dealId: String, callback: ICallbackFinished) {
-        orderLogic.getActiveOrdersByDeal(dealId, object : ICallbackOrders {
+        orderLogic.getAllOrdersByDeal(dealId, object : ICallbackOrders {
             override fun onFinishOrders(orders: List<Order>?) {
                 if(orders!!.isEmpty()) {
                     dealDAO.deleteDeal(dealId, object : ICallbackFinished{

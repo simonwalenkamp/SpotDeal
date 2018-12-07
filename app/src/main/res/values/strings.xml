@@ -38,4 +38,7 @@
     <string name="info">Info</string>
     <string name="price">Price</string>
     <string name="create_deal">Create Deal</string>
+    <string name="no_history">This device has no history yet!</string>
+    <string name="no_customers">You have no customers yet!</string>
+    <string name="no_deals">You have no deals yet!</string>
 </resources>

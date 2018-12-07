@@ -14,6 +14,7 @@ import com.walenkamp.spotdeal.Interface.ICallbackOrders
 import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.activity_deal.*
 import kotlinx.android.synthetic.main.activity_order_history.*
+import kotlinx.android.synthetic.main.history_list_item.*
 
 const val SUPPLIER_ID        = "SUPPLIER_ID"
 
@@ -50,10 +51,16 @@ class OrderHistoryActivity : AppCompatActivity() {
         history_progress.visibility = View.VISIBLE
         historyLogic.getHistory(supplierId, object : ICallbackOrders{
             override fun onFinishOrders(orders: List<Order>?) {
+                if (orders!!.isEmpty()) {
+                    history_progress.visibility = View.INVISIBLE
+                    status_history.visibility = View.VISIBLE
+                    return
+                }
+                status_history.visibility = View.INVISIBLE
                 history_progress.visibility = View.INVISIBLE
                 rec_history.adapter = adapter
                 rec_history.layoutManager = LinearLayoutManager(baseContext)
-                adapter.setOrders(orders!!)
+                adapter.setOrders(orders)
                 rec_history.layoutManager = LinearLayoutManager(baseContext)
             }
         })
