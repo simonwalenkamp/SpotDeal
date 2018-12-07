@@ -52,6 +52,10 @@ class DealDAO: IDealDAO {
                         for (o in orderList) {
                             if (deal.id == o.dealId && !dealList.contains(deal) && !o.valid) {
                                 dealList.add(deal)
+                            } else {
+                                if(o.valid && dealList.contains(deal)) {
+                                    dealList.remove(deal)
+                                }
                             }
                         }
                     } catch (e: Exception) {
