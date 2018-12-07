@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.walenkamp.spotdeal.Adapters.DealAdapter
 import com.walenkamp.spotdeal.BLL.DealLogic
 import com.walenkamp.spotdeal.BLL.SupplierLogic
@@ -66,7 +67,6 @@ class CustomerActivity : AppCompatActivity() {
         supplierLogic.getSupplier(object : ICallBackSupplier {
             override fun onFinishSupplier(sup: Supplier?) {
                 supplier = sup!!
-                getValidDeals(customer.id ,supplier.id)
             }
         })
     }
@@ -125,13 +125,13 @@ class CustomerActivity : AppCompatActivity() {
     // Gets all valid deals a customer has with the supplier
     private fun getValidDeals(customerId: String, supplierId: String) {
         rec_deal.visibility = View.INVISIBLE
-        status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE
         dealLogic.getValidDealsForCustomer(object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
                 if(deals!!.isEmpty()) {
-                    status_tv.text = getText(R.string.status_no_active)
-                    status_tv.visibility = View.VISIBLE
+                    Snackbar.make(customer_constraint, R.string.status_no_active, Snackbar.LENGTH_LONG).show()
+                    getInvalidDeals(customerId, supplierId)
+                    displayInactive()
                 }
                 rec_deal.visibility = View.VISIBLE
                 adapter.customer = customer
@@ -147,7 +147,6 @@ class CustomerActivity : AppCompatActivity() {
     // Gets all deals a customer has with the supplier
     private fun getAllDeals(customerId: String, supplierId: String) {
         rec_deal.visibility = View.INVISIBLE
-        status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE
         dealLogic.getAllDealsForCustomer(object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
@@ -163,13 +162,13 @@ class CustomerActivity : AppCompatActivity() {
     // Gets all invalid deals a customer has with the supplier
     private fun getInvalidDeals(customerId: String, supplierId: String) {
         rec_deal.visibility = View.INVISIBLE
-        status_tv.visibility = View.INVISIBLE
         deal_progress.visibility = View.VISIBLE
         dealLogic.getInvalidDealsForCustomer(object : ICallbackDeals {
             override fun onFinishDeals(deals: List<Deal>?) {
                 if(deals!!.isEmpty()) {
-                    status_tv.text = getText(R.string.status_no_inactive)
-                    status_tv.visibility = View.VISIBLE
+                    Snackbar.make(customer_constraint, R.string.status_no_inactive ,Snackbar.LENGTH_LONG).show()
+                    getValidDeals(customerId, supplierId)
+                    displayActive()
                 }
                 rec_deal.visibility = View.VISIBLE
                 rec_deal.adapter = adapter
