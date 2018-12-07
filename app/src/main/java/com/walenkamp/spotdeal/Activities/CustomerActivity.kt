@@ -132,6 +132,7 @@ class CustomerActivity : AppCompatActivity() {
                     Snackbar.make(customer_constraint, R.string.status_no_active, Snackbar.LENGTH_LONG).show()
                     getInvalidDeals(customerId, supplierId)
                     displayInactive()
+                    return
                 }
                 rec_deal.visibility = View.VISIBLE
                 adapter.customer = customer
@@ -169,6 +170,7 @@ class CustomerActivity : AppCompatActivity() {
                     Snackbar.make(customer_constraint, R.string.status_no_inactive ,Snackbar.LENGTH_LONG).show()
                     getValidDeals(customerId, supplierId)
                     displayActive()
+                    return
                 }
                 rec_deal.visibility = View.VISIBLE
                 rec_deal.adapter = adapter

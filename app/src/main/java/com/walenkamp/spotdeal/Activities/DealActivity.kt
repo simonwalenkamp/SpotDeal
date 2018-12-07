@@ -158,7 +158,10 @@ class DealActivity : AppCompatActivity() {
 
     // Gets the orders for the deal
     private fun getValidOrders() {
-        ordersSelected.clear()
+        ordersShown.clear()
+        uncheckAllBoxes()
+        handleSelectAll()
+        layout_swipe.visibility = View.GONE
         ordersShown.clear()
         redeem_tv.text = getText(R.string.swipe_to_complete)
         rec_order.visibility = View.INVISIBLE
@@ -183,7 +186,10 @@ class DealActivity : AppCompatActivity() {
 
     // Gets the orders for the deal
     private fun getInvalidOrders() {
-        ordersSelected.clear()
+        ordersShown.clear()
+        uncheckAllBoxes()
+        handleSelectAll()
+        layout_swipe.visibility = View.GONE
         ordersShown.clear()
         redeem_tv.text = getText(R.string.swipe_to_reopen)
         rec_order.visibility = View.INVISIBLE
@@ -275,6 +281,7 @@ class DealActivity : AppCompatActivity() {
 
     // Unchecks all checkboxes in recyclerView
     private fun uncheckAllBoxes() {
+        ordersSelected.clear()
         adapter.checkAllBoxes = false
         adapter.notifyDataSetChanged()
     }
