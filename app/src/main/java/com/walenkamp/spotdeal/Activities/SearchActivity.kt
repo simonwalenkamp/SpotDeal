@@ -55,13 +55,10 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+    }
 
-        setNavigationAndToolbar()
-
-        separator = Separator(this)
-        rec_customer.addItemDecoration(separator)
-
-
+    override fun onResume() {
+        super.onResume()
         // Gets the supplier from SupplierLogic and calls the getCustomers function
         supplierLogic.getSupplier(object : ICallBackSupplier{
             override fun onFinishSupplier(sup: Supplier?) {
@@ -69,6 +66,12 @@ class SearchActivity : AppCompatActivity() {
                 getCustomers(supplier.id)
             }
         })
+
+        setNavigationAndToolbar()
+
+        separator = Separator(this)
+        rec_customer.addItemDecoration(separator)
+
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
