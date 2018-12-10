@@ -49,6 +49,7 @@ class CustomerActivity : AppCompatActivity() {
 
         customer = intent.getSerializableExtra(CUSTOMER) as Customer
         toolbar_customer.title = customer.name
+        adapter.customer = customer
         setSupportActionBar(toolbar_customer)
 
         email_tv.text = customer.email

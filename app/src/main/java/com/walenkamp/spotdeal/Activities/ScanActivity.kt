@@ -388,11 +388,11 @@ class ScanActivity : AppCompatActivity() {
                                 stopBackgroundThread()
                                 scan_progress.visibility = View.VISIBLE
                                 dealLogic.getDealById(order.dealId, object : ICallbackDeal {
-                                    override fun onFinishDeal(deal: Deal?) {
+                                    override fun onFinishDeal(d: Deal?) {
                                         customerLogic.getCustomerById(order.customerId, object : ICallbackCustomer {
-                                            override fun onFinishCustomer(customer: Customer?) {
+                                            override fun onFinishCustomer(c: Customer?) {
                                                 val intent = Intent(scan_view.context, DealActivity::class.java).putExtra(
-                                                    DEAL, deal).putExtra(CUSTOMER, customer).putExtra(SHOW_INVALID, order.valid)
+                                                    DEAL, d).putExtra(CUSTOMER, c).putExtra(SHOW_INVALID, order.valid)
                                                 scan_view.context.startActivity(intent)
                                                 finish()
                                             }

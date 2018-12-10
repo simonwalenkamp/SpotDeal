@@ -12,6 +12,7 @@ import androidx.appcompat.view.menu.MenuBuilder
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.walenkamp.spotdeal.Adapters.OrderAdapter
+import com.walenkamp.spotdeal.BLL.CustomerLogic
 import com.walenkamp.spotdeal.BLL.DealLogic
 import com.walenkamp.spotdeal.BLL.HistoryLogic
 import com.walenkamp.spotdeal.BLL.OrderLogic
@@ -19,6 +20,8 @@ import com.walenkamp.spotdeal.DAL.StorageHelper
 import com.walenkamp.spotdeal.Entities.Customer
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Entities.Order
+import com.walenkamp.spotdeal.Interface.ICallbackCustomer
+import com.walenkamp.spotdeal.Interface.ICallbackDeal
 import com.walenkamp.spotdeal.Interface.ICallbackDealImage
 import com.walenkamp.spotdeal.Interface.ICallbackOrders
 import com.walenkamp.spotdeal.R
@@ -28,6 +31,8 @@ import kotlinx.android.synthetic.main.activity_deal.*
 
 const val DEAL        = "DEAL"
 const val SHOW_INVALID = "SHOW_INVALID"
+const val DEAL_ID        = "DEAL_ID"
+const val CUSTOMER_ID        = "CUSTOMER_ID"
 
 class DealActivity : AppCompatActivity() {
     // Deal instance
@@ -45,8 +50,11 @@ class DealActivity : AppCompatActivity() {
     // List of orders shown
     private val ordersShown = mutableListOf<Order>()
 
-    // OrderLogic intance
+    // OrderLogic instance
     private var orderLogic: OrderLogic = OrderLogic()
+
+    // CustomerLogic instance
+    private var customerLogic: CustomerLogic = CustomerLogic()
 
     // HistoryLogic instance
     private lateinit var historyLogic: HistoryLogic
@@ -57,30 +65,52 @@ class DealActivity : AppCompatActivity() {
     // Separator instance
     private lateinit var separator: Separator
 
+    private val TAG = "DealActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deal)
 
         historyLogic = HistoryLogic(this)
 
-        deal = intent.getSerializableExtra(DEAL) as Deal
-        customer = intent.getSerializableExtra(CUSTOMER) as Customer
-        toolbar_deal.title = customer.name
-        setSupportActionBar(toolbar_deal)
+        if(intent.getSerializableExtra(DEAL) != null &&  intent.getSerializableExtra(CUSTOMER) != null) {
+            deal = intent.getSerializableExtra(DEAL) as Deal
+            customer = intent.getSerializableExtra(CUSTOMER) as Customer
+            setDeal()
+            setImage()
+            setSupportActionBar(toolbar_deal)
+            if(!intent.getBooleanExtra(SHOW_INVALID, true)){
+                getInvalidOrders()
+            } else {
+                getValidOrders()
+            }
+        } else {
+            dealLogic.getDealById(intent.getStringExtra(DEAL_ID), object : ICallbackDeal {
+                override fun onFinishDeal(d: Deal?) {
+                    deal = d!!
+                    setDeal()
+                    customerLogic.getCustomerById(intent.getStringExtra(CUSTOMER_ID), object : ICallbackCustomer {
+                        override fun onFinishCustomer(c: Customer?) {
+                            customer = c!!
+                            toolbar_deal.title = customer.name
+                            setSupportActionBar(toolbar_deal)
+                            setImage()
+                            if(!intent.getBooleanExtra(SHOW_INVALID, true)){
+                                getInvalidOrders()
+                            } else {
+                                getValidOrders()
+                            }
+                        }
+                    })
+                }
+            })
+        }
+
+
 
         separator = Separator(this)
         rec_order.addItemDecoration(separator)
 
-        deal_name.text = deal.name
-        deal_description.text = deal.description
-        deal_info.text = deal.info
-        setImage()
-
-        if(!intent.getBooleanExtra(SHOW_INVALID, true)){
-            getInvalidOrders()
-        } else {
-            getValidOrders()
-        }
         seek_bar.progress = 16
         select_all_cb.setOnClickListener {
             handleSelectAll()
@@ -284,5 +314,12 @@ class DealActivity : AppCompatActivity() {
         ordersSelected.clear()
         adapter.checkAllBoxes = false
         adapter.notifyDataSetChanged()
+    }
+
+    // Sets the deal
+    private fun setDeal() {
+        deal_name.text = deal.name
+        deal_description.text = deal.description
+        deal_info.text = deal.info
     }
 }

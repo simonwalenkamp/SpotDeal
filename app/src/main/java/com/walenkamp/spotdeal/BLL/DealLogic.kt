@@ -72,8 +72,8 @@ class DealLogic {
     // Gets specific deal
     fun getDealById(id: String, callback: ICallbackDeal) {
         dealDAO.getDealById(id, object : ICallbackDeal{
-            override fun onFinishDeal(deal: Deal?) {
-                callback.onFinishDeal(deal)
+            override fun onFinishDeal(d: Deal?) {
+                callback.onFinishDeal(d)
             }
         })
     }
@@ -108,8 +108,8 @@ class DealLogic {
     // Creates new deal
     fun createDeal(d: Deal, img: Bitmap, callback: ICallbackFinished) {
         dealDAO.createDeal(d, object : ICallbackDeal {
-            override fun onFinishDeal(deal: Deal?) {
-                storage.saveImage(img, deal!!.id, object : ICallbackFinished {
+            override fun onFinishDeal(d: Deal?) {
+                storage.saveImage(img, d!!.id, object : ICallbackFinished {
                     override fun onFinishFinished(finished: Boolean) {
                         callback.onFinishFinished(true)
                     }
@@ -121,8 +121,8 @@ class DealLogic {
     // Edit a deal
     fun editDeal(d: Deal, img: Bitmap, callback: ICallbackFinished) {
         dealDAO.editDeal(d, object : ICallbackDeal {
-            override fun onFinishDeal(deal: Deal?) {
-                storage.editImage(img, d.id, object : ICallbackFinished{
+            override fun onFinishDeal(d: Deal?) {
+                storage.editImage(img, d!!.id, object : ICallbackFinished{
                     override fun onFinishFinished(finished: Boolean) {
                         callback.onFinishFinished(finished)
                     }

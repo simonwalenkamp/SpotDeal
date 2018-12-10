@@ -32,8 +32,8 @@ class CustomerLogic {
     // Gets spicific customer
     fun getCustomerById(id: String, callback: ICallbackCustomer) {
         customerDAO.getCustomerById(id, object : ICallbackCustomer{
-            override fun onFinishCustomer(customer: Customer?) {
-                callback.onFinishCustomer(customer)
+            override fun onFinishCustomer(c: Customer?) {
+                callback.onFinishCustomer(c)
             }
         })
     }

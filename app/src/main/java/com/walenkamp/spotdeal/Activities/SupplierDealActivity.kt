@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -168,14 +167,14 @@ class SupplierDealActivity : AppCompatActivity() {
     // Gets updated deal
     private fun getDeal() {
         dealLogic.getDealById(deal.id, object : ICallbackDeal{
-            override fun onFinishDeal(deal: Deal?) {
-                setDeal(deal!!)
+            override fun onFinishDeal(d: Deal?) {
+                setDeal(d!!)
                 dealLogic.getDealImage(object : ICallbackDealImage{
                     override fun onFinishDealImage(dealImage: Bitmap?) {
                         supplier_deal_image.setImageBitmap(dealImage)
                         showLayout()
                     }
-                }, deal.id)
+                }, d.id)
             }
         })
     }
