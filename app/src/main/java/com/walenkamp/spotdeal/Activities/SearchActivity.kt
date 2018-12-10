@@ -182,13 +182,7 @@ class SearchActivity : AppCompatActivity() {
     private fun getCustomers(supplierId: String) {
         customerLogic.getCustomers(object : ICallbackCustomers {
             override fun onFinishCustomers(customers: List<Customer>?) {
-                if(customers!!.isEmpty()) {
-                    customer_progress.visibility = View.INVISIBLE
-                    status_search.visibility = View.VISIBLE
-                    return
-                }
-                status_search.visibility = View.INVISIBLE
-                allCustomers = customers
+                allCustomers = customers!!
                 rec_customer.adapter = adapter
                 rec_customer.layoutManager = LinearLayoutManager(baseContext)
                 adapter.setCustomers(customers)

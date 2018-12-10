@@ -62,7 +62,7 @@ class DealListActivity : AppCompatActivity() {
                     progress_deal_list.visibility = View.INVISIBLE
                     return
                 }
-                status_deal_list.visibility = View.VISIBLE
+                status_deal_list.visibility = View.INVISIBLE
                 progress_deal_list.visibility = View.INVISIBLE
                 rec_deal_list.visibility = View.VISIBLE
                 rec_deal_list.adapter = adapter

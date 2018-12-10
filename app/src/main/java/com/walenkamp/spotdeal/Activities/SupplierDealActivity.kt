@@ -93,11 +93,13 @@ class SupplierDealActivity : AppCompatActivity() {
 
     // Deletes deal
     private fun deleteDeal(id: String) {
+        hideLayout()
         dealLogic.deleteDeal(id, object : ICallbackFinished {
             override fun onFinishFinished(finished: Boolean) {
                 if(finished) {
                     finish()
                 } else {
+                    showLayout()
                     Snackbar.make(supplier_deal_constraint, "Could not delete... Check if the deal has active orders!", Snackbar.LENGTH_LONG).show()
                 }
             }
