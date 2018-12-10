@@ -41,4 +41,11 @@
     <string name="no_history">This device has no history yet!</string>
     <string name="no_customers">You have no customers yet!</string>
     <string name="no_deals">You have no deals yet!</string>
+    <string name="camera_access_needed">Camera access permission required</string>
+    <string name="setup_failed">Unable to set up preview</string>
+    <string name="select_image">Please select an image</string>
+    <string name="fill_in_fields">Please fill in all fields</string>
+    <string name="could_not_delete">Could not delete… Check if the deal has active orders!</string>
+    <string name="no_active_vouchers">Deal has no active vouchers!</string>
+    <string name="could_not_edit">Cloud not edit Deal</string>
 </resources>

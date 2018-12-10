@@ -180,7 +180,7 @@ class ScanActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CAMERA_PERMISSION_RESULT) {
             if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Snackbar.make(scan_view, "Camera access permission needed", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(scan_view, R.string.camera_access_needed, Snackbar.LENGTH_LONG).show()
             }
         }
     }
@@ -195,7 +195,7 @@ class ScanActivity : AppCompatActivity() {
 
                 } else {
                     if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-                        Snackbar.make(scan_view, "Required access to camera", Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(scan_view, R.string.camera_access_needed, Snackbar.LENGTH_LONG).show()
                     }
                     requestPermissions(arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION_RESULT)
                 }
@@ -321,7 +321,7 @@ class ScanActivity : AppCompatActivity() {
 
             cameraDevice?.createCaptureSession(Arrays.asList(previewSurface), object : CameraCaptureSession.StateCallback(){
                 override fun onConfigureFailed(session: CameraCaptureSession) {
-                    Snackbar.make(camera_view, "Unable to set up preview", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(camera_view, R.string.setup_failed, Snackbar.LENGTH_LONG).show()
                 }
 
                 override fun onConfigured(session: CameraCaptureSession) {

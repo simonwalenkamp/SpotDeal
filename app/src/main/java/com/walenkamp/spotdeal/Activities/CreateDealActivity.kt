@@ -83,11 +83,11 @@ class CreateDealActivity : AppCompatActivity() {
                     }
                 })
             } catch (e: Exception) {
-                Snackbar.make(create_deal_constraint, "Please select an image", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(create_deal_constraint, R.string.select_image, Snackbar.LENGTH_LONG).show()
                 Log.d(TAG, e.message)
             }
         } else {
-            Snackbar.make(create_deal_constraint, "Please fill in all fields", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(create_deal_constraint, R.string.fill_in_fields, Snackbar.LENGTH_LONG).show()
         }
     }
 

@@ -92,10 +92,10 @@ class EditDealActivity : AppCompatActivity() {
                 })
             } catch (e: Exception){
                 Log.d(TAG, e.message)
-                Snackbar.make(edit_deal_constraint, "Cloud not edit Deal", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(edit_deal_constraint, R.string.could_not_edit, Snackbar.LENGTH_LONG).show()
             }
         } else {
-            Snackbar.make(edit_deal_constraint, "Please fill out all fields", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(edit_deal_constraint, R.string.fill_in_fields, Snackbar.LENGTH_LONG).show()
         }
     }
 

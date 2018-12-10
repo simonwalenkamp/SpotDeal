@@ -100,7 +100,7 @@ class SupplierDealActivity : AppCompatActivity() {
                     finish()
                 } else {
                     showLayout()
-                    Snackbar.make(supplier_deal_constraint, "Could not delete... Check if the deal has active orders!", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(supplier_deal_constraint, R.string.could_not_delete, Snackbar.LENGTH_LONG).show()
                 }
             }
         })
@@ -126,7 +126,7 @@ class SupplierDealActivity : AppCompatActivity() {
         customerLogic.getCustomerByDeal(dealId, object : ICallbackCustomers {
             override fun onFinishCustomers(customers: List<Customer>?) {
                 if(customers!!.isEmpty()) {
-                    Snackbar.make(supplier_deal_constraint, "Deal has no active vouchers!", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(supplier_deal_constraint, R.string.no_active_vouchers, Snackbar.LENGTH_LONG).show()
                 }
                 progress_supplier_deal.visibility = View.INVISIBLE
                 rec_supplier_deal.visibility = View.VISIBLE
