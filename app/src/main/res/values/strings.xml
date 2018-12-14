@@ -48,4 +48,5 @@
     <string name="could_not_delete">Could not delete… Check if the deal has active orders!</string>
     <string name="no_active_vouchers">Deal has no active vouchers!</string>
     <string name="could_not_edit">Cloud not edit Deal</string>
+    <string name="could_not_edit_has_active">Cloud not edit Deal… Check if the deal has active orders!</string>
 </resources>

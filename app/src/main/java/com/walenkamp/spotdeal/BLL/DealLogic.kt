@@ -120,14 +120,23 @@ class DealLogic {
 
     // Edit a deal
     fun editDeal(d: Deal, img: Bitmap, callback: ICallbackFinished) {
-        dealDAO.editDeal(d, object : ICallbackDeal {
-            override fun onFinishDeal(d: Deal?) {
-                storage.editImage(img, d!!.id, object : ICallbackFinished{
-                    override fun onFinishFinished(finished: Boolean) {
-                        callback.onFinishFinished(finished)
-                    }
-                })
+        orderLogic.getAllOrdersByDeal(d.id, object : ICallbackOrders{
+            override fun onFinishOrders(orders: List<Order>?) {
+                if(orders!!.isEmpty()) {
+                    dealDAO.editDeal(d, object : ICallbackDeal {
+                        override fun onFinishDeal(d: Deal?) {
+                            storage.editImage(img, d!!.id, object : ICallbackFinished{
+                                override fun onFinishFinished(finished: Boolean) {
+                                    callback.onFinishFinished(finished)
+                                }
+                            })
+                        }
+                    })
+                } else {
+                    callback.onFinishFinished(false)
+                }
             }
         })
+
     }
 }

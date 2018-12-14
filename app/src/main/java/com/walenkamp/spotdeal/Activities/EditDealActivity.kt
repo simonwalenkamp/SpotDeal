@@ -14,7 +14,6 @@ import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Interface.ICallbackDealImage
 import com.walenkamp.spotdeal.Interface.ICallbackFinished
 import com.walenkamp.spotdeal.R
-import kotlinx.android.synthetic.main.activity_create_deal.*
 import kotlinx.android.synthetic.main.activity_edit_deal.*
 import java.lang.Exception
 
@@ -77,7 +76,7 @@ class EditDealActivity : AppCompatActivity() {
             !edit_deal_info.text.isEmpty() &&
             !edit_deal_price.text.isEmpty()) {
             try {
-                updateLayout()
+                hideLayout()
                 val bitmap: Bitmap = (edit_deal_image.drawable as BitmapDrawable).bitmap
 
                 deal.name = edit_deal_name.text.toString()
@@ -87,7 +86,12 @@ class EditDealActivity : AppCompatActivity() {
 
                 dealLogic.editDeal(deal, bitmap, object : ICallbackFinished{
                     override fun onFinishFinished(finished: Boolean) {
-                        finish()
+                        if(finished) {
+                            finish()
+                        } else {
+                            showLayout()
+                            Snackbar.make(edit_deal_constraint, R.string.could_not_edit_has_active, Snackbar.LENGTH_LONG).show()
+                        }
                     }
                 })
             } catch (e: Exception){
@@ -100,13 +104,23 @@ class EditDealActivity : AppCompatActivity() {
     }
 
 
-    // Updates layout to show progress
-    private fun updateLayout() {
+    // Hides layout to show progress
+    private fun hideLayout() {
         edit_deal_name.visibility = View.INVISIBLE
         edit_deal_description.visibility = View.INVISIBLE
         edit_deal_grid.visibility = View.INVISIBLE
         edit_deal_image.visibility = View.INVISIBLE
 
         progress_edit_deal.visibility = View.VISIBLE
+    }
+
+    // Shows the layout to stop progress
+    private fun showLayout() {
+        edit_deal_name.visibility = View.VISIBLE
+        edit_deal_description.visibility = View.VISIBLE
+        edit_deal_grid.visibility = View.VISIBLE
+        edit_deal_image.visibility = View.VISIBLE
+
+        progress_edit_deal.visibility = View.INVISIBLE
     }
 }
