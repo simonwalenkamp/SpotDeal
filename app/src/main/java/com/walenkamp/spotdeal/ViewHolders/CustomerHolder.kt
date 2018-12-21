@@ -1,7 +1,6 @@
 package com.walenkamp.spotdeal.ViewHolders
 
 import android.content.Intent
-import android.content.res.Resources
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +8,6 @@ import com.walenkamp.spotdeal.Activities.CUSTOMER
 import com.walenkamp.spotdeal.Activities.CustomerActivity
 import com.walenkamp.spotdeal.Entities.Customer
 import com.walenkamp.spotdeal.R
-import io.grpc.internal.SharedResourceHolder
 import kotlinx.android.synthetic.main.customer_list_item.view.*
 
 class CustomerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

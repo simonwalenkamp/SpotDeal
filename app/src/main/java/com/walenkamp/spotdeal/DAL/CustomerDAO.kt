@@ -9,6 +9,7 @@ import com.walenkamp.spotdeal.Interface.ICallbackCustomers
 import com.walenkamp.spotdeal.Interface.ICustomerDAO
 
 class CustomerDAO: ICustomerDAO {
+
     // Logcat tag
     private val TAG: String = "CustomerDAO"
 

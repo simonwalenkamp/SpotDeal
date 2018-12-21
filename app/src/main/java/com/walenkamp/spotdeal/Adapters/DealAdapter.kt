@@ -10,8 +10,11 @@ import com.walenkamp.spotdeal.R
 import com.walenkamp.spotdeal.ViewHolders.DealHolder
 
 class DealAdapter(private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     // Result list
     val results = mutableListOf<Deal>()
+
+    // Customer instance
     lateinit var customer: Customer
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

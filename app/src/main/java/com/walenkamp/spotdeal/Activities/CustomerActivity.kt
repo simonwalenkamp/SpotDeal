@@ -20,7 +20,6 @@ import com.walenkamp.spotdeal.Interface.ICallBackSupplier
 import com.walenkamp.spotdeal.Interface.ICallbackDeals
 import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.activity_customer.*
-import com.walenkamp.spotdeal.Separator
 
 
 const val CUSTOMER        = "CUSTOMER"

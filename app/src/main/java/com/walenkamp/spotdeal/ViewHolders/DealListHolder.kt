@@ -5,9 +5,7 @@ import android.graphics.Bitmap
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.walenkamp.spotdeal.Activities.CUSTOMER
 import com.walenkamp.spotdeal.Activities.DEAL
-import com.walenkamp.spotdeal.Activities.DealActivity
 import com.walenkamp.spotdeal.Activities.SupplierDealActivity
 import com.walenkamp.spotdeal.BLL.DealLogic
 import com.walenkamp.spotdeal.Entities.Deal
@@ -16,6 +14,7 @@ import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.deal_list_item.view.*
 
 class DealListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
     // DealLogic instance
     private val dealLogic: DealLogic = DealLogic()
 

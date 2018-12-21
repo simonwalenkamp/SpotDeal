@@ -19,6 +19,7 @@ import java.lang.Exception
 
 class EditDealActivity : AppCompatActivity() {
 
+    // Tag used for logging
     private val TAG = "EDIT_DEAL_ACTIVITY"
 
     // Deal instance

@@ -16,6 +16,7 @@ import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.deal_list_item.view.*
 
 class DealHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
     // DealLogic instance
     private val dealLogic: DealLogic = DealLogic()
 

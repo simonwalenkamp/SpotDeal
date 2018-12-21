@@ -3,7 +3,6 @@ package com.walenkamp.spotdeal.Activities
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,7 +15,6 @@ import com.walenkamp.spotdeal.BLL.CustomerLogic
 import com.walenkamp.spotdeal.BLL.DealLogic
 import com.walenkamp.spotdeal.BLL.HistoryLogic
 import com.walenkamp.spotdeal.BLL.OrderLogic
-import com.walenkamp.spotdeal.DAL.StorageHelper
 import com.walenkamp.spotdeal.Entities.Customer
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Entities.Order
@@ -64,8 +62,6 @@ class DealActivity : AppCompatActivity() {
 
     // Separator instance
     private lateinit var separator: Separator
-
-    private val TAG = "DealActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

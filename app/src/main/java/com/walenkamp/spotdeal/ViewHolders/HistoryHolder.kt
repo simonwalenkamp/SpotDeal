@@ -7,15 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.walenkamp.spotdeal.Activities.*
 import com.walenkamp.spotdeal.BLL.CustomerLogic
 import com.walenkamp.spotdeal.BLL.DealLogic
-import com.walenkamp.spotdeal.Entities.Customer
-import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Entities.Order
-import com.walenkamp.spotdeal.Interface.ICallbackCustomer
-import com.walenkamp.spotdeal.Interface.ICallbackDeal
 import com.walenkamp.spotdeal.R
 import kotlinx.android.synthetic.main.history_list_item.view.*
 
 class HistoryHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
     // DealLogic instance
     private val dealLogic: DealLogic = DealLogic()
 

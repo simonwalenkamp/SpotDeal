@@ -9,6 +9,7 @@ import com.walenkamp.spotdeal.R
 import com.walenkamp.spotdeal.ViewHolders.DealListHolder
 
 class DealListAdapter(private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     // Result list
     val results = mutableListOf<Deal>()
 

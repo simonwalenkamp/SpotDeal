@@ -4,7 +4,6 @@ import android.content.Context
 import android.database.sqlite.SQLiteStatement
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
 import com.walenkamp.spotdeal.Entities.Order
 import com.walenkamp.spotdeal.Interface.ICallbackDone
 import com.walenkamp.spotdeal.Interface.ICallbackOrders

@@ -3,7 +3,6 @@ package com.walenkamp.spotdeal.Activities
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,6 +21,7 @@ val PICKFILE_REQUEST_CODE = 1234
 
 class CreateDealActivity : AppCompatActivity() {
 
+    // Tag used for logging
     private val TAG = "CREATE_DEAL_ACTIVITY"
 
     // Pick file request code

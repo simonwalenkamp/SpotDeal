@@ -1,7 +1,6 @@
 package com.walenkamp.spotdeal.DAL
 
 import android.util.Log
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.walenkamp.spotdeal.Entities.Deal
 import com.walenkamp.spotdeal.Entities.Order
@@ -11,6 +10,7 @@ import com.walenkamp.spotdeal.Interface.ICallbackDeals
 import com.walenkamp.spotdeal.Interface.IDealDAO
 
 class DealDAO: IDealDAO {
+
     // Logcat tag
     private val TAG: String = "DealDAO"
 

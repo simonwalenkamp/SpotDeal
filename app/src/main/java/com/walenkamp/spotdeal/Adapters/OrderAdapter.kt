@@ -11,6 +11,7 @@ import com.walenkamp.spotdeal.ViewHolders.OrderHolder
 
 
 class OrderAdapter(private val context: Context, val clickListener: (Order) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     // Result list
     val results = mutableListOf<Order>()
 

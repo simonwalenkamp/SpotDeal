@@ -9,6 +9,7 @@ import com.walenkamp.spotdeal.R
 
 class MainActivity : AppCompatActivity() {
 
+    // Boolean true id used is logged in
     private var isLoggedIn : Boolean = false
 
     // AuthManager instance

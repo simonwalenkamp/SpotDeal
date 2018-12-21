@@ -4,9 +4,7 @@ import android.graphics.Bitmap
 import com.google.firebase.storage.FirebaseStorage
 import com.walenkamp.spotdeal.Interface.ICallbackDealImage
 import android.graphics.BitmapFactory
-import android.util.Log
 import com.google.firebase.storage.UploadTask
-import com.walenkamp.spotdeal.Interface.ICallbackDone
 import com.walenkamp.spotdeal.Interface.ICallbackFinished
 import java.io.ByteArrayOutputStream
 

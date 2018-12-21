@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.walenkamp.spotdeal.Entities.Order
 import com.walenkamp.spotdeal.R
 import com.walenkamp.spotdeal.ViewHolders.HistoryHolder
-import com.walenkamp.spotdeal.ViewHolders.OrderHolder
 
 class HistoryAdapter(private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     // Result list
     val results = mutableListOf<Order>()
 

@@ -8,6 +8,7 @@ import com.walenkamp.spotdeal.Interface.ICallBackSupplier
 import com.walenkamp.spotdeal.Interface.ISupplierDAO
 
 class SupplierDAO : ISupplierDAO {
+
     // Logcat tag
     private val TAG: String = "SupplierDAO"
 
